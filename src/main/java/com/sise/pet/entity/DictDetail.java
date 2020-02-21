@@ -1,20 +1,16 @@
 package com.sise.pet.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 宠物狗类别
+ * 数据字典详情
  * </p>
  *
  * @author author
@@ -23,44 +19,32 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class Pet implements Serializable {
+public class DictDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
     /**
-     * 名称
+     * 字典值
      */
-    private String name;
+    private String value;
 
     /**
-     * 描述
+     * 排序
      */
-    private String description;
+    private String sort;
 
     /**
-     * 内容
+     * 字典id
      */
-    private String content;
+    private Long dictId;
 
     /**
-     * 主图片
-     */
-    private String mainPic;
-
-    /**
-     * 创建时间
+     * 创建日期
      */
     private LocalDateTime createTime;
 
-    /**
-     * 修改时间
-     */
-    private LocalDateTime modifyTime;
-
-    @TableField(exist = false)
-    List<PetSubImg> subImgs;
 
 }

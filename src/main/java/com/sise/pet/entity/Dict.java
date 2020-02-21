@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
@@ -14,7 +13,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 宠物狗类别
+ * 数据字典
  * </p>
  *
  * @author author
@@ -23,44 +22,30 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class Pet implements Serializable {
+public class Dict implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
     /**
-     * 名称
+     * 字典名称
      */
     private String name;
 
     /**
      * 描述
      */
-    private String description;
+    private String remark;
 
     /**
-     * 内容
-     */
-    private String content;
-
-    /**
-     * 主图片
-     */
-    private String mainPic;
-
-    /**
-     * 创建时间
+     * 创建日期
      */
     private LocalDateTime createTime;
 
-    /**
-     * 修改时间
-     */
-    private LocalDateTime modifyTime;
-
     @TableField(exist = false)
-    List<PetSubImg> subImgs;
+    private List<DictDetail> dictDetails;
+
 
 }
