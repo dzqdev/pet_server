@@ -1,5 +1,6 @@
 package com.sise.pet.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sise.pet.entity.DictDetail;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IDictDetailService extends IService<DictDetail> {
 
+    Page<DictDetail> selectPage(DictDetail dict, Page page);
 }

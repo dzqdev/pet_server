@@ -3,13 +3,14 @@ package com.sise.pet.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
-import java.io.Serializable;
-import java.util.List;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.CreatedDate;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -42,7 +43,8 @@ public class Dict implements Serializable {
     /**
      * 创建日期
      */
-    private LocalDateTime createTime;
+    @CreatedDate
+    private Date createTime;
 
     @TableField(exist = false)
     private List<DictDetail> dictDetails;

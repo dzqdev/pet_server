@@ -1,10 +1,14 @@
 package com.sise.pet.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sise.pet.entity.Pet;
 import com.sise.pet.mapper.PetMapper;
 import com.sise.pet.service.IPetService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
  * <p>
@@ -17,4 +21,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class PetServiceImpl extends ServiceImpl<PetMapper, Pet> implements IPetService {
 
+    @Resource
+    private PetMapper petMapper;
+
+    @Override
+    public Page<Pet> selectPage(Pet pet, Page page) {
+        QueryWrapper<Pet> queryWrapper = new QueryWrapper<>();
+        Page result = petMapper.selectPage(page, queryWrapper);
+        return result;
+    }
 }

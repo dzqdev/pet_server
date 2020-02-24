@@ -1,30 +1,26 @@
 package com.sise.pet.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
  * <p>
- * 宠物狗类别
+ * 文章表
  * </p>
  *
  * @author author
- * @since 2020-02-21
+ * @since 2020-02-23
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class Pet implements Serializable {
+public class Article implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,9 +28,9 @@ public class Pet implements Serializable {
     private Integer id;
 
     /**
-     * 名称
+     * 标题
      */
-    private String name;
+    private String title;
 
     /**
      * 描述
@@ -47,24 +43,19 @@ public class Pet implements Serializable {
     private String content;
 
     /**
-     * 主图片
+     * 所属宠物狗类别id
      */
-    private String mainPic;
+    private Integer petId;
 
     /**
-     * 创建时间
+     * 类型
      */
-    @CreatedDate
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private String type;
+
+    /**
+     * 创建日期
+     */
     private Date createTime;
 
-    /**
-     * 修改时间
-     */
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date modifyTime;
-
-    @TableField(exist = false)
-    List<String> subImgs;
 
 }

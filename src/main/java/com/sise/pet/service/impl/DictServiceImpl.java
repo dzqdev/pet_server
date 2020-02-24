@@ -1,10 +1,14 @@
 package com.sise.pet.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sise.pet.entity.Dict;
 import com.sise.pet.mapper.DictMapper;
 import com.sise.pet.service.IDictService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
  * <p>
@@ -17,4 +21,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements IDictService {
 
+    @Resource
+    private DictMapper dictMapper;
+
+    @Override
+    public Page<Dict> selectPage(Dict dict, Page page) {
+        QueryWrapper<Dict> queryWrapper = new QueryWrapper<>();
+        Page result = dictMapper.selectPage(page, queryWrapper);
+        return result;
+    }
 }

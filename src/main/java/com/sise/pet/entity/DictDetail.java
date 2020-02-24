@@ -1,12 +1,15 @@
 package com.sise.pet.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.CreatedDate;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -26,6 +29,8 @@ public class DictDetail implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
+    private String label;
+
     /**
      * 字典值
      */
@@ -44,7 +49,11 @@ public class DictDetail implements Serializable {
     /**
      * 创建日期
      */
-    private LocalDateTime createTime;
+    @CreatedDate
+    private Date createTime;
+
+    @TableField(exist = false)
+    private String dictName;
 
 
 }

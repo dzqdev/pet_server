@@ -1,18 +1,18 @@
 package com.sise.pet.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.sise.pet.entity.Pet;
+import com.sise.pet.entity.Article;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
- * 宠物狗类别 服务类
+ * 文章表 服务类
  * </p>
  *
  * @author author
- * @since 2020-02-21
+ * @since 2020-02-23
  */
-public interface IPetService extends IService<Pet> {
+public interface IArticleService extends IService<Article> {
 
-    Page<Pet> selectPage(Pet pet, Page page);
+    Page<Article> selectPage(Article article, Page page);
 }

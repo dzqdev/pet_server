@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sise.pet.mapper.DictDetailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sise.pet.entity.DictDetail">
+        <id column="id" property="id" />
+        <result column="label" property="label"/>
+        <result column="value" property="value" />
+        <result column="sort" property="sort" />
+        <result column="dict_id" property="dictId" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, label,value, sort, dict_id, create_time
+    </sql>
+
+</mapper>
