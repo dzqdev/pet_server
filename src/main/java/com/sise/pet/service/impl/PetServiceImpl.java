@@ -1,6 +1,6 @@
 package com.sise.pet.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sise.pet.entity.Pet;
@@ -24,10 +24,14 @@ public class PetServiceImpl extends ServiceImpl<PetMapper, Pet> implements IPetS
     @Resource
     private PetMapper petMapper;
 
+
     @Override
-    public Page<Pet> selectPage(Pet pet, Page page) {
-        QueryWrapper<Pet> queryWrapper = new QueryWrapper<>();
-        Page result = petMapper.selectPage(page, queryWrapper);
-        return result;
+    public IPage<Pet> selectPage(Pet entity, Page page) {
+        return petMapper.getWithSubImgPage(page,entity);
+    }
+
+    @Override
+    public Pet getByPrimaryKey(Integer id) {
+        return petMapper.getSingleWithSubImg(id);
     }
 }

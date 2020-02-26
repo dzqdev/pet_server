@@ -1,5 +1,6 @@
 package com.sise.pet.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sise.pet.entity.Hospital;
@@ -13,5 +14,7 @@ import com.sise.pet.entity.Hospital;
  * @since 2020-02-23
  */
 public interface IHospitalService extends IService<Hospital> {
-    Page<Hospital> selectPage(Hospital entity, Page page);
+    IPage<Hospital> selectPage(Hospital entity, Page page);
+
+    Hospital getByPrimaryKey(Integer id);
 }

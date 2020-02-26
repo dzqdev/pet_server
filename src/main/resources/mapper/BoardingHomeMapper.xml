@@ -17,9 +17,37 @@
         <result column="create_time" property="createTime" />
     </resultMap>
 
+    <resultMap id="withSubImgResultMap" type="com.sise.pet.entity.BoardingHome" extends="BaseResultMap">
+        <collection property="subImgs" ofType="string">
+            <result column="subImg"/>
+        </collection>
+    </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, name, main_pic, promise, feature, custom_comment, concat, lng, lat, location, create_time
     </sql>
+
+    <select id="getWithSubImgPage" resultMap="withSubImgResultMap">
+        select
+        boarding_home.*,tmp.url as subImg
+        from boarding_home left join
+        (select * from img_entity where entity_type = 'boarding-home') as tmp
+        on boarding_home.id = tmp.entity_id
+        <where>
+            <if test="boardingHome.id != null">
+                and boarding_home.id = #{boardingHome.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="getSingleWithSubImg" resultMap="withSubImgResultMap">
+        select
+        boarding_home.*,tmp.url as subImg
+        from boarding_home left join
+        (select * from img_entity where entity_type = 'boarding-home') as tmp
+        on boarding_home.id = tmp.entity_id
+        where boarding_home.id = #{id}
+    </select>
 
 </mapper>

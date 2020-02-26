@@ -1,6 +1,7 @@
 package com.sise.pet.controller;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sise.pet.core.Result;
 import com.sise.pet.core.ResultGenerator;
@@ -33,6 +34,7 @@ public class HospitalController {
         return ResultGenerator.genSuccessResult();
     }
 
+
     @PutMapping
     public Result update(Hospital entity){
         iHospitalService.updateById(entity);
@@ -47,7 +49,13 @@ public class HospitalController {
 
     @GetMapping
     public Result list(Hospital entity, Page page){
-        Page<Hospital> list = iHospitalService.selectPage(entity,page);
+        IPage<Hospital> list = iHospitalService.selectPage(entity, page);
         return ResultGenerator.genSuccessResult(list);
+    }
+
+    @GetMapping("/{id}")
+    public Result get(@PathVariable Integer id){
+        Hospital hospital = iHospitalService.getByPrimaryKey(id);
+        return ResultGenerator.genSuccessResult(hospital);
     }
 }

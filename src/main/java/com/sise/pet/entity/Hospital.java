@@ -1,13 +1,16 @@
 package com.sise.pet.entity;
 
-import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -66,6 +69,9 @@ public class Hospital implements Serializable {
      * 创建时间
      */
     private Date createTime;
+
+    @TableField(exist = false)
+    List<String> subImgs;
 
 
 }

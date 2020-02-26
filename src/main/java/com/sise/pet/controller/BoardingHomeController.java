@@ -1,6 +1,7 @@
 package com.sise.pet.controller;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sise.pet.core.Result;
 import com.sise.pet.core.ResultGenerator;
@@ -45,9 +46,15 @@ public class BoardingHomeController {
         return ResultGenerator.genSuccessResult();
     }
 
+    @GetMapping("/{id}")
+    public Result get(@PathVariable Integer id){
+        BoardingHome entity = iBoardingHomeService.getByPrimaryKey(id);
+        return ResultGenerator.genSuccessResult(entity);
+    }
+
     @GetMapping
     public Result list(BoardingHome entity, Page page){
-        Page<BoardingHome> list = iBoardingHomeService.selectPage(entity,page);
+        IPage<BoardingHome> list = iBoardingHomeService.selectPage(entity, page);
         return ResultGenerator.genSuccessResult(list);
     }
 

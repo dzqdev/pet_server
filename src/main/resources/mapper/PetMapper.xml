@@ -13,9 +13,37 @@
         <result column="modify_time" property="modifyTime" />
     </resultMap>
 
+    <resultMap id="withSubImgResultMap" type="com.sise.pet.entity.Pet" extends="BaseResultMap">
+        <collection property="subImgs" ofType="string">
+            <result column="subImg"/>
+        </collection>
+    </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, name, description, content, main_pic, create_time, modify_time
     </sql>
+
+    <select id="getWithSubImgPage" resultMap="withSubImgResultMap">
+        select
+        pet.*,tmp.url as subImg
+        from pet left join
+        (select * from img_entity where entity_type = 'pet') as tmp
+        on pet.id = tmp.entity_id
+        <where>
+            <if test="pet.id != null">
+                and pet.id = #{pet.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="getSingleWithSubImg" resultMap="withSubImgResultMap">
+        select
+        pet.*,tmp.url as subImg
+        from pet left join
+        (select * from img_entity where entity_type = 'pet') as tmp
+        on pet.id = tmp.entity_id
+        where pet.id = #{id}
+    </select>
 
 </mapper>

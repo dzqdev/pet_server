@@ -1,5 +1,6 @@
 package com.sise.pet.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sise.pet.entity.BoardingHome;
@@ -13,5 +14,7 @@ import com.sise.pet.entity.BoardingHome;
  * @since 2020-02-23
  */
 public interface IBoardingHomeService extends IService<BoardingHome> {
-    Page<BoardingHome> selectPage(BoardingHome entity, Page page);
+    IPage<BoardingHome> selectPage(BoardingHome entity, Page page);
+
+    BoardingHome getByPrimaryKey(Integer id);
 }

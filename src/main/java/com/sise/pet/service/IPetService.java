@@ -1,8 +1,9 @@
 package com.sise.pet.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.sise.pet.entity.Pet;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.sise.pet.entity.Pet;
 
 /**
  * <p>
@@ -14,5 +15,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IPetService extends IService<Pet> {
 
-    Page<Pet> selectPage(Pet pet, Page page);
+    IPage<Pet> selectPage(Pet entity, Page page);
+
+    Pet getByPrimaryKey(Integer id);
 }

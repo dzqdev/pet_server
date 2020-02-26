@@ -1,6 +1,6 @@
 package com.sise.pet.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sise.pet.entity.BoardingHome;
@@ -25,9 +25,12 @@ public class BoardingHomeServiceImpl extends ServiceImpl<BoardingHomeMapper, Boa
     private BoardingHomeMapper boardingHomeMapper;
 
     @Override
-    public Page<BoardingHome> selectPage(BoardingHome entity, Page page) {
-        QueryWrapper<BoardingHome> queryWrapper = new QueryWrapper<>();
-        Page result = boardingHomeMapper.selectPage(page, queryWrapper);
-        return result;
+    public IPage<BoardingHome> selectPage(BoardingHome entity, Page page) {
+        return boardingHomeMapper.getWithSubImgPage(page, entity);
+    }
+
+    @Override
+    public BoardingHome getByPrimaryKey(Integer id) {
+        return boardingHomeMapper.getSingleWithSubImg(id);
     }
 }

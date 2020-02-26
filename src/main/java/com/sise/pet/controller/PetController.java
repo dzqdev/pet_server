@@ -1,6 +1,7 @@
 package com.sise.pet.controller;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sise.pet.core.Result;
 import com.sise.pet.core.ResultGenerator;
@@ -35,8 +36,14 @@ public class PetController {
 
     @GetMapping
     public Result petList(Pet pet, Page page){
-        Page<Pet> list = iPetService.selectPage(pet,page);
+        IPage<Pet> list = iPetService.selectPage(pet, page);
         return ResultGenerator.genSuccessResult(list);
+    }
+
+    @GetMapping("/{id}")
+    public Result get(@PathVariable Integer id){
+        Pet pet = iPetService.getByPrimaryKey(id);
+        return ResultGenerator.genSuccessResult(pet);
     }
 
     @PutMapping
