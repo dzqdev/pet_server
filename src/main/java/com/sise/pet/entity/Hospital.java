@@ -1,16 +1,15 @@
 package com.sise.pet.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 /**
  * <p>
@@ -41,6 +40,11 @@ public class Hospital implements Serializable {
     private String mainPic;
 
     /**
+     * 副图片
+     */
+    private String subImages;
+
+    /**
      * 内容
      */
     private String content;
@@ -51,16 +55,6 @@ public class Hospital implements Serializable {
     private String concat;
 
     /**
-     * 经度
-     */
-    private BigDecimal lng;
-
-    /**
-     * 纬度
-     */
-    private BigDecimal lat;
-
-    /**
      * 位置信息
      */
     private String location;
@@ -68,10 +62,9 @@ public class Hospital implements Serializable {
     /**
      * 创建时间
      */
+    @CreatedDate
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
-
-    @TableField(exist = false)
-    List<String> subImgs;
 
 
 }

@@ -9,41 +9,20 @@
         <result column="description" property="description" />
         <result column="content" property="content" />
         <result column="main_pic" property="mainPic" />
+        <result column="view_count" property="viewCount" />
         <result column="create_time" property="createTime" />
         <result column="modify_time" property="modifyTime" />
+        <result property="subImages" column="sub_images"/>
     </resultMap>
 
-    <resultMap id="withSubImgResultMap" type="com.sise.pet.entity.Pet" extends="BaseResultMap">
-        <collection property="subImgs" ofType="string">
-            <result column="subImg"/>
-        </collection>
-    </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, description, content, main_pic, create_time, modify_time
+        id, name, description, content, main_pic,sub_images,view_count, create_time, modify_time
     </sql>
 
-    <select id="getWithSubImgPage" resultMap="withSubImgResultMap">
-        select
-        pet.*,tmp.url as subImg
-        from pet left join
-        (select * from img_entity where entity_type = 'pet') as tmp
-        on pet.id = tmp.entity_id
-        <where>
-            <if test="pet.id != null">
-                and pet.id = #{pet.id}
-            </if>
-        </where>
-    </select>
-
-    <select id="getSingleWithSubImg" resultMap="withSubImgResultMap">
-        select
-        pet.*,tmp.url as subImg
-        from pet left join
-        (select * from img_entity where entity_type = 'pet') as tmp
-        on pet.id = tmp.entity_id
-        where pet.id = #{id}
-    </select>
+    <update id="updateViewCount">
+        update pet set view_count = view_count+1 where id = #{id}
+    </update>
 
 </mapper>

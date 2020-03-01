@@ -15,6 +15,4 @@ import com.sise.pet.entity.Hospital;
  */
 public interface IHospitalService extends IService<Hospital> {
     IPage<Hospital> selectPage(Hospital entity, Page page);
-
-    Hospital getByPrimaryKey(Integer id);
 }

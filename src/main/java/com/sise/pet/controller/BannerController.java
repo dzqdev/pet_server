@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -49,5 +50,15 @@ public class BannerController {
     public Result deleteBanner(@PathVariable String id){
         iBannerService.removeById(id);
         return ResultGenerator.genSuccessResult();
+    }
+
+    /**
+     * 返回客户端需要展示的banner
+     * @return
+     */
+    @GetMapping("/visible")
+    public Result getVisibleBanner(){
+        List<Banner> list =  iBannerService.getVisibleBanner();
+        return ResultGenerator.genSuccessResult(list);
     }
 }

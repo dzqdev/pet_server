@@ -1,6 +1,7 @@
 package com.sise.pet.controller;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sise.pet.core.Result;
 import com.sise.pet.core.ResultGenerator;
@@ -39,7 +40,19 @@ public class ArticleController {
 
     @GetMapping
     public Result articleList(Article article, Page page){
-        Page<Article> articlePage = iArticleService.selectPage(article, page);
-        return ResultGenerator.genSuccessResult(articlePage);
+        IPage<Article> articleIPage = iArticleService.selectPage(article, page);
+        return ResultGenerator.genSuccessResult(articleIPage);
+    }
+
+    @GetMapping("/{id}")
+    public Result article(@PathVariable Integer id){
+        Article article = iArticleService.getArticleWithPetInfo(id);
+        return ResultGenerator.genSuccessResult(article);
+    }
+
+    @PutMapping("/{id}")
+    public Result updateViewCount(@PathVariable Integer id){
+        iArticleService.updateViewCount(id);
+        return ResultGenerator.genSuccessResult();
     }
 }

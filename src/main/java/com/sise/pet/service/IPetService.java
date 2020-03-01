@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sise.pet.entity.Pet;
 
+import java.util.List;
+
 /**
  * <p>
  * 宠物狗类别 服务类
@@ -15,7 +17,10 @@ import com.sise.pet.entity.Pet;
  */
 public interface IPetService extends IService<Pet> {
 
+
     IPage<Pet> selectPage(Pet entity, Page page);
 
-    Pet getByPrimaryKey(Integer id);
+    void updateViewCount(Integer id);
+
+    List<Pet> getHotPet();
 }

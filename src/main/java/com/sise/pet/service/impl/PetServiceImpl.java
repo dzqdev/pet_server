@@ -1,5 +1,6 @@
 package com.sise.pet.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -9,6 +10,7 @@ import com.sise.pet.service.IPetService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -27,11 +29,23 @@ public class PetServiceImpl extends ServiceImpl<PetMapper, Pet> implements IPetS
 
     @Override
     public IPage<Pet> selectPage(Pet entity, Page page) {
-        return petMapper.getWithSubImgPage(page,entity);
+        QueryWrapper<Pet> queryWrapper = new QueryWrapper<>();
+        Page result = petMapper.selectPage(page, queryWrapper);
+        return result;
     }
 
     @Override
-    public Pet getByPrimaryKey(Integer id) {
-        return petMapper.getSingleWithSubImg(id);
+    public void updateViewCount(Integer id) {
+        petMapper.updateViewCount(id);
     }
+
+    @Override
+    public List<Pet> getHotPet() {
+        QueryWrapper<Pet> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByAsc("view_count");
+        queryWrapper.last("limit 0 , 5");
+        List<Pet> list = petMapper.selectList(queryWrapper);
+        return list;
+    }
+
 }

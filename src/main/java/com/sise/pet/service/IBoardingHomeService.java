@@ -15,6 +15,4 @@ import com.sise.pet.entity.BoardingHome;
  */
 public interface IBoardingHomeService extends IService<BoardingHome> {
     IPage<BoardingHome> selectPage(BoardingHome entity, Page page);
-
-    BoardingHome getByPrimaryKey(Integer id);
 }

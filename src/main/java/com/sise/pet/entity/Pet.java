@@ -1,7 +1,6 @@
 package com.sise.pet.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,7 +10,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
  * <p>
@@ -52,6 +50,13 @@ public class Pet implements Serializable {
     private String mainPic;
 
     /**
+     * 副图片
+     */
+    private String subImages;
+
+    private Integer viewCount;
+
+    /**
      * 创建时间
      */
     @CreatedDate
@@ -64,7 +69,5 @@ public class Pet implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date modifyTime;
 
-    @TableField(exist = false)
-    List<String> subImgs;
 
 }

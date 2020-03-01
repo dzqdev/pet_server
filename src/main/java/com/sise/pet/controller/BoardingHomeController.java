@@ -48,7 +48,7 @@ public class BoardingHomeController {
 
     @GetMapping("/{id}")
     public Result get(@PathVariable Integer id){
-        BoardingHome entity = iBoardingHomeService.getByPrimaryKey(id);
+        BoardingHome entity = iBoardingHomeService.getById(id);
         return ResultGenerator.genSuccessResult(entity);
     }
 

@@ -9,6 +9,7 @@ import com.sise.pet.service.IBannerService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -29,5 +30,12 @@ public class BannerServiceImpl extends ServiceImpl<BannerMapper, Banner> impleme
         QueryWrapper<Banner> queryWrapper = new QueryWrapper<>();
         Page result = bannerMapper.selectPage(page, queryWrapper);
         return result;
+    }
+
+    @Override
+    public List<Banner> getVisibleBanner() {
+        QueryWrapper<Banner> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("state", 0);
+        return bannerMapper.selectList(queryWrapper);
     }
 }

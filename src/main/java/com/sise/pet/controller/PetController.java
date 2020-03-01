@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -42,7 +43,7 @@ public class PetController {
 
     @GetMapping("/{id}")
     public Result get(@PathVariable Integer id){
-        Pet pet = iPetService.getByPrimaryKey(id);
+        Pet pet = iPetService.getById(id);
         return ResultGenerator.genSuccessResult(pet);
     }
 
@@ -59,5 +60,15 @@ public class PetController {
         return ResultGenerator.genSuccessResult();
     }
 
+    @PutMapping("/{id}")
+    public Result updateViewCount(@PathVariable Integer id){
+        iPetService.updateViewCount(id);
+        return ResultGenerator.genSuccessResult();
+    }
 
+    @GetMapping("/hot")
+    public Result getHotPet(){
+        List<Pet> list = iPetService.getHotPet();
+        return ResultGenerator.genSuccessResult(list);
+    }
 }

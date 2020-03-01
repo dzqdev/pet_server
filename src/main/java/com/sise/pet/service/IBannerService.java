@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sise.pet.entity.Banner;
 
+import java.util.List;
+
 /**
  * <p>
  * 轮播图 服务类
@@ -14,4 +16,6 @@ import com.sise.pet.entity.Banner;
  */
 public interface IBannerService extends IService<Banner> {
     Page<Banner> selectPage(Banner banner, Page page);
+
+    List<Banner> getVisibleBanner();
 }

@@ -1,5 +1,6 @@
 package com.sise.pet.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -26,12 +27,8 @@ public class HospitalServiceImpl extends ServiceImpl<HospitalMapper, Hospital> i
 
     @Override
     public IPage<Hospital> selectPage(Hospital entity, Page page) {
-        IPage<Hospital> result = hospitalMapper.getWithSubImgPage(page, entity);
+        QueryWrapper<Hospital> queryWrapper = new QueryWrapper<>();
+        Page result = hospitalMapper.selectPage(page, queryWrapper);
         return result;
-    }
-
-    @Override
-    public Hospital getByPrimaryKey(Integer id) {
-        return hospitalMapper.getSingleWithSubImg(id);
     }
 }

@@ -1,10 +1,12 @@
 package com.sise.pet.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.Transient;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -43,6 +45,11 @@ public class Article implements Serializable {
     private String content;
 
     /**
+     * 作者
+     */
+    private String author;
+
+    /**
      * 所属宠物狗类别id
      */
     private Integer petId;
@@ -53,9 +60,23 @@ public class Article implements Serializable {
     private String type;
 
     /**
+     * 查看次数
+     */
+    private Integer viewCount;
+
+    /**
      * 创建日期
      */
     private Date createTime;
+
+
+    @TableField(exist = false)
+    @Transient
+    private Pet pet;
+
+    @TableField(exist = false)
+    @Transient
+    private String typeName;
 
 
 }

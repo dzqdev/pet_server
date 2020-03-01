@@ -1,6 +1,6 @@
 package com.sise.pet.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sise.pet.entity.Article;
@@ -24,10 +24,19 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Resource
     private ArticleMapper articleMapper;
 
+
     @Override
-    public Page<Article> selectPage(Article article, Page page) {
-        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
-        Page result = articleMapper.selectPage(page, queryWrapper);
-        return result;
+    public IPage<Article> selectPage(Article entity, Page page) {
+        return articleMapper.getArticlePage(page,entity);
+    }
+
+    @Override
+    public Article getArticleWithPetInfo(Integer id) {
+        return articleMapper.getArticleWithPetInfo(id);
+    }
+
+    @Override
+    public void updateViewCount(Integer id) {
+        articleMapper.updateViewCount(id);
     }
 }

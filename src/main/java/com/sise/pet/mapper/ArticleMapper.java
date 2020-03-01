@@ -1,7 +1,9 @@
 package com.sise.pet.mapper;
 
-import com.sise.pet.entity.Article;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.sise.pet.entity.Article;
 
 /**
  * <p>
@@ -12,5 +14,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2020-02-23
  */
 public interface ArticleMapper extends BaseMapper<Article> {
-
+    Article getArticleWithPetInfo(Integer id);
+    IPage<Article> getArticlePage(Page page, Article article);
+    void updateViewCount(Integer id);
 }

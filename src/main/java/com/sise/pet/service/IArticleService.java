@@ -1,8 +1,9 @@
 package com.sise.pet.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.sise.pet.entity.Article;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.sise.pet.entity.Article;
 
 /**
  * <p>
@@ -14,5 +15,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IArticleService extends IService<Article> {
 
-    Page<Article> selectPage(Article article, Page page);
+    IPage<Article> selectPage(Article entity, Page page);
+
+    Article getArticleWithPetInfo(Integer id);
+
+    void updateViewCount(Integer id);
 }

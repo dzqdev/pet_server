@@ -6,43 +6,15 @@
         <id column="id" property="id" />
         <result column="name" property="name" />
         <result column="main_pic" property="mainPic" />
+        <result property="subImages" column="sub_images"/>
         <result column="content" property="content" />
         <result column="concat" property="concat" />
-        <result column="lng" property="lng" />
-        <result column="lat" property="lat" />
         <result column="location" property="location" />
         <result column="create_time" property="createTime" />
     </resultMap>
 
-    <resultMap id="withSubImgResultMap" type="com.sise.pet.entity.Hospital" extends="BaseResultMap">
-        <collection property="subImgs" ofType="string">
-            <result column="subImg"/>
-        </collection>
-    </resultMap>
-
     <sql id="Base_Column_List">
-        id, name, main_pic, content, concat, lng, lat, location, create_time
+        id, name, main_pic,sub_images, content, concat, location, create_time
     </sql>
 
-    <select id="getWithSubImgPage" resultMap="withSubImgResultMap">
-        select
-        hospital.*,tmp.url as subImg
-        from hospital left join
-        (select * from img_entity where entity_type = 'hospital') as tmp
-        on hospital.id = tmp.entity_id
-        <where>
-            <if test="hospital.id != null">
-                and hospital.id = #{hospital.id}
-            </if>
-        </where>
-    </select>
-
-    <select id="getSingleWithSubImg" resultMap="withSubImgResultMap">
-        select
-        hospital.*,tmp.url as subImg
-        from hospital left join
-        (select * from img_entity where entity_type = 'hospital') as tmp
-        on hospital.id = tmp.entity_id
-        where hospital.id = #{id}
-    </select>
 </mapper>

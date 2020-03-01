@@ -55,7 +55,7 @@ public class HospitalController {
 
     @GetMapping("/{id}")
     public Result get(@PathVariable Integer id){
-        Hospital hospital = iHospitalService.getByPrimaryKey(id);
+        Hospital hospital = iHospitalService.getById(id);
         return ResultGenerator.genSuccessResult(hospital);
     }
 }
