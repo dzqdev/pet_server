@@ -40,6 +40,7 @@ public class LoginController {
         if (user == null || !StringUtils.equals(user.getPassword(), password)){
             return ResultGenerator.genFailResult("用户名或密码错误");
         }
+
         String token = JWTUtil.sign(user.getId().toString(), "user", user.getPassword());
         LocalDateTime expireTime = LocalDateTime.now().plusSeconds(86400L);
         String expireTimeStr = DateUtil.formatFullTime(expireTime);

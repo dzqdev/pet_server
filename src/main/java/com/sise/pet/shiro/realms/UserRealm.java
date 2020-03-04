@@ -3,6 +3,7 @@ package com.sise.pet.shiro.realms;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.sise.pet.entity.User;
 import com.sise.pet.service.IUserService;
+import com.sise.pet.shiro.JWTUtil;
 import com.sise.pet.shiro.JwtToken;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -32,6 +33,7 @@ public class UserRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         JwtToken token = (JwtToken) authenticationToken;
+        String s = token.getToken();
         String principal = (String)token.getPrincipal();
         Object credentials = token.getCredentials();
         QueryWrapper<User> queryWrapper = new QueryWrapper();
