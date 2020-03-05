@@ -69,6 +69,16 @@ public class JWTUtil {
         }
     }
 
+    public static String getPassword(String token) {
+        try {
+            DecodedJWT jwt = JWT.decode(token);
+            return jwt.getClaim("password").asString();
+        } catch (JWTDecodeException e) {
+            log.error("error：{}", e.getMessage());
+            return null;
+        }
+    }
+
     /**
      * 生成 token
      *

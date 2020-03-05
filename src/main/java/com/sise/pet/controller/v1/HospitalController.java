@@ -1,4 +1,4 @@
-package com.sise.pet.controller;
+package com.sise.pet.controller.v1;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -21,7 +21,7 @@ import java.util.Date;
  * @since 2020-02-23
  */
 @RestController
-@RequestMapping("/api/v1/hospital")
+@RequestMapping(value = {"/api/v1/hospital","/api/v2/hospital"})
 public class HospitalController {
 
     @Resource

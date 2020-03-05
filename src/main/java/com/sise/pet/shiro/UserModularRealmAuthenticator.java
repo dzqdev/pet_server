@@ -25,14 +25,15 @@ public class UserModularRealmAuthenticator extends ModularRealmAuthenticator {
         Collection<Realm> realms = getRealms();
         Realm realm = null;
         for (Realm r : realms) {
-            if (loginType.equals(r.getName())) {
+            String name = r.getClass().getName();
+            if (name.indexOf(loginType) > -1) {
                 realm = r;
             }
         }
         if (realm == null) {
             return null;
         }
-        return doSingleRealmAuthentication(realm, authenticationToken);
+        return doSingleRealmAuthentication(realm, jwtToken);
     }
 
     @Override

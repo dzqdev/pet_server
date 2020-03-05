@@ -1,4 +1,4 @@
-package com.sise.pet.controller;
+package com.sise.pet.controller.v1;
 
 
 import org.springframework.web.bind.annotation.RequestMapping;

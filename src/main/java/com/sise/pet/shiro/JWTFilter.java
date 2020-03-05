@@ -22,7 +22,6 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
 
     private static final String TOKEN = "Authentication";
 
-    private static final String LOGIN_TYPE = "loginType";
 
 
     private AntPathMatcher pathMatcher = new AntPathMatcher();
@@ -56,7 +55,6 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
     protected boolean executeLogin(ServletRequest request, ServletResponse response) {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String token = httpServletRequest.getHeader(TOKEN);
-        String loginType = httpServletRequest.getHeader(LOGIN_TYPE);
         JwtToken jwtToken = new JwtToken(token);
         try {
             getSubject(request, response).login(jwtToken);

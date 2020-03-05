@@ -1,4 +1,4 @@
-package com.sise.pet.controller;
+package com.sise.pet.controller.v1;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sise.pet.core.Result;
 import com.sise.pet.core.ResultGenerator;
 import com.sise.pet.entity.Discussion;
-import com.sise.pet.entity.Hospital;
 import com.sise.pet.service.IDiscussionService;
 import org.springframework.web.bind.annotation.*;
 
