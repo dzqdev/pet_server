@@ -2,11 +2,10 @@ package com.sise.pet.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sise.pet.entity.Discussion;
-import com.sise.pet.entity.Hospital;
 import com.sise.pet.mapper.DiscussionMapper;
 import com.sise.pet.service.IDiscussionService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -29,5 +28,10 @@ public class DiscussionServiceImpl extends ServiceImpl<DiscussionMapper, Discuss
     public IPage<Discussion> selectPage(Discussion entity, Page page) {
         IPage<Discussion> result = discussionMapper.getDetailInfoPage(page, entity);
         return result;
+    }
+
+    @Override
+    public Discussion getSingleDiscussion(Integer id) {
+        return discussionMapper.getSingleDiscussion(id);
     }
 }

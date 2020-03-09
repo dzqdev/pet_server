@@ -16,4 +16,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IDiscussionService extends IService<Discussion> {
 
     IPage<Discussion> selectPage(Discussion entity, Page page);
+
+    Discussion getSingleDiscussion(Integer id);
 }

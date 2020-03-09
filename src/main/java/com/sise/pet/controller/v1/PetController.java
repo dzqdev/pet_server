@@ -22,7 +22,7 @@ import java.util.List;
  * @since 2020-02-21
  */
 @RestController
-@RequestMapping("/api/v1/pet")
+@RequestMapping(value = {"/api/v1/pet","/api/v2/pet"})
 public class PetController {
 
     @Resource

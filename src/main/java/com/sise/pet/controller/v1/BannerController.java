@@ -21,7 +21,7 @@ import java.util.List;
  * @since 2020-02-23
  */
 @RestController
-@RequestMapping("/api/v1/banner")
+@RequestMapping(value = {"/api/v1/banner","/api/v2/banner"})
 public class BannerController {
 
     @Resource

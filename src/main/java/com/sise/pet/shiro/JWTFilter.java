@@ -23,7 +23,6 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
     private static final String TOKEN = "Authentication";
 
 
-
     private AntPathMatcher pathMatcher = new AntPathMatcher();
 
     @Override

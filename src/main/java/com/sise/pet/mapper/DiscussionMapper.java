@@ -16,4 +16,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface DiscussionMapper extends BaseMapper<Discussion> {
 
     IPage<Discussion> getDetailInfoPage(Page page, Discussion entity);
+
+    Discussion getSingleDiscussion(Integer id);
 }

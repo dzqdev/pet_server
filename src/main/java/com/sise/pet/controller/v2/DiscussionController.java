@@ -1,4 +1,4 @@
-package com.sise.pet.controller.v1;
+package com.sise.pet.controller.v2;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -10,6 +10,7 @@ import com.sise.pet.service.IDiscussionService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 /**
  * <p>
@@ -20,7 +21,7 @@ import javax.annotation.Resource;
  * @since 2020-02-27
  */
 @RestController
-@RequestMapping("/api/v1/discussion")
+@RequestMapping("/api/v2/discussion")
 public class DiscussionController {
 
     @Resource
@@ -28,6 +29,7 @@ public class DiscussionController {
 
     @PostMapping
     public Result add(Discussion entity){
+        entity.setCreateTime(new Date());
         iDiscussionService.save(entity);
         return ResultGenerator.genSuccessResult();
     }
@@ -47,11 +49,12 @@ public class DiscussionController {
     @GetMapping
     public Result list(Discussion entity, Page page){
         IPage<Discussion> list = iDiscussionService.selectPage(entity, page);
-        return ResultGenerator.genSuccessResult();
+        return ResultGenerator.genSuccessResult(list);
     }
 
     @GetMapping("/{id}")
     public Result get(@PathVariable Integer id){
-        return ResultGenerator.genSuccessResult();
+        Discussion discussion = iDiscussionService.getSingleDiscussion(id);
+        return ResultGenerator.genSuccessResult(discussion);
     }
 }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sise.pet.mapper.StatisticsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sise.pet.vo.StatisticsBaseData">
+        <result column="name" property="name"/>
+        <result column="value" property="value"/>
+    </resultMap>
+
+
+    <select id="getTopic5PetInfo" resultMap="BaseResultMap">
+         select pet.name as name,
+         tmp.viewSumCount as value
+         FROM pet,
+        (select pet_id,sum(view_count) as viewSumCount
+        from article group by pet_id order by view_count desc) as tmp
+        where pet.id = tmp.pet_id order by tmp.viewSumCount desc
+    </select>
+
+    <select id="getArticleTypeCount" resultMap="BaseResultMap">
+        select
+        type_origin.label as name,
+        article_type.count as value
+        from
+        (
+        select label,value from dict_detail WHERE dict_id in(
+            SELECT id from dict WHERE name = 'article_type')
+        ) as type_origin,
+        (select type,count(id) as count from article GROUP BY type) as article_type
+        WHERE type_origin.value = article_type.type
+    </select>
+
+
+</mapper>

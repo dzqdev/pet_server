@@ -19,7 +19,7 @@ import javax.annotation.Resource;
  * @since 2020-02-21
  */
 @RestController
-@RequestMapping("api/v1/dict-detail")
+@RequestMapping(value = {"api/v1/dict-detail","api/v2/dict-detail"})
 public class DictDetailController {
 
     @Resource

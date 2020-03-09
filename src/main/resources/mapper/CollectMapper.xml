@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sise.pet.mapper.CollectMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.sise.pet.entity.Collect">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="resource_id" property="resourceId" />
+        <result column="type" property="type" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <resultMap id="ArticleResultMap" type="com.sise.pet.vo.CollectArticleVo">
+        <result column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="description" property="description"/>
+        <result column="content" property="content"/>
+        <result column="author" property="author"/>
+        <result column="pet_id" property="petId"/>
+        <result column="type" property="type"/>
+        <result column="view_count" property="viewCount"/>
+        <result column="create_time" property="createTime"/>
+        <result column="collect_time" property="collectTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_id, resource_id, type, create_time
+    </sql>
+
+
+    <select id="getUserCollectArticles" resultMap="ArticleResultMap">
+        select article.*,collect_tmp.create_time from article
+        right join
+        (
+        select * from collect where user_id = #{collect.userId} and type = 'article'
+        ) as collect_tmp
+        on article.id = collect_tmp.resource_id
+    </select>
+
+
+</mapper>

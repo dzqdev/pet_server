@@ -10,6 +10,7 @@ import com.sise.pet.service.IArticleService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 /**
  * <p>
@@ -20,7 +21,7 @@ import javax.annotation.Resource;
  * @since 2020-02-23
  */
 @RestController
-@RequestMapping("/api/v1/article")
+@RequestMapping(value = {"/api/v1/article","/api/v2/article"})
 public class ArticleController {
 
     @Resource
@@ -28,6 +29,7 @@ public class ArticleController {
 
     @PostMapping
     public Result addArticle(Article article){
+        article.setCreateTime(new Date());
         iArticleService.save(article);
         return ResultGenerator.genSuccessResult();
     }

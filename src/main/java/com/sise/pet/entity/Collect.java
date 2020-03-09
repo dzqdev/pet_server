@@ -1,6 +1,7 @@
 package com.sise.pet.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import lombok.Data;
@@ -9,16 +10,16 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 图片-实体中间表
+ * 收藏
  * </p>
  *
  * @author author
- * @since 2020-02-23
+ * @since 2020-03-08
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class ImgEntity implements Serializable {
+public class Collect implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -26,19 +27,24 @@ public class ImgEntity implements Serializable {
     private Integer id;
 
     /**
-     * 图片地址
+     * 用户id
      */
-    private String url;
+    private Integer userId;
 
     /**
-     * 图片对应实体类型
+     * 收藏的资源id
      */
-    private String entityType;
+    private Integer resourceId;
 
     /**
-     * 对应的实体id
+     * 资源类型 文章|视频
      */
-    private Integer entityId;
+    private String type;
+
+    /**
+     * 收藏时间
+     */
+    private Date createTime;
 
 
 }

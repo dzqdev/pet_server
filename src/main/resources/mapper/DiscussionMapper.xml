@@ -13,6 +13,7 @@
     </resultMap>
     
     <resultMap id="withAuthorResultMap" type="com.sise.pet.entity.Discussion" extends="BaseResultMap">
+        <result column="comment_count" property="commentCount"/>
         <association property="author" javaType="com.sise.pet.entity.User">
             <result column="id" property="id"/>
             <result column="username" property="username"/>
@@ -20,15 +21,6 @@
         </association>
     </resultMap>
 
-    <resultMap id="withAuthorAndCommentsResultMap" type="com.sise.pet.entity.Discussion" extends="BaseResultMap">
-        <association property="author" javaType="com.sise.pet.entity.User">
-            <result column="id" property="id"/>
-            <result column="username" property="username"/>
-            <result column="avatar" property="avatar"/>
-        </association>
-        <collection property="comments" ofType="com.sise.pet.entity.Comment">
-        </collection>
-    </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
@@ -36,8 +28,24 @@
     </sql>
 
     <select id="getDetailInfoPage" resultMap="withAuthorResultMap">
-        select discussion.*,user.* from discussion
+       select
+        discussion.*,
+        user.id,user.username,user.avatar,
+        count(comment.id) as comment_count
+        from discussion
         left join user on discussion.author_id = user.id
+        left join comment on comment.discussion_id = discussion.id
+    </select>
+
+    <select id="getSingleDiscussion" resultMap="withAuthorResultMap">
+       select
+        discussion.*,
+        user.id,user.username,user.avatar,
+        count(comment.id) as comment_count
+        from discussion
+        left join user on discussion.author_id = user.id
+        left join comment on comment.discussion_id = discussion.id
+        where discussion.id = #{id}
     </select>
 
 </mapper>
