@@ -14,9 +14,60 @@
         <result column="create_date" property="createDate" />
     </resultMap>
 
+    <resultMap id="withDetailInfoResultMap" extends="BaseResultMap" type="com.sise.pet.vo.CommentVo">
+        <association property="author" javaType="com.sise.pet.entity.User">
+            <result column="a_id" property="id"/>
+            <result column="a_username" property="username"/>
+            <result column="a_avatar" property="avatar"/>
+        </association>
+        <association property="toUser" javaType="com.sise.pet.entity.User">
+            <result column="t_id" property="id"/>
+            <result column="t_username" property="username"/>
+            <result column="t_avatar" property="avatar"/>
+        </association>
+    </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, content, discussion_id, author_id, parent_id, to_uid, level, create_date
     </sql>
+
+    <select id="listCommentsByDiscussion" resultMap="withDetailInfoResultMap">
+        select
+        comment.*,
+        u1.id as a_id,
+        u1.username as a_username,
+        u1.avatar as a_avatar,
+        u2.id as t_id,
+        u2.username as t_username,
+        u2.avatar as t_avatar
+        from comment
+        left join user u1 on u1.id = comment.author_id
+        left join user u2 on u2.id = comment.to_uid
+        <where>
+            discussion_id = #{discussionId}
+            <if test="level != null">
+                and level = #{level}
+            </if>
+        </where>
+        order by create_date desc
+    </select>
+
+
+    <select id="listCommentSubComments" resultMap="withDetailInfoResultMap">
+        select
+        comment.*,
+        u1.id as a_id,
+        u1.username as a_username,
+        u1.avatar as a_avatar,
+        u2.id as t_id,
+        u2.username as t_username,
+        u2.avatar as t_avatar
+        from comment
+        left join user u1 on u1.id = comment.author_id
+        left join user u2 on u2.id = comment.to_uid
+        where parent_id = #{parentId}
+        order by create_date desc
+    </select>
 
 </mapper>

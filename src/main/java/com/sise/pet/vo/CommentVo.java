@@ -19,5 +19,5 @@ public class CommentVo extends Comment {
     private User toUser;
     private User author;
     private Comment parent;
-    private List<Comment> children;
+    private List<CommentVo> children;
 }

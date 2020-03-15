@@ -2,6 +2,10 @@ package com.sise.pet.mapper;
 
 import com.sise.pet.entity.Comment;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.sise.pet.vo.CommentVo;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +17,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface CommentMapper extends BaseMapper<Comment> {
 
+    List<CommentVo> listCommentsByDiscussion(Integer discussionId, @Param("level") String level);
+
+    List<CommentVo> listCommentSubComments(Integer parentId);
 }

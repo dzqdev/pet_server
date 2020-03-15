@@ -15,7 +15,7 @@
          FROM pet,
         (select pet_id,sum(view_count) as viewSumCount
         from article group by pet_id order by view_count desc) as tmp
-        where pet.id = tmp.pet_id order by tmp.viewSumCount desc
+        where pet.id = tmp.pet_id order by tmp.viewSumCount desc limit 0,5
     </select>
 
     <select id="getArticleTypeCount" resultMap="BaseResultMap">

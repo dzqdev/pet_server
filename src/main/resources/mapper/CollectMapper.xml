@@ -22,6 +22,11 @@
         <result column="view_count" property="viewCount"/>
         <result column="create_time" property="createTime"/>
         <result column="collect_time" property="collectTime"/>
+        <result column="type_name" property="typeName"/>
+        <association property="pet" javaType="com.sise.pet.entity.Pet">
+            <result column="pet_name" property="name"/>
+            <result column="pet_id" property="id"/>
+        </association>
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -31,7 +36,17 @@
 
 
     <select id="getUserCollectArticles" resultMap="ArticleResultMap">
-        select article.*,collect_tmp.create_time from article
+        select
+        article.*,
+        p.name as pet_name,
+        p.id as pet_id,
+        tmp.label as type_name,
+        collect_tmp.create_time
+        from article
+        left join pet p on article.pet_id = p.id
+        left join
+        (select * from dict_detail where dict_id in (select id from dict where name ='article_type')) as tmp
+        on article.type = tmp.value
         right join
         (
         select * from collect where user_id = #{collect.userId} and type = 'article'

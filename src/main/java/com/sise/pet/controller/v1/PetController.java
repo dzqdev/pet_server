@@ -41,6 +41,12 @@ public class PetController {
         return ResultGenerator.genSuccessResult(list);
     }
 
+    @GetMapping("/unPage")
+    public Result getAllPets(Pet pet){
+        List<Pet> list = iPetService.list();
+        return ResultGenerator.genSuccessResult(list);
+    }
+
     @GetMapping("/{id}")
     public Result get(@PathVariable Integer id){
         Pet pet = iPetService.getById(id);

@@ -5,8 +5,12 @@ import com.sise.pet.core.Result;
 import com.sise.pet.core.ResultGenerator;
 import com.sise.pet.entity.Comment;
 import com.sise.pet.service.ICommentService;
+import com.sise.pet.vo.CommentVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * 前端相关的评论 新增/查询
@@ -22,6 +26,7 @@ public class CommentController {
 
     @PostMapping
     public Result add(Comment comment){
+        comment.setCreateDate(new Date());
         iCommentService.save(comment);
         return ResultGenerator.genSuccessResult();
     }
@@ -33,8 +38,8 @@ public class CommentController {
      */
     @GetMapping("/discussion/{id}")
     public Result listCommentsByDiscussion(@PathVariable("id") Integer id){
-
-        return ResultGenerator.genSuccessResult();
+        List<CommentVo> commentList = iCommentService.listCommentsByDiscussion(id);
+        return ResultGenerator.genSuccessResult(commentList);
     }
 
 

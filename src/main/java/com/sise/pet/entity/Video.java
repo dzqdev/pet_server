@@ -1,27 +1,27 @@
 package com.sise.pet.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * <p>
- * 评论
+ * 视频
  * </p>
  *
  * @author author
- * @since 2020-02-27
+ * @since 2020-03-14
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class Comment implements Serializable {
+public class Video implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,41 +29,42 @@ public class Comment implements Serializable {
     private Integer id;
 
     /**
-     * 回复内容
+     * 标题
      */
-    private String content;
+    private String title;
 
     /**
-     * 讨论id
+     * 缩略图
      */
-    private Integer discussionId;
+    private String thumbnail;
 
     /**
-     * 发表人id
+     * 视频地址
      */
-    private Integer authorId;
+    private String url;
 
     /**
-     * 上一级评论
+     * 所属狗狗
      */
-    private Integer parentId;
+    private Integer petId;
 
     /**
-     * 评论目标
-     * 评论的用户@之类的
+     * 视频简介
      */
-    private Integer toUid;
+    private String description;
 
     /**
-     * 0 文章的评论 1 评论的评论 2 评论的回复 @
+     * 点击量
      */
-    private String level;
+    private Integer viewCount;
 
     /**
      * 创建时间
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createDate;
+    private Date createTime;
+
+    @TableField(exist = false)
+    private Pet pet;
 
 
 }

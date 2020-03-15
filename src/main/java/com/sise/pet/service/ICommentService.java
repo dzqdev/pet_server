@@ -2,6 +2,9 @@ package com.sise.pet.service;
 
 import com.sise.pet.entity.Comment;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.sise.pet.vo.CommentVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ICommentService extends IService<Comment> {
 
+    List<CommentVo> listCommentsByDiscussion(Integer id);
 }

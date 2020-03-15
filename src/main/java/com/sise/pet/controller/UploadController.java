@@ -24,7 +24,7 @@ public class UploadController {
     @PostMapping(value = {"pictures"})
     public Result fileUpload(MultipartFile file){
         String filename = file.getOriginalFilename();
-        File fileDir = UploadUtil.getResourcesSaveDir();
+        File fileDir = UploadUtil.getImageResourceSaveDir();
         try {
             // 构建真实的文件路径
             File newFile = new File(fileDir.getAbsolutePath() + File.separator + filename);
@@ -37,7 +37,19 @@ public class UploadController {
         }
     }
 
-    public void common(){
-
+    @PostMapping(value = {"videos"})
+    public Result videoUpload(MultipartFile file){
+        String filename = file.getOriginalFilename();
+        File fileDir = UploadUtil.getVideoResourceSaveDir();
+        try {
+            // 构建真实的文件路径
+            File newFile = new File(fileDir.getAbsolutePath() + File.separator + filename);
+            file.transferTo(newFile);
+            String filePath = "http://localhost:8888/videos/" + filename;
+            return ResultGenerator.genSuccessResult(filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResultGenerator.genFailResult(e.getMessage());
+        }
     }
 }

@@ -9,10 +9,12 @@ import java.io.File;
  * @Version 1.0
  **/
 public class UploadUtil {
-    public static final String FILE_UPLOAD_PATH = "D:/upload/images";
+    public static final String IMAGE_UPLOAD_PATH = "D:/upload/images";
 
-    public static File getResourcesSaveDir(){
-        String fileDirPath = new String(FILE_UPLOAD_PATH);
+    public static final String VIDEO_UPLOAD_PATH = "D:/upload/videos";
+
+    public static File getImageResourceSaveDir(){
+        String fileDirPath = new String(IMAGE_UPLOAD_PATH);
         File fileDir = new File(fileDirPath);
         if(!fileDir.exists()){
             // 递归生成文件夹
@@ -20,4 +22,15 @@ public class UploadUtil {
         }
         return fileDir;
     }
+
+    public static File getVideoResourceSaveDir(){
+        String fileDirPath = new String(VIDEO_UPLOAD_PATH);
+        File fileDir = new File(fileDirPath);
+        if(!fileDir.exists()){
+            // 递归生成文件夹
+            fileDir.mkdirs();
+        }
+        return fileDir;
+    }
+
 }
