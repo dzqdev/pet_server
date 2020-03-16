@@ -17,4 +17,8 @@ import java.util.List;
 public interface ICommentService extends IService<Comment> {
 
     List<CommentVo> listCommentsByDiscussion(Integer id);
+
+    void saveComment(Comment comment);
+
+    void deleteComment(Integer id);
 }
