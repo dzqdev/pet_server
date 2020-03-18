@@ -21,7 +21,7 @@ import java.util.Date;
  * @since 2020-02-27
  */
 @RestController
-@RequestMapping("/api/v2/discussion")
+@RequestMapping(value = {"/api/v1/discussion","/api/v2/discussion"})
 public class DiscussionController {
 
     @Resource
