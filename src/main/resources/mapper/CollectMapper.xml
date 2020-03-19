@@ -71,7 +71,7 @@
     </select>
 
 
-    <select id="getUserCollectVideos" resultType="com.sise.pet.vo.CollectVideoVo">
+    <select id="getUserCollectVideos" resultMap="VideoResultMap">
         select video.*,
         p.name as pet_name,
         p.id as pet_id,

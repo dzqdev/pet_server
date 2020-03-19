@@ -58,7 +58,7 @@ public class DiscussionController {
     }
 
     @GetMapping("/popular")
-    public Result getPopularPet(){
+    public Result getPopularDiscussion(){
         List<Discussion> discussions = iDiscussionService.getPopularDiscussion();
         return ResultGenerator.genSuccessResult(discussions);
     }

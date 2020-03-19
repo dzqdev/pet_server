@@ -80,7 +80,7 @@ public class PetController {
      * 热门宠物狗
      * @return
      */
-    @GetMapping("/hot")
+    @GetMapping("/popular")
     public Result getPopularPet(){
         List<Pet> list = iPetService.getPopularPet();
         return ResultGenerator.genSuccessResult(list);

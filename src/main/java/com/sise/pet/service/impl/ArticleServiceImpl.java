@@ -1,5 +1,6 @@
 package com.sise.pet.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -9,6 +10,7 @@ import com.sise.pet.service.IArticleService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -38,5 +40,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public void updateViewCount(Integer id) {
         articleMapper.updateViewCount(id);
+    }
+
+    @Override
+    public List<Article> getPopularArticle() {
+        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByAsc("view_count");
+        queryWrapper.last("limit 0 , 5");
+        List<Article> list = articleMapper.selectList(queryWrapper);
+        return list;
     }
 }

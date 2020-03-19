@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sise.pet.entity.Article;
 
+import java.util.List;
+
 /**
  * <p>
  * 文章表 服务类
@@ -20,4 +22,7 @@ public interface IArticleService extends IService<Article> {
     Article getArticleWithPetInfo(Integer id);
 
     void updateViewCount(Integer id);
+
+    List<Article> getPopularArticle();
+
 }
