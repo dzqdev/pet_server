@@ -9,6 +9,7 @@ import com.sise.pet.core.ResultGenerator;
 import com.sise.pet.entity.Collect;
 import com.sise.pet.service.ICollectService;
 import com.sise.pet.vo.CollectArticleVo;
+import com.sise.pet.vo.CollectVideoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -103,7 +104,10 @@ public class CollectController {
      */
     @GetMapping("/collectVideos/{userId}")
     public Result getUserCollectVideos(@PathVariable Integer userId, Page page) {
-        return ResultGenerator.genSuccessResult();
+        Collect collect = new Collect();
+        collect.setUserId(userId);
+        IPage<CollectVideoVo> result = iCollectService.getUserCollectVideos(page, collect);
+        return ResultGenerator.genSuccessResult(result);
     }
 
     /**

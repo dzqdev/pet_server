@@ -65,6 +65,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         StringBuffer title = new StringBuffer();
         StringBuffer content = new StringBuffer();
         if(Constant.COMMENT_DISCUSSION.equals(comment.getLevel())){
+            //
             Integer discussionId = comment.getDiscussionId();
             Discussion discussion = discussionMapper.selectById(discussionId);
             title.append("您的讨论【").append(discussion.getTitle()).append("】被回复啦！");

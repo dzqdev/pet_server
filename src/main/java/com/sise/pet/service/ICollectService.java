@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sise.pet.entity.Collect;
 import com.sise.pet.vo.CollectArticleVo;
+import com.sise.pet.vo.CollectVideoVo;
 
 /**
  * <p>
@@ -30,4 +31,6 @@ public interface ICollectService extends IService<Collect> {
      */
 
     IPage<CollectArticleVo> getUserCollectArticles(Page page, Collect collect);
+
+    IPage<CollectVideoVo> getUserCollectVideos(Page page, Collect collect);
 }

@@ -10,7 +10,7 @@ import com.sise.pet.service.IDiscussionService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -29,14 +29,13 @@ public class DiscussionController {
 
     @PostMapping
     public Result add(Discussion entity){
-        entity.setCreateTime(new Date());
         iDiscussionService.save(entity);
         return ResultGenerator.genSuccessResult();
     }
 
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable Integer id){
-        iDiscussionService.removeById(id);
+        iDiscussionService.deleteById(id);
         return ResultGenerator.genSuccessResult();
     }
 
@@ -57,4 +56,11 @@ public class DiscussionController {
         Discussion discussion = iDiscussionService.getSingleDiscussion(id);
         return ResultGenerator.genSuccessResult(discussion);
     }
+
+    @GetMapping("/popular")
+    public Result getPopularPet(){
+        List<Discussion> discussions = iDiscussionService.getPopularDiscussion();
+        return ResultGenerator.genSuccessResult(discussions);
+    }
+
 }

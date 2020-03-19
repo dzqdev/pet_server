@@ -40,7 +40,7 @@ public class PetServiceImpl extends ServiceImpl<PetMapper, Pet> implements IPetS
     }
 
     @Override
-    public List<Pet> getHotPet() {
+    public List<Pet> getPopularPet() {
         QueryWrapper<Pet> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByAsc("view_count");
         queryWrapper.last("limit 0 , 5");

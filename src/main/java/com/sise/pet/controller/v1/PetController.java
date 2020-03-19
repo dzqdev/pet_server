@@ -41,8 +41,12 @@ public class PetController {
         return ResultGenerator.genSuccessResult(list);
     }
 
+    /**
+     * 返回所有的记录，不需要分页
+     * @return
+     */
     @GetMapping("/unPage")
-    public Result getAllPets(Pet pet){
+    public Result getAllPets(){
         List<Pet> list = iPetService.list();
         return ResultGenerator.genSuccessResult(list);
     }
@@ -72,9 +76,13 @@ public class PetController {
         return ResultGenerator.genSuccessResult();
     }
 
+    /**
+     * 热门宠物狗
+     * @return
+     */
     @GetMapping("/hot")
-    public Result getHotPet(){
-        List<Pet> list = iPetService.getHotPet();
+    public Result getPopularPet(){
+        List<Pet> list = iPetService.getPopularPet();
         return ResultGenerator.genSuccessResult(list);
     }
 }

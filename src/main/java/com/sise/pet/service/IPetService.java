@@ -22,5 +22,5 @@ public interface IPetService extends IService<Pet> {
 
     void updateViewCount(Integer id);
 
-    List<Pet> getHotPet();
+    List<Pet> getPopularPet();
 }

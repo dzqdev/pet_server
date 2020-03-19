@@ -29,6 +29,22 @@
         </association>
     </resultMap>
 
+    <resultMap id="VideoResultMap" type="com.sise.pet.vo.CollectVideoVo">
+        <id column="id" property="id" />
+        <result column="title" property="title" />
+        <result column="thumbnail" property="thumbnail" />
+        <result column="url" property="url" />
+        <result column="pet_id" property="petId" />
+        <result column="description" property="description" />
+        <result column="view_count" property="viewCount" />
+        <result column="create_time" property="createTime" />
+        <result column="collect_time" property="collectTime" />
+        <association property="pet" javaType="com.sise.pet.entity.Pet">
+            <result column="pet_name" property="name"/>
+            <result column="pet_id" property="id"/>
+        </association>
+    </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, user_id, resource_id, type, create_time
@@ -52,6 +68,19 @@
         select * from collect where user_id = #{collect.userId} and type = 'article'
         ) as collect_tmp
         on article.id = collect_tmp.resource_id
+    </select>
+
+
+    <select id="getUserCollectVideos" resultType="com.sise.pet.vo.CollectVideoVo">
+        select video.*,
+        p.name as pet_name,
+        p.id as pet_id,
+        collect_tmp.create_time as collect_time
+        from video
+        left join pet p on video.pet_id = p.id
+        left join
+        (select * from collect where user_id = #{collect.userId} and type = 'video') as collect_tmp
+        on video.id = collect_tmp.resource_id
     </select>
 
 

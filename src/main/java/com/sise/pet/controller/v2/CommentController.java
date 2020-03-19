@@ -9,6 +9,7 @@ import com.sise.pet.vo.CommentVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 
@@ -21,13 +22,12 @@ import java.util.List;
 @RequestMapping("/api/v2/comment")
 public class CommentController {
 
-    @Autowired
+    @Resource
     private ICommentService iCommentService;
 
     @PostMapping
     public Result add(Comment comment){
-        comment.setCreateDate(new Date());
-        iCommentService.save(comment);
+        iCommentService.saveComment(comment);
         return ResultGenerator.genSuccessResult();
     }
 
@@ -40,6 +40,17 @@ public class CommentController {
     public Result listCommentsByDiscussion(@PathVariable("id") Integer id){
         List<CommentVo> commentList = iCommentService.listCommentsByDiscussion(id);
         return ResultGenerator.genSuccessResult(commentList);
+    }
+
+    /**
+     * 删除评论
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/{id}")
+    public Result delete(@PathVariable Integer id){
+        iCommentService.removeById(id);
+        return ResultGenerator.genSuccessResult();
     }
 
 

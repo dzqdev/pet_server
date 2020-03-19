@@ -1,28 +1,25 @@
 package com.sise.pet.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
+import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
+import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import org.springframework.data.annotation.CreatedDate;
-
-import java.io.Serializable;
-import java.util.Date;
 
 /**
  * <p>
- * 讨论
+ * 资源删除日志
  * </p>
  *
  * @author author
- * @since 2020-02-27
+ * @since 2020-03-17
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class Discussion implements Serializable {
+public class DeleteLog implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,36 +27,24 @@ public class Discussion implements Serializable {
     private Integer id;
 
     /**
-     * 标题
+     * 删除资源类型 0:讨论 1:评论
      */
-    private String title;
+    private Integer type;
 
     /**
-     * 内容
+     * 资源id
      */
-    private String content;
+    private Integer resourceId;
 
     /**
-     * 查看数量
+     * 删除原因类型
      */
-    private Integer viewCount;
-
-    /**
-     * 作者id
-     */
-    private Integer authorId;
+    private Integer reasonType;
 
     /**
      * 创建时间
      */
-    @CreatedDate
     private Date createTime;
 
-
-    @TableField(exist = false)
-    private User author;
-
-    @TableField(exist = false)
-    private Integer commentCount;
 
 }
