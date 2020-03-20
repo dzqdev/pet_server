@@ -13,8 +13,10 @@ import com.sise.pet.shiro.ShiroProperties;
 import com.sise.pet.utils.CaptchaType;
 import com.sise.pet.utils.Constant;
 import com.sise.pet.utils.DateUtil;
+import com.sise.pet.utils.SmsUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -97,6 +99,20 @@ public class UserLoginController {
             e.printStackTrace();
             return ResultGenerator.genFailResult("服务器内部错误");
         }
+    }
 
+    /**
+     * 发送短信
+     * @param phone
+     * @return
+     */
+    @GetMapping("/captcha")
+    public Result getCaptcha(String phone,Integer captchaType){
+        String value = CaptchaType.getValue(captchaType);
+        Result result = SmsUtil.sendSms(phone,value);
+        if(result.getCode() != 200){
+            return ResultGenerator.genFailResult(result.getMessage());
+        }
+        return ResultGenerator.genSuccessResult();
     }
 }

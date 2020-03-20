@@ -88,20 +88,5 @@ public class UserController {
         return ResultGenerator.genSuccessResult();
     }
 
-    /**
-     * 发送短信
-     * @param phone
-     * @return
-     */
-    @GetMapping("/captcha")
-    public Result getCaptcha(String phone,Integer captchaType){
-        String value = CaptchaType.getValue(captchaType);
-        Result result = SmsUtil.sendSms(phone,value);
-        if(result.getCode() != 200){
-            return ResultGenerator.genFailResult(result.getMessage());
-        }
-        return ResultGenerator.genSuccessResult();
-    }
-
 
 }
