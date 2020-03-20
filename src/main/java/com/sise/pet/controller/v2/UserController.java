@@ -8,6 +8,8 @@ import com.sise.pet.entity.User;
 import com.sise.pet.exception.RedisConnectException;
 import com.sise.pet.service.IUserService;
 import com.sise.pet.service.RedisService;
+import com.sise.pet.utils.CaptchaType;
+import com.sise.pet.utils.SmsUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +42,7 @@ public class UserController {
     @PutMapping("/updatePassword")
     public Result updatePassword(String account,String newPassword,String captcha){
         try {
-            String redisCaptcha = redisService.get("captcha:" + account);
+            String redisCaptcha = redisService.get(CaptchaType.UPDATE_PASSWORD + account);
             if(StringUtils.isNotEmpty(redisCaptcha)){
                 //缓存中的验证码
                 if(StringUtils.equals(redisCaptcha,captcha)){
@@ -83,6 +85,21 @@ public class UserController {
     @PutMapping
     public Result updateUser(User user){
         userService.updateById(user);
+        return ResultGenerator.genSuccessResult();
+    }
+
+    /**
+     * 发送短信
+     * @param phone
+     * @return
+     */
+    @GetMapping("/captcha")
+    public Result getCaptcha(String phone,Integer captchaType){
+        String value = CaptchaType.getValue(captchaType);
+        Result result = SmsUtil.sendSms(phone,value);
+        if(result.getCode() != 200){
+            return ResultGenerator.genFailResult(result.getMessage());
+        }
         return ResultGenerator.genSuccessResult();
     }
 

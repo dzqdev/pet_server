@@ -10,6 +10,7 @@ import com.sise.pet.service.RedisService;
 import com.sise.pet.shiro.JWTUtil;
 import com.sise.pet.shiro.JwtToken;
 import com.sise.pet.shiro.ShiroProperties;
+import com.sise.pet.utils.CaptchaType;
 import com.sise.pet.utils.Constant;
 import com.sise.pet.utils.DateUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -71,5 +73,30 @@ public class UserLoginController {
         user.setPassword("it's a secret");
         userInfo.put("user", user);
         return userInfo;
+    }
+
+
+    @PostMapping("/register")
+    public Result register(String account,String password,String captcha){
+        //校验验证码是否正确
+        try {
+            String redisCaptcha = redisService.get(CaptchaType.REGISTER + account);
+            if(StringUtils.isNotEmpty(redisCaptcha) && !StringUtils.equals(redisCaptcha,captcha)){
+                return ResultGenerator.genFailResult("验证码过期或错误");
+            }
+            //验证码正确
+            User user = new User();
+            user.setAccount(account);
+            user.setPassword(password);
+            user.setUsername("用户" + account);
+            user.setCreateTime(new Date());
+            user.setAvatar(Constant.USER_DEFAULT_AVATAR);
+            iUserService.save(user);
+            return ResultGenerator.genSuccessResult();
+        } catch (RedisConnectException e) {
+            e.printStackTrace();
+            return ResultGenerator.genFailResult("服务器内部错误");
+        }
+
     }
 }
