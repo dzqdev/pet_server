@@ -65,4 +65,10 @@ public class ArticleController {
         return ResultGenerator.genSuccessResult(list);
     }
 
+    @DeleteMapping("/{id}")
+    public Result delete(@PathVariable Integer id){
+        iArticleService.removeById(id);
+        return ResultGenerator.genSuccessResult();
+    }
+
 }

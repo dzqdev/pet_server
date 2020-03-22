@@ -17,5 +17,8 @@
     <sql id="Base_Column_List">
         id, username, account, password, avatar, last_login, create_time
     </sql>
+    <update id="updatePassword">
+        update user set password = #{password} where account = #{account}
+    </update>
 
 </mapper>

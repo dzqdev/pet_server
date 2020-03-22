@@ -10,6 +10,7 @@ import com.sise.pet.service.IDiscussionService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,6 +30,7 @@ public class DiscussionController {
 
     @PostMapping
     public Result add(Discussion entity){
+        entity.setCreateTime(new Date());
         iDiscussionService.save(entity);
         return ResultGenerator.genSuccessResult();
     }
@@ -61,6 +63,12 @@ public class DiscussionController {
     public Result getPopularDiscussion(){
         List<Discussion> discussions = iDiscussionService.getPopularDiscussion();
         return ResultGenerator.genSuccessResult(discussions);
+    }
+
+    @PutMapping("/updateViewCount/{id}")
+    public Result updateViewCount(@PathVariable Integer id){
+        iDiscussionService.updateViewCount(id);
+        return ResultGenerator.genSuccessResult();
     }
 
 }

@@ -12,5 +12,5 @@ public class Constant {
     public static final String COMMENT_REPLY = "1";
     //@某个人回复
     public static final String COMMENT_PERSON = "2";
-    public static final String USER_DEFAULT_AVATAR = "http://localhost:8888/images/xxx.jpg";
+    public static final String USER_DEFAULT_AVATAR = "http://localhost:8888/images/default.jpg";
 }

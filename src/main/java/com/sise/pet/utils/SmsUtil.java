@@ -1,7 +1,7 @@
 package com.sise.pet.utils;
 
 
-
+import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.CommonRequest;
 import com.aliyuncs.CommonResponse;
 import com.aliyuncs.DefaultAcsClient;
@@ -14,13 +14,15 @@ import com.sise.pet.core.Result;
 import com.sise.pet.core.ResultCode;
 import com.sise.pet.exception.RedisConnectException;
 import com.sise.pet.service.RedisService;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.Map;
 import java.util.Random;
 
 public class SmsUtil {
 
     public static Result sendSms(String PhoneNumber,String captchaType){
-        RedisService redisService = (RedisService)SpringContextUtil.getBean("redisService");
+        RedisService redisService = (RedisService)SpringContextUtil.getBean(RedisService.class);
         DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAIgdc2tQIF9Klw", "dDFbTl6vt09FG4ylLsrZO5sNhGlwsE");
         IAcsClient client = new DefaultAcsClient(profile);
         String verifyCode = getVerifyCode();
@@ -36,7 +38,12 @@ public class SmsUtil {
         request.putQueryParameter("TemplateParam", "{\"code\":\"" + verifyCode + "\"}");
         try {
             CommonResponse response = client.getCommonResponse(request);
-            int httpStatus = response.getHttpStatus();
+            String data = response.getData();
+            Map json = (Map) JSONObject.parse(data);
+            String state = (String) json.get("Code");
+            if(StringUtils.equals("isv.BUSINESS_LIMIT_CONTROL",state)){
+                return new Result().setCode(ResultCode.FAIL).setMessage("每小时至多发5条短信，每天至多发10条，当前超出上限");
+            }
             //发送成功才存入redis
             redisService.set(captchaType + PhoneNumber, verifyCode, new Long(5 * 60 * 1000));
             return new Result().setCode(ResultCode.SUCCESS);

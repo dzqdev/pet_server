@@ -50,7 +50,7 @@
                 and level = #{level}
             </if>
         </where>
-        order by create_date desc
+        order by create_date asc
     </select>
 
 
@@ -68,6 +68,25 @@
         left join user u2 on u2.id = comment.to_uid
         where parent_id = #{parentId}
         order by create_date desc
+    </select>
+
+    <select id="getCommentPage" resultMap="withDetailInfoResultMap">
+        select
+        comment.*,
+        u1.id as a_id,
+        u1.username as a_username,
+        u1.avatar as a_avatar,
+        u2.id as t_id,
+        u2.username as t_username,
+        u2.avatar as t_avatar
+        from comment
+        left join user u1 on u1.id = comment.author_id
+        left join user u2 on u2.id = comment.to_uid
+        <where>
+            <if test="comment.discussionId != null">
+                and comment.discussion_id = #{comment.discussionId}
+            </if>
+        </where>
     </select>
 
 </mapper>

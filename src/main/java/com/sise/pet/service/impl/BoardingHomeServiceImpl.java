@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sise.pet.entity.BoardingHome;
 import com.sise.pet.mapper.BoardingHomeMapper;
 import com.sise.pet.service.IBoardingHomeService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -28,6 +29,9 @@ public class BoardingHomeServiceImpl extends ServiceImpl<BoardingHomeMapper, Boa
     @Override
     public IPage<BoardingHome> selectPage(BoardingHome entity, Page page) {
         QueryWrapper<BoardingHome> queryWrapper = new QueryWrapper<>();
+        if(StringUtils.isNotBlank(entity.getName())){
+            queryWrapper.like("name", entity.getName());
+        }
         Page result = boardingHomeMapper.selectPage(page, queryWrapper);
         return result;
     }

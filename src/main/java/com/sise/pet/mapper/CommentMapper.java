@@ -1,7 +1,9 @@
 package com.sise.pet.mapper;
 
-import com.sise.pet.entity.Comment;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.sise.pet.entity.Comment;
 import com.sise.pet.vo.CommentVo;
 import org.apache.ibatis.annotations.Param;
 
@@ -20,4 +22,6 @@ public interface CommentMapper extends BaseMapper<Comment> {
     List<CommentVo> listCommentsByDiscussion(Integer discussionId, @Param("level") String level);
 
     List<CommentVo> listCommentSubComments(Integer parentId);
+
+    IPage<CommentVo> getCommentPage(Page page, @Param("comment") Comment comment);
 }

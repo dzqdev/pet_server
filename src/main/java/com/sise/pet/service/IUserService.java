@@ -14,5 +14,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IUserService extends IService<User> {
 
     
-    Boolean checkOldPassword(String account, String password);
+    Boolean updatePassword(String account, String password);
+
+
 }

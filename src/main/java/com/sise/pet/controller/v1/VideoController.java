@@ -54,4 +54,10 @@ public class VideoController {
         Video video = iVideoService.selectWithPetInfo(id);
         return ResultGenerator.genSuccessResult(video);
     }
+
+    @PutMapping("/{id}")
+    public Result updateViewCount(@PathVariable Integer id){
+        iVideoService.updateViewCount(id);
+        return ResultGenerator.genSuccessResult();
+    }
 }

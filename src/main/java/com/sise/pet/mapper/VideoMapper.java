@@ -17,4 +17,6 @@ import org.apache.ibatis.annotations.Param;
 public interface VideoMapper extends BaseMapper<Video> {
     IPage<Video> selectWithPetInfoPage(Page page, @Param("video") Video video);
     Video selectWithPetInfo(Integer id);
+
+    void updateViewCount(Integer id);
 }

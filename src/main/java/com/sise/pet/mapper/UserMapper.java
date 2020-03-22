@@ -2,6 +2,7 @@ package com.sise.pet.mapper;
 
 import com.sise.pet.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface UserMapper extends BaseMapper<User> {
 
+    boolean updatePassword(@Param("account") String account, @Param("password") String password);
 }

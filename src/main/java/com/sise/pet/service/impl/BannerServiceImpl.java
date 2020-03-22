@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sise.pet.entity.Banner;
 import com.sise.pet.mapper.BannerMapper;
 import com.sise.pet.service.IBannerService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -28,6 +29,9 @@ public class BannerServiceImpl extends ServiceImpl<BannerMapper, Banner> impleme
     @Override
     public Page<Banner> selectPage(Banner banner, Page page) {
         QueryWrapper<Banner> queryWrapper = new QueryWrapper<>();
+        if(StringUtils.isNotBlank(banner.getAlt())){
+            queryWrapper.like("alt", banner.getAlt());
+        }
         Page result = bannerMapper.selectPage(page, queryWrapper);
         return result;
     }

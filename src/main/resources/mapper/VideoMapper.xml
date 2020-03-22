@@ -26,6 +26,10 @@
         id, title, thumbnail, url, pet_id, description, view_count, create_time
     </sql>
 
+    <update id="updateViewCount">
+        update video set view_count = view_count+1 where id = #{id}
+    </update>
+
 
     <select id="selectWithPetInfoPage" resultMap="withPetInfoResultMap">
         select video.*,
@@ -36,6 +40,9 @@
         <where>
             <if test="video.petId != null">
                 and video.pet_id = #{video.petId}
+            </if>
+            <if test="video.title != null">
+                and video.title like concat('%',#{video.title},'%')
             </if>
         </where>
     </select>

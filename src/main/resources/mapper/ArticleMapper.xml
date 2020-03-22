@@ -61,6 +61,9 @@
             <if test="article.petId != null">
                 and article.pet_id = #{article.petId}
             </if>
+            <if test="article.title != null">
+                and article.title like concat('%',#{article.title},'%')
+            </if>
         </where>
     </select>
 

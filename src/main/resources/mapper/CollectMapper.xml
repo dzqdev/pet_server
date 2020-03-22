@@ -63,7 +63,7 @@
         left join
         (select * from dict_detail where dict_id in (select id from dict where name ='article_type')) as tmp
         on article.type = tmp.value
-        right join
+        join
         (
         select * from collect where user_id = #{collect.userId} and type = 'article'
         ) as collect_tmp
@@ -78,7 +78,7 @@
         collect_tmp.create_time as collect_time
         from video
         left join pet p on video.pet_id = p.id
-        left join
+        join
         (select * from collect where user_id = #{collect.userId} and type = 'video') as collect_tmp
         on video.id = collect_tmp.resource_id
     </select>

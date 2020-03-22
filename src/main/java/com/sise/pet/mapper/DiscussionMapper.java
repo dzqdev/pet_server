@@ -18,4 +18,6 @@ public interface DiscussionMapper extends BaseMapper<Discussion> {
     IPage<Discussion> getDetailInfoPage(Page page, Discussion entity);
 
     Discussion getSingleDiscussion(Integer id);
+
+    void updateViewCount(Integer id);
 }

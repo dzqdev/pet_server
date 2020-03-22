@@ -33,4 +33,9 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     public Video selectWithPetInfo(Integer id) {
         return videoMapper.selectWithPetInfo(id);
     }
+
+    @Override
+    public void updateViewCount(Integer id) {
+        videoMapper.updateViewCount(id);
+    }
 }

@@ -1,7 +1,9 @@
 package com.sise.pet.service;
 
-import com.sise.pet.entity.Comment;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.sise.pet.entity.Comment;
 import com.sise.pet.vo.CommentVo;
 
 import java.util.List;
@@ -21,4 +23,6 @@ public interface ICommentService extends IService<Comment> {
     void saveComment(Comment comment);
 
     void deleteComment(Integer id);
+
+    IPage<CommentVo> selectPage(Comment entity, Page page);
 }

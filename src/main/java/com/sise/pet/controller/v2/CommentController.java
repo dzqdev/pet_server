@@ -1,12 +1,13 @@
 package com.sise.pet.controller.v2;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sise.pet.core.Result;
 import com.sise.pet.core.ResultGenerator;
 import com.sise.pet.entity.Comment;
 import com.sise.pet.service.ICommentService;
 import com.sise.pet.vo.CommentVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -19,7 +20,7 @@ import java.util.List;
  * @since 2020-02-27
  */
 @RestController
-@RequestMapping("/api/v2/comment")
+@RequestMapping(value = {"/api/v1/comment","/api/v2/comment"})
 public class CommentController {
 
     @Resource
@@ -27,12 +28,13 @@ public class CommentController {
 
     @PostMapping
     public Result add(Comment comment){
+        comment.setCreateDate(new Date());
         iCommentService.saveComment(comment);
         return ResultGenerator.genSuccessResult();
     }
 
     /**
-     * 根据讨论id,获取讨论下的评论
+     * 根据讨论id,获取讨论下的评论,分层级
      * @param id
      * @return
      */
@@ -40,6 +42,14 @@ public class CommentController {
     public Result listCommentsByDiscussion(@PathVariable("id") Integer id){
         List<CommentVo> commentList = iCommentService.listCommentsByDiscussion(id);
         return ResultGenerator.genSuccessResult(commentList);
+    }
+
+    @GetMapping("/list/{id}")
+    public Result listCommentsByDiscussionWithoutLevel(@PathVariable("id") Integer id, Page page){
+        Comment comment = new Comment();
+        comment.setDiscussionId(id);
+        IPage<CommentVo> list = iCommentService.selectPage(comment, page);
+        return ResultGenerator.genSuccessResult(list);
     }
 
     /**

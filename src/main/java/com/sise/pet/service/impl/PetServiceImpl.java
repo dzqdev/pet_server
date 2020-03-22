@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sise.pet.entity.Pet;
 import com.sise.pet.mapper.PetMapper;
 import com.sise.pet.service.IPetService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -30,6 +31,9 @@ public class PetServiceImpl extends ServiceImpl<PetMapper, Pet> implements IPetS
     @Override
     public IPage<Pet> selectPage(Pet entity, Page page) {
         QueryWrapper<Pet> queryWrapper = new QueryWrapper<>();
+        if(StringUtils.isNotBlank(entity.getName())){
+            queryWrapper.like("name", entity.getName());
+        }
         Page result = petMapper.selectPage(page, queryWrapper);
         return result;
     }

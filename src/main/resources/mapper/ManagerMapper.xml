@@ -10,12 +10,13 @@
         <result column="password" property="password" />
         <result column="role" property="role" />
         <result column="state" property="state" />
+        <result column="avatar" property="avatar" />
         <result column="create_time" property="createTime" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, account, name, password, role, state, create_time
+        id, account, name, avatar,password, role, state, create_time
     </sql>
 
 </mapper>

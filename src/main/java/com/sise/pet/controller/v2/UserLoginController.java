@@ -16,15 +16,13 @@ import com.sise.pet.utils.DateUtil;
 import com.sise.pet.utils.SmsUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -64,6 +62,9 @@ public class UserLoginController {
         //保存token到redis
         redisService.set(Constant.TOKEN_CACHE_PREFIX + jwtToken.getToken(), jwtToken.getToken(), shiroProperties.getJwtTimeOut() * 1000);
         Map<String, Object> userInfo = generateUserInfo(jwtToken, user);
+        //设置最后登录时间
+        user.setLastLogin(new Date());
+        iUserService.updateById(user);
         return ResultGenerator.genSuccessResult(userInfo);
     }
 
@@ -77,13 +78,34 @@ public class UserLoginController {
         return userInfo;
     }
 
+    /**
+     * 修改密码
+     * @param account
+     * @param password
+     * @param captcha
+     * @return
+     */
+    @PutMapping("/updatePassword")
+    public Result updatePassword(String account,String password,String captcha){
+        try {
+            String redisCaptcha = redisService.get(CaptchaType.UPDATE_PASSWORD.getValue() + account);
+            if(StringUtils.isBlank(redisCaptcha) || !StringUtils.equals(redisCaptcha,captcha)){
+                return ResultGenerator.genFailResult("验证码过期或错误");
+            }
+            iUserService.updatePassword(account,password);
+            return ResultGenerator.genSuccessResult();
+        } catch (RedisConnectException e) {
+            e.printStackTrace();
+            return ResultGenerator.genFailResult("服务器内部错误");
+        }
+    }
 
     @PostMapping("/register")
     public Result register(String account,String password,String captcha){
         //校验验证码是否正确
         try {
-            String redisCaptcha = redisService.get(CaptchaType.REGISTER + account);
-            if(StringUtils.isNotEmpty(redisCaptcha) && !StringUtils.equals(redisCaptcha,captcha)){
+            String redisCaptcha = redisService.get(CaptchaType.REGISTER.getValue() + account);
+            if(StringUtils.isBlank(redisCaptcha) || !StringUtils.equals(redisCaptcha,captcha)){
                 return ResultGenerator.genFailResult("验证码过期或错误");
             }
             //验证码正确
@@ -101,6 +123,16 @@ public class UserLoginController {
         }
     }
 
+    public boolean accountUniqueValidate(String account){
+        QueryWrapper<User> wrapper = new QueryWrapper();
+        wrapper.eq("account", account);
+        List<User> list = iUserService.list(wrapper);
+        if(list != null && list.size() > 0){
+            return false;
+        }
+        return true;
+    }
+
     /**
      * 发送短信
      * @param phone
@@ -108,6 +140,12 @@ public class UserLoginController {
      */
     @GetMapping("/captcha")
     public Result getCaptcha(String phone,Integer captchaType){
+        if(captchaType != CaptchaType.UPDATE_PASSWORD.getCode()){
+            boolean validate = accountUniqueValidate(phone);
+            if(!validate){
+                return ResultGenerator.genFailResult("该手机号码已注册");
+            }
+        }
         String value = CaptchaType.getValue(captchaType);
         Result result = SmsUtil.sendSms(phone,value);
         if(result.getCode() != 200){

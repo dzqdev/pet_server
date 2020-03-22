@@ -17,4 +17,6 @@ public interface IVideoService extends IService<Video> {
     IPage<Video> selectWithPetInfoPage(Page page, Video video);
 
     Video selectWithPetInfo(Integer id);
+
+    void updateViewCount(Integer id);
 }

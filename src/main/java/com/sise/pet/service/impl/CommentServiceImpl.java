@@ -1,16 +1,14 @@
 package com.sise.pet.service.impl;
 
-import com.alibaba.druid.sql.visitor.functions.If;
-import com.sise.pet.entity.Comment;
-import com.sise.pet.entity.Discussion;
-import com.sise.pet.entity.Notice;
-import com.sise.pet.entity.User;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sise.pet.entity.*;
 import com.sise.pet.mapper.CommentMapper;
 import com.sise.pet.mapper.DiscussionMapper;
 import com.sise.pet.mapper.NoticeMapper;
 import com.sise.pet.mapper.UserMapper;
 import com.sise.pet.service.ICommentService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sise.pet.utils.Constant;
 import com.sise.pet.vo.CommentVo;
 import org.springframework.stereotype.Service;
@@ -118,6 +116,12 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         notice.setCreateTime(new Date());
         notice.setType(Constant.SYSTEM_NOTICE);
         notice.setUserId(comment.getAuthorId());
+    }
+
+    @Override
+    public IPage<CommentVo> selectPage(Comment entity, Page page) {
+        IPage<CommentVo> commentPage = commentMapper.getCommentPage(page, entity);
+        return commentPage;
     }
 
 

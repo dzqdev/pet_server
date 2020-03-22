@@ -15,7 +15,7 @@
     <resultMap id="withAuthorResultMap" type="com.sise.pet.entity.Discussion" extends="BaseResultMap">
         <result column="comment_count" property="commentCount"/>
         <association property="author" javaType="com.sise.pet.entity.User">
-            <result column="id" property="id"/>
+            <result column="user_id" property="id"/>
             <result column="username" property="username"/>
             <result column="avatar" property="avatar"/>
         </association>
@@ -27,20 +27,29 @@
         id, title, content, view_count, author_id, create_time
     </sql>
 
+    <update id="updateViewCount">
+        update discussion set view_count = view_count+1 where id = #{id}
+    </update>
+
     <select id="getDetailInfoPage" resultMap="withAuthorResultMap">
-       select
+        select
         discussion.*,
-        user.id,user.username,user.avatar,
+        user.id as user_id,
+        user.username,
+        user.avatar,
         count(comment.id) as comment_count
         from discussion
         left join user on discussion.author_id = user.id
-        left join comment on comment.discussion_id = discussion.id
+        left join comment on discussion.id = comment.discussion_id
+        group by discussion.id
     </select>
 
     <select id="getSingleDiscussion" resultMap="withAuthorResultMap">
        select
         discussion.*,
-        user.id,user.username,user.avatar,
+        user.id as user_id,
+        user.username,
+        user.avatar,
         count(comment.id) as comment_count
         from discussion
         left join user on discussion.author_id = user.id

@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sise.pet.entity.Comment;
 import com.sise.pet.entity.Discussion;
-import com.sise.pet.entity.Pet;
 import com.sise.pet.mapper.CommentMapper;
 import com.sise.pet.mapper.DiscussionMapper;
 import com.sise.pet.service.IDiscussionService;
@@ -40,6 +39,12 @@ public class DiscussionServiceImpl extends ServiceImpl<DiscussionMapper, Discuss
 
     @Override
     public Discussion getSingleDiscussion(Integer id) {
+        Discussion discussion = discussionMapper.getSingleDiscussion(id);
+        //获取评论数量
+        QueryWrapper<Comment> commentQueryWrapper = new QueryWrapper();
+        commentQueryWrapper.eq("discussion_id", id);
+        Integer count = commentMapper.selectCount(commentQueryWrapper);
+        discussion.setCommentCount(count);
         return discussionMapper.getSingleDiscussion(id);
     }
 
@@ -59,5 +64,10 @@ public class DiscussionServiceImpl extends ServiceImpl<DiscussionMapper, Discuss
         queryWrapper.last("limit 0 , 5");
         List<Discussion> list = discussionMapper.selectList(queryWrapper);
         return list;
+    }
+
+    @Override
+    public void updateViewCount(Integer id) {
+        discussionMapper.updateViewCount(id);
     }
 }

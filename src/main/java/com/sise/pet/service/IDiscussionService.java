@@ -28,4 +28,6 @@ public interface IDiscussionService extends IService<Discussion> {
     void deleteById(Integer id);
 
     List<Discussion> getPopularDiscussion();
+
+    void updateViewCount(Integer id);
 }

@@ -92,6 +92,7 @@ public class ManagerController {
     @PostMapping
     public Result add(Manager manager){
         manager.setRole("manager");
+        manager.setAvatar(Constant.USER_DEFAULT_AVATAR);
         manager.setCreateTime(new Date());
         manager.setName("管理员" + RandomStringUtils.randomAlphanumeric(6));
         iManagerService.save(manager);

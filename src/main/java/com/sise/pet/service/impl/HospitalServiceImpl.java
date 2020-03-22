@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sise.pet.entity.Hospital;
 import com.sise.pet.mapper.HospitalMapper;
 import com.sise.pet.service.IHospitalService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -28,6 +29,9 @@ public class HospitalServiceImpl extends ServiceImpl<HospitalMapper, Hospital> i
     @Override
     public IPage<Hospital> selectPage(Hospital entity, Page page) {
         QueryWrapper<Hospital> queryWrapper = new QueryWrapper<>();
+        if(StringUtils.isNotBlank(entity.getName())){
+            queryWrapper.like("name", entity.getName());
+        }
         Page result = hospitalMapper.selectPage(page, queryWrapper);
         return result;
     }
