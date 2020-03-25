@@ -35,7 +35,7 @@ public class UserController {
     @GetMapping("/{userId}")
     public Result get(@PathVariable Integer userId){
         User user = userService.getById(userId);
-        user.setPassword("it's a secret");
+        user.setPassword(null);
         return ResultGenerator.genSuccessResult(user);
     }
 
@@ -46,6 +46,7 @@ public class UserController {
      */
     @PutMapping
     public Result updateUser(User user){
+        user.setPassword(null);
         userService.updateById(user);
         return ResultGenerator.genSuccessResult();
     }

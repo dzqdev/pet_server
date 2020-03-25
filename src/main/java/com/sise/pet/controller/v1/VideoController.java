@@ -10,6 +10,8 @@ import com.sise.pet.service.IVideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 /**
  * <p>
  * 视频 前端控制器
@@ -27,6 +29,7 @@ public class VideoController {
 
     @PostMapping
     public Result add(Video video){
+        video.setCreateTime(new Date());
         iVideoService.save(video);
         return ResultGenerator.genSuccessResult();
     }

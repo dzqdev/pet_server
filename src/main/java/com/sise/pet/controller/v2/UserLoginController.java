@@ -73,7 +73,7 @@ public class UserLoginController {
         userInfo.put("token", token.getToken());
         userInfo.put("expireTime", token.getExpireAt());
 
-        user.setPassword("it's a secret");
+        user.setPassword(null);
         userInfo.put("user", user);
         return userInfo;
     }
