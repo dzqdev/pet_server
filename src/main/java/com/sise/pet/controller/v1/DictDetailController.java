@@ -2,8 +2,7 @@ package com.sise.pet.controller.v1;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.sise.pet.core.Result;
-import com.sise.pet.core.ResultGenerator;
+import com.sise.pet.core.CommonResult;
 import com.sise.pet.entity.DictDetail;
 import com.sise.pet.service.IDictDetailService;
 import org.springframework.web.bind.annotation.*;
@@ -26,21 +25,21 @@ public class DictDetailController {
     private IDictDetailService iDictDetailService;
 
     @PostMapping
-    public Result addDictDetail(DictDetail dict){
+    public CommonResult addDictDetail(DictDetail dict){
         iDictDetailService.save(dict);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
     @PutMapping
-    public Result updateDictDetail(DictDetail dict){
+    public CommonResult updateDictDetail(DictDetail dict){
         iDictDetailService.updateById(dict);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
     @GetMapping
-    public Result dictDetailList(DictDetail dict, Page page){
+    public CommonResult dictDetailList(DictDetail dict, Page page){
         Page<DictDetail> dictPage = iDictDetailService.selectPage(dict, page);
-        return ResultGenerator.genSuccessResult(dictPage);
+        return CommonResult.success(dictPage);
     }
 
 }

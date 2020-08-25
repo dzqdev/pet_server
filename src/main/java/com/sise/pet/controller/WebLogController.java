@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2020-03-17
  */
 @RestController
-@RequestMapping("/pet/delete-log")
-public class DeleteLogController {
+@RequestMapping("/pet/web-log")
+public class WebLogController {
 
 }

@@ -3,8 +3,7 @@ package com.sise.pet.controller.v1;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.sise.pet.core.Result;
-import com.sise.pet.core.ResultGenerator;
+import com.sise.pet.core.CommonResult;
 import com.sise.pet.entity.Manager;
 import com.sise.pet.exception.RedisConnectException;
 import com.sise.pet.service.IManagerService;
@@ -48,13 +47,13 @@ public class ManagerController {
 
 
     @PostMapping("/login")
-    public Result managerLogin(@NotBlank(message = "{required}") String account,
-                            @NotBlank(message = "{required}") String password) throws RedisConnectException {
+    public CommonResult managerLogin(@NotBlank(message = "{required}") String account,
+                                     @NotBlank(message = "{required}") String password) throws RedisConnectException {
         QueryWrapper<Manager> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("account", account);
         Manager manager = iManagerService.getOne(queryWrapper);
         if (manager == null || !StringUtils.equals(manager.getPassword(), password)){
-            return ResultGenerator.genFailResult("用户名或密码错误");
+            return CommonResult.failed("用户名或密码错误");
         }
 
         String token = JWTUtil.sign(manager.getId().toString(), Constant.MANAGER_LOGIN_TYPE, manager.getPassword());
@@ -64,7 +63,7 @@ public class ManagerController {
         //保存token到redis
         redisService.set(Constant.TOKEN_CACHE_PREFIX + jwtToken.getToken(), jwtToken.getToken(), shiroProperties.getJwtTimeOut() * 1000);
         Map<String, Object> userInfo = generateUserInfo(jwtToken, manager);
-        return ResultGenerator.genSuccessResult(userInfo);
+        return CommonResult.success(userInfo);
     }
 
     private Map<String, Object> generateUserInfo(JwtToken token, Manager manager) {
@@ -78,61 +77,61 @@ public class ManagerController {
     }
 
     @DeleteMapping("/logout")
-    public Result logout(String token){
+    public CommonResult logout(String token){
         try {
             redisService.del(Constant.TOKEN_CACHE_PREFIX + token);
-            return ResultGenerator.genSuccessResult();
+            return CommonResult.success(null);
         } catch (RedisConnectException e) {
             e.printStackTrace();
-            return ResultGenerator.genFailResult("退出登录失败");
+            return CommonResult.failed("退出登录失败");
         }
 
     }
 
     @PostMapping
-    public Result add(Manager manager){
+    public CommonResult add(Manager manager){
         manager.setRole("manager");
         manager.setAvatar(Constant.USER_DEFAULT_AVATAR);
         manager.setCreateTime(new Date());
         manager.setName("管理员" + RandomStringUtils.randomAlphanumeric(6));
         iManagerService.save(manager);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
     @PutMapping
-    public Result update(Manager manager){
+    public CommonResult update(Manager manager){
         iManagerService.updateById(manager);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
     @GetMapping
-    public Result managerList(Manager manager, Page page){
+    public CommonResult managerList(Manager manager, Page page){
         Page<Manager> list = iManagerService.selectPage(manager,page);
-        return ResultGenerator.genSuccessResult(list);
+        return CommonResult.success(list);
     }
 
     @GetMapping("/validate/{account}")
-    public Result accountValidate(@PathVariable String account){
+    public CommonResult accountValidate(@PathVariable String account){
         QueryWrapper<Manager> condition = new QueryWrapper<>();
         condition.eq("account", account);
         Manager manager = iManagerService.getOne(condition);
         if(null == manager){
-            return ResultGenerator.genSuccessResult(false);
+            return CommonResult.success(false);
         }else{
-            return ResultGenerator.genSuccessResult(true);
+            return CommonResult.success(true);
         }
 
     }
 
     @GetMapping("/{id}")
-    public Result get(@PathVariable String id){
+    public CommonResult get(@PathVariable String id){
         Manager manager = iManagerService.getById(id);
-        return ResultGenerator.genSuccessResult(manager);
+        return CommonResult.success(manager);
     }
 
     @DeleteMapping("/{id}")
-    public Result delete(@PathVariable String id){
+    public CommonResult delete(@PathVariable String id){
         iManagerService.removeById(id);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 }

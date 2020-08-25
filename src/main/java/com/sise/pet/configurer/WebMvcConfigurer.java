@@ -4,8 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import com.sise.pet.core.Result;
+import com.sise.pet.core.CommonResult;
 import com.sise.pet.core.ResultCode;
+import com.sise.pet.utils.HttpRequestUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -67,13 +68,14 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
     public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
         exceptionResolvers.add(new HandlerExceptionResolver() {
             public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception e) {
-                Result result = new Result();
+                CommonResult result = new CommonResult();
                  if (e instanceof NoHandlerFoundException) {
-                    result.setCode(ResultCode.NOT_FOUND).setMessage("接口 [" + request.getRequestURI() + "] 不存在");
+                    result.setCode(ResultCode.NOT_FOUND.getCode()).setMessage("接口 [" + request.getRequestURI() + "] 不存在");
                 } else if (e instanceof ServletException) {
-                    result.setCode(ResultCode.FAIL).setMessage(e.getMessage());
+                    result.setCode(ResultCode.FAILURE.getCode()).setMessage(e.getMessage());
                 } else {
-                    result.setCode(ResultCode.INTERNAL_SERVER_ERROR).setMessage("接口 [" + request.getRequestURI() + "] 内部错误，请联系管理员");
+                    result.setCode(ResultCode.INTERNAL_SERVER_ERROR.getCode()).setMessage("接口 [" + request.getRequestURI() + "] 内部错误，请联系管理员");
+
                     String message;
                     if (handler instanceof HandlerMethod) {
                         HandlerMethod handlerMethod = (HandlerMethod) handler;
@@ -118,10 +120,10 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
                         return true;
                     } else {
                         logger.warn("签名认证失败，请求接口：{}，请求IP：{}，请求参数：{}",
-                                request.getRequestURI(), getIpAddress(request), JSON.toJSONString(request.getParameterMap()));
+                                request.getRequestURI(), HttpRequestUtil.getIpAddress(request), JSON.toJSONString(request.getParameterMap()));
 
-                        Result result = new Result();
-                        result.setCode(ResultCode.UNAUTHORIZED).setMessage("签名认证失败");
+                        CommonResult result = new CommonResult();
+                        result.setCode(ResultCode.UN_AUTHORIZED.getCode()).setMessage("签名认证失败");
                         responseResult(response, result);
                         return false;
                     }
@@ -130,7 +132,7 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
         }
     }
 
-    private void responseResult(HttpServletResponse response, Result result) {
+    private void responseResult(HttpServletResponse response, CommonResult result) {
         response.setCharacterEncoding("UTF-8");
         response.setHeader("Content-type", "application/json;charset=UTF-8");
         response.setStatus(200);
@@ -169,28 +171,5 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
         return StringUtils.equals(sign, requestSign);//比较
     }
 
-    private String getIpAddress(HttpServletRequest request) {
-        String ip = request.getHeader("x-forwarded-for");
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_CLIENT_IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        // 如果是多级代理，那么取第一个ip为客户端ip
-        if (ip != null && ip.indexOf(",") != -1) {
-            ip = ip.substring(0, ip.indexOf(",")).trim();
-        }
 
-        return ip;
-    }
 }

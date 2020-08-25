@@ -3,8 +3,7 @@ package com.sise.pet.controller.v1;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.sise.pet.core.Result;
-import com.sise.pet.core.ResultGenerator;
+import com.sise.pet.core.CommonResult;
 import com.sise.pet.entity.BoardingHome;
 import com.sise.pet.service.IBoardingHomeService;
 import org.springframework.web.bind.annotation.*;
@@ -28,34 +27,34 @@ public class BoardingHomeController {
     private IBoardingHomeService iBoardingHomeService;
 
     @PostMapping
-    public Result addBoardingHome(BoardingHome entity){
+    public CommonResult addBoardingHome(BoardingHome entity){
         entity.setCreateTime(new Date());
         iBoardingHomeService.save(entity);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
     @PutMapping
-    public Result updateBoardingHome(BoardingHome entity){
+    public CommonResult updateBoardingHome(BoardingHome entity){
         iBoardingHomeService.updateById(entity);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
     @DeleteMapping("/{id}")
-    public Result deleteBoardingHome(@PathVariable String id){
+    public CommonResult deleteBoardingHome(@PathVariable String id){
         iBoardingHomeService.removeById(id);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
     @GetMapping("/{id}")
-    public Result get(@PathVariable Integer id){
+    public CommonResult get(@PathVariable Integer id){
         BoardingHome entity = iBoardingHomeService.getById(id);
-        return ResultGenerator.genSuccessResult(entity);
+        return CommonResult.success(entity);
     }
 
     @GetMapping
-    public Result list(BoardingHome entity, Page page){
+    public CommonResult list(BoardingHome entity, Page page){
         IPage<BoardingHome> list = iBoardingHomeService.selectPage(entity, page);
-        return ResultGenerator.genSuccessResult(list);
+        return CommonResult.success(list);
     }
 
 }

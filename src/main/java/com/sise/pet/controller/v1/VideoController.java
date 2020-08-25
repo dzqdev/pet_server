@@ -3,14 +3,11 @@ package com.sise.pet.controller.v1;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.sise.pet.core.Result;
-import com.sise.pet.core.ResultGenerator;
+import com.sise.pet.core.CommonResult;
 import com.sise.pet.entity.Video;
 import com.sise.pet.service.IVideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
 
 /**
  * <p>
@@ -28,39 +25,38 @@ public class VideoController {
     private IVideoService iVideoService;
 
     @PostMapping
-    public Result add(Video video){
-        video.setCreateTime(new Date());
+    public CommonResult add(Video video){
         iVideoService.save(video);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
     @DeleteMapping("/{id}")
-    public Result delete(@PathVariable Integer id){
+    public CommonResult delete(@PathVariable Integer id){
         iVideoService.removeById(id);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
     @PutMapping
-    public Result update(Video video){
+    public CommonResult update(Video video){
         iVideoService.updateById(video);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
     @GetMapping
-    public Result list(Page page,Video video){
+    public CommonResult list(Page page, Video video){
         IPage<Video> list = iVideoService.selectWithPetInfoPage(page, video);
-        return ResultGenerator.genSuccessResult(list);
+        return CommonResult.success(list);
     }
 
     @GetMapping("/{id}")
-    public Result get(@PathVariable Integer id){
+    public CommonResult get(@PathVariable Integer id){
         Video video = iVideoService.selectWithPetInfo(id);
-        return ResultGenerator.genSuccessResult(video);
+        return CommonResult.success(video);
     }
 
     @PutMapping("/{id}")
-    public Result updateViewCount(@PathVariable Integer id){
+    public CommonResult updateViewCount(@PathVariable Integer id){
         iVideoService.updateViewCount(id);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 }

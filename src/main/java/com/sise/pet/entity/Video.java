@@ -66,5 +66,8 @@ public class Video implements Serializable {
     @TableField(exist = false)
     private Pet pet;
 
+    @TableField(exist = false)
+    private String searchPetType;
+
 
 }

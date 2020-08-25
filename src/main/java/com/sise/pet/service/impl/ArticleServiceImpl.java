@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sise.pet.dto.ArticleDto;
 import com.sise.pet.entity.Article;
 import com.sise.pet.mapper.ArticleMapper;
 import com.sise.pet.service.IArticleService;
@@ -28,12 +29,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
 
     @Override
-    public IPage<Article> selectPage(Article entity, Page page) {
+    public IPage<ArticleDto> selectPage(ArticleDto entity, Page page) {
         return articleMapper.getArticlePage(page,entity);
     }
 
     @Override
-    public Article getArticleWithPetInfo(Integer id) {
+    public ArticleDto getArticleWithPetInfo(Integer id) {
         return articleMapper.getArticleWithPetInfo(id);
     }
 

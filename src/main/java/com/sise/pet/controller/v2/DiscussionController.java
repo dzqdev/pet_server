@@ -3,8 +3,7 @@ package com.sise.pet.controller.v2;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.sise.pet.core.Result;
-import com.sise.pet.core.ResultGenerator;
+import com.sise.pet.core.CommonResult;
 import com.sise.pet.entity.Discussion;
 import com.sise.pet.service.IDiscussionService;
 import org.springframework.web.bind.annotation.*;
@@ -29,46 +28,46 @@ public class DiscussionController {
     private IDiscussionService iDiscussionService;
 
     @PostMapping
-    public Result add(Discussion entity){
+    public CommonResult add(Discussion entity){
         entity.setCreateTime(new Date());
         iDiscussionService.save(entity);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
     @DeleteMapping("/{id}")
-    public Result delete(@PathVariable Integer id){
+    public CommonResult delete(@PathVariable Integer id){
         iDiscussionService.deleteById(id);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
     @PutMapping
-    public Result update(Discussion entity){
+    public CommonResult update(Discussion entity){
         iDiscussionService.updateById(entity);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
     @GetMapping
-    public Result list(Discussion entity, Page page){
+    public CommonResult list(Discussion entity, Page page){
         IPage<Discussion> list = iDiscussionService.selectPage(entity, page);
-        return ResultGenerator.genSuccessResult(list);
+        return CommonResult.success(list);
     }
 
     @GetMapping("/{id}")
-    public Result get(@PathVariable Integer id){
+    public CommonResult get(@PathVariable Integer id){
         Discussion discussion = iDiscussionService.getSingleDiscussion(id);
-        return ResultGenerator.genSuccessResult(discussion);
+        return CommonResult.success(discussion);
     }
 
     @GetMapping("/popular")
-    public Result getPopularDiscussion(){
+    public CommonResult getPopularDiscussion(){
         List<Discussion> discussions = iDiscussionService.getPopularDiscussion();
-        return ResultGenerator.genSuccessResult(discussions);
+        return CommonResult.success(discussions);
     }
 
     @PutMapping("/updateViewCount/{id}")
-    public Result updateViewCount(@PathVariable Integer id){
+    public CommonResult updateViewCount(@PathVariable Integer id){
         iDiscussionService.updateViewCount(id);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
 }

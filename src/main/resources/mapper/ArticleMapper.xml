@@ -15,7 +15,7 @@
         <result column="create_time" property="createTime"/>
     </resultMap>
 
-    <resultMap id="withPetAndTypeResultMap" extends="BaseResultMap" type="com.sise.pet.entity.Article">
+    <resultMap id="withPetAndTypeResultMap" extends="BaseResultMap" type="com.sise.pet.dto.ArticleDto">
         <result column="type_name" property="typeName"/>
         <association property="pet" javaType="com.sise.pet.entity.Pet">
             <result column="pet_name" property="name"/>
@@ -61,8 +61,14 @@
             <if test="article.petId != null">
                 and article.pet_id = #{article.petId}
             </if>
-            <if test="article.title != null">
+            <if test="article.title != null and article.title != ''">
                 and article.title like concat('%',#{article.title},'%')
+            </if>
+            <if test="article.typeName != null and article.typeName != ''">
+                and tmp.value = #{article.typeName}
+            </if>
+            <if test="article.petName != null and article.petName != ''">
+                and p.name like concat('%',#{article.petName},'%')
             </if>
         </where>
     </select>

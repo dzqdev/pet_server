@@ -3,8 +3,7 @@ package com.sise.pet.controller.v1;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.sise.pet.core.Result;
-import com.sise.pet.core.ResultGenerator;
+import com.sise.pet.core.CommonResult;
 import com.sise.pet.entity.Hospital;
 import com.sise.pet.service.IHospitalService;
 import org.springframework.web.bind.annotation.*;
@@ -28,34 +27,34 @@ public class HospitalController {
     private IHospitalService iHospitalService;
 
     @PostMapping
-    public Result add(Hospital entity){
+    public CommonResult add(Hospital entity){
         entity.setCreateTime(new Date());
         iHospitalService.save(entity);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
 
     @PutMapping
-    public Result update(Hospital entity){
+    public CommonResult update(Hospital entity){
         iHospitalService.updateById(entity);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
     @DeleteMapping("/{id}")
-    public Result delete(@PathVariable String id){
+    public CommonResult delete(@PathVariable String id){
         iHospitalService.removeById(id);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
     @GetMapping
-    public Result list(Hospital entity, Page page){
+    public CommonResult list(Hospital entity, Page page){
         IPage<Hospital> list = iHospitalService.selectPage(entity, page);
-        return ResultGenerator.genSuccessResult(list);
+        return CommonResult.success(list);
     }
 
     @GetMapping("/{id}")
-    public Result get(@PathVariable Integer id){
+    public CommonResult get(@PathVariable Integer id){
         Hospital hospital = iHospitalService.getById(id);
-        return ResultGenerator.genSuccessResult(hospital);
+        return CommonResult.success(hospital);
     }
 }

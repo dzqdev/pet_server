@@ -10,7 +10,7 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
-import com.sise.pet.core.Result;
+import com.sise.pet.core.CommonResult;
 import com.sise.pet.core.ResultCode;
 import com.sise.pet.exception.RedisConnectException;
 import com.sise.pet.service.RedisService;
@@ -21,7 +21,7 @@ import java.util.Random;
 
 public class SmsUtil {
 
-    public static Result sendSms(String PhoneNumber,String captchaType){
+    public static CommonResult sendSms(String PhoneNumber, String captchaType){
         RedisService redisService = (RedisService)SpringContextUtil.getBean(RedisService.class);
         DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAIgdc2tQIF9Klw", "dDFbTl6vt09FG4ylLsrZO5sNhGlwsE");
         IAcsClient client = new DefaultAcsClient(profile);
@@ -42,20 +42,20 @@ public class SmsUtil {
             Map json = (Map) JSONObject.parse(data);
             String state = (String) json.get("Code");
             if(StringUtils.equals("isv.BUSINESS_LIMIT_CONTROL",state)){
-                return new Result().setCode(ResultCode.FAIL).setMessage("每小时至多发5条短信，每天至多发10条，当前超出上限");
+                return new CommonResult().setCode(ResultCode.FAILURE.getCode()).setMessage("每小时至多发5条短信，每天至多发10条，当前超出上限");
             }
             //发送成功才存入redis
             redisService.set(captchaType + PhoneNumber, verifyCode, new Long(5 * 60 * 1000));
-            return new Result().setCode(ResultCode.SUCCESS);
+            return new CommonResult().setCode(ResultCode.SUCCESS.getCode());
         } catch (ServerException e) {
             e.printStackTrace();
-            return new Result().setCode(ResultCode.FAIL).setMessage("短信发送错误");
+            return new CommonResult().setCode(ResultCode.FAILURE.getCode()).setMessage("短信发送错误");
         } catch (ClientException e) {
             e.printStackTrace();
-            return new Result().setCode(ResultCode.FAIL).setMessage("短信发送错误");
+            return new CommonResult().setCode(ResultCode.FAILURE.getCode()).setMessage("短信发送错误");
         } catch (RedisConnectException e) {
             e.printStackTrace();
-            return new Result().setCode(ResultCode.FAIL).setMessage("服务器内部错误");
+            return new CommonResult().setCode(ResultCode.FAILURE.getCode()).setMessage("服务器内部错误");
         }
     }
 

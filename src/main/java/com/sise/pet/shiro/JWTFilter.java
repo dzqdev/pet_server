@@ -1,5 +1,7 @@
 package com.sise.pet.shiro;
 
+import com.alibaba.fastjson.JSON;
+import com.sise.pet.core.CommonResult;
 import com.sise.pet.utils.SpringContextUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -89,10 +91,8 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
         httpResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
         httpResponse.setCharacterEncoding("utf-8");
         httpResponse.setContentType("application/json; charset=utf-8");
-        final String message = "未认证，请在前端系统进行认证";
         try (PrintWriter out = httpResponse.getWriter()) {
-            String responseJson = "{\"message\":\"" + message + "\"}";
-            out.print(responseJson);
+            out.print(JSON.toJSONString(CommonResult.unauthorized(null)));
         } catch (IOException e) {
             log.error("sendChallenge error：", e);
         }

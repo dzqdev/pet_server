@@ -1,7 +1,6 @@
 package com.sise.pet.controller.v1;
 
-import com.sise.pet.core.Result;
-import com.sise.pet.core.ResultGenerator;
+import com.sise.pet.core.CommonResult;
 import com.sise.pet.service.IStatisticsService;
 import com.sise.pet.vo.HistogramChartData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +26,9 @@ public class StatisticsController {
      * @return
      */
     @GetMapping("/topic5Pet")
-    public Result getTopic5Pet(){
+    public CommonResult getTopic5Pet(){
         HistogramChartData chartData = iStatisticsService.getTopic5PetInfo();
-        return ResultGenerator.genSuccessResult(chartData);
+        return CommonResult.success(chartData);
     }
 
     /** 饼图
@@ -37,9 +36,9 @@ public class StatisticsController {
      * @return
      */
     @GetMapping("/articleTypeCount")
-    public Result getArticleGroupByCategory(){
+    public CommonResult getArticleGroupByCategory(){
         HistogramChartData chartData = iStatisticsService.getArticleTypeCount();
-        return ResultGenerator.genSuccessResult(chartData);
+        return CommonResult.success(chartData);
     }
 
 
@@ -49,8 +48,8 @@ public class StatisticsController {
      * @return
      */
     @GetMapping("/discussionIncrement")
-    public Result getDiscussionIncrement(){
-        return ResultGenerator.genSuccessResult();
+    public CommonResult getDiscussionIncrement(){
+        return CommonResult.success(null);
     }
 
 

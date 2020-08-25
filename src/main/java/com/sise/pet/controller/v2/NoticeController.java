@@ -1,8 +1,7 @@
 package com.sise.pet.controller.v2;
 
 
-import com.sise.pet.core.Result;
-import com.sise.pet.core.ResultGenerator;
+import com.sise.pet.core.CommonResult;
 import com.sise.pet.entity.Notice;
 import com.sise.pet.service.INoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +30,9 @@ public class NoticeController {
      * @return
      */
     @GetMapping("/read/{userId}")
-    public Result getReadNoticeByUserId(@PathVariable Integer userId){
+    public CommonResult getReadNoticeByUserId(@PathVariable Integer userId){
         List<Notice> list = iNoticeService.getUserNoticesByType(userId, "read");
-        return ResultGenerator.genSuccessResult(list);
+        return CommonResult.success(list);
     }
 
     /**
@@ -42,19 +41,19 @@ public class NoticeController {
      * @return
      */
     @GetMapping("/un-read/{userId}")
-    public Result getUnReadNoticeByUserId(@PathVariable Integer userId){
+    public CommonResult getUnReadNoticeByUserId(@PathVariable Integer userId){
         List<Notice> list = iNoticeService.getUserNoticesByType(userId, "un_read");
-        return ResultGenerator.genSuccessResult(list);
+        return CommonResult.success(list);
     }
 
     //修改某个通知状态为已读
     @PutMapping("/{id}")
-    public Result updateNoticeState(@PathVariable Integer id){
+    public CommonResult updateNoticeState(@PathVariable Integer id){
         Notice notice = new Notice();
         notice.setId(id);
         notice.setReadTime(new Date());
         iNoticeService.updateById(notice);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
 

@@ -1,8 +1,7 @@
 package com.sise.pet.controller.v2;
 
 
-import com.sise.pet.core.Result;
-import com.sise.pet.core.ResultGenerator;
+import com.sise.pet.core.CommonResult;
 import com.sise.pet.entity.User;
 import com.sise.pet.service.IUserService;
 import com.sise.pet.service.RedisService;
@@ -33,10 +32,10 @@ public class UserController {
      * @return
      */
     @GetMapping("/{userId}")
-    public Result get(@PathVariable Integer userId){
+    public CommonResult get(@PathVariable Integer userId){
         User user = userService.getById(userId);
-        user.setPassword(null);
-        return ResultGenerator.genSuccessResult(user);
+        user.setPassword("it's a secret");
+        return CommonResult.success(user);
     }
 
     /**
@@ -45,10 +44,9 @@ public class UserController {
      * @return
      */
     @PutMapping
-    public Result updateUser(User user){
-        user.setPassword(null);
+    public CommonResult updateUser(User user){
         userService.updateById(user);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
 

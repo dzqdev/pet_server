@@ -1,7 +1,6 @@
 package com.sise.pet.controller;
 
-import com.sise.pet.core.Result;
-import com.sise.pet.core.ResultGenerator;
+import com.sise.pet.core.CommonResult;
 import com.sise.pet.utils.UploadUtil;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +21,7 @@ import java.io.IOException;
 public class UploadController {
 
     @PostMapping(value = {"pictures"})
-    public Result fileUpload(MultipartFile file){
+    public CommonResult fileUpload(MultipartFile file){
         String filename = file.getOriginalFilename();
         File fileDir = UploadUtil.getImageResourceSaveDir();
         try {
@@ -30,15 +29,15 @@ public class UploadController {
             File newFile = new File(fileDir.getAbsolutePath() + File.separator + filename);
             file.transferTo(newFile);
             String filePath = "http://localhost:8888/images/" + filename;
-            return ResultGenerator.genSuccessResult(filePath);
+            return CommonResult.success(filePath);
         } catch (IOException e) {
             e.printStackTrace();
-            return ResultGenerator.genFailResult(e.getMessage());
+            return CommonResult.failed(e.getMessage());
         }
     }
 
     @PostMapping(value = {"videos"})
-    public Result videoUpload(MultipartFile file){
+    public CommonResult videoUpload(MultipartFile file){
         String filename = file.getOriginalFilename();
         File fileDir = UploadUtil.getVideoResourceSaveDir();
         try {
@@ -46,10 +45,10 @@ public class UploadController {
             File newFile = new File(fileDir.getAbsolutePath() + File.separator + filename);
             file.transferTo(newFile);
             String filePath = "http://localhost:8888/videos/" + filename;
-            return ResultGenerator.genSuccessResult(filePath);
+            return CommonResult.success(filePath);
         } catch (IOException e) {
             e.printStackTrace();
-            return ResultGenerator.genFailResult(e.getMessage());
+            return CommonResult.failed(e.getMessage());
         }
     }
 }

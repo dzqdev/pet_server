@@ -1,7 +1,6 @@
 package com.sise.pet.controller.v1;
 
-import com.sise.pet.core.Result;
-import com.sise.pet.core.ResultGenerator;
+import com.sise.pet.core.CommonResult;
 import com.sise.pet.service.IArticleService;
 import com.sise.pet.service.IBoardingHomeService;
 import com.sise.pet.service.IHospitalService;
@@ -37,7 +36,7 @@ public class ManageIndexController {
     private IBoardingHomeService boardingHomeService;
 
     @GetMapping("/count")
-    public Result getCount(){
+    public CommonResult getCount(){
         Map map = new HashMap();
         int petCount = petService.count();
         int hospitalCount = hospitalService.count();
@@ -47,6 +46,6 @@ public class ManageIndexController {
         map.put("hospitalCount",hospitalCount);
         map.put("articleCount",articleCount);
         map.put("boardingHomeCount",boardingHomeCount);
-        return ResultGenerator.genSuccessResult(map);
+        return CommonResult.success(map);
     }
 }

@@ -4,8 +4,7 @@ package com.sise.pet.controller.v2;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.sise.pet.core.Result;
-import com.sise.pet.core.ResultGenerator;
+import com.sise.pet.core.CommonResult;
 import com.sise.pet.entity.Collect;
 import com.sise.pet.service.ICollectService;
 import com.sise.pet.vo.CollectArticleVo;
@@ -37,11 +36,11 @@ public class CollectController {
      * @return
      */
     @PostMapping("/article")
-    public Result addArticle(Collect collect) {
+    public CommonResult addArticle(Collect collect) {
         collect.setCreateTime(new Date());
         collect.setType("article");
         iCollectService.save(collect);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
     /**
@@ -51,21 +50,21 @@ public class CollectController {
      * @return
      */
     @PostMapping("/video")
-    public Result addVideo(Collect collect) {
+    public CommonResult addVideo(Collect collect) {
         collect.setCreateTime(new Date());
         collect.setType("video");
         iCollectService.save(collect);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
     /**
      * 判断文章是否被某用户收藏过
      */
     @GetMapping("/judgeArticleIsCollect")
-    public Result judgeArticleIsCollect(Collect collect) {
+    public CommonResult judgeArticleIsCollect(Collect collect) {
         collect.setType("article");
         boolean b = iCollectService.judgeResourceIsCollect(collect);
-        return ResultGenerator.genSuccessResult(b);
+        return CommonResult.success(b);
     }
 
     /**
@@ -75,10 +74,10 @@ public class CollectController {
      * @return
      */
     @GetMapping("/judgeVideoIsCollect")
-    public Result judgeVideoIsCollect(Collect collect) {
+    public CommonResult judgeVideoIsCollect(Collect collect) {
         collect.setType("video");
         boolean b = iCollectService.judgeResourceIsCollect(collect);
-        return ResultGenerator.genSuccessResult(b);
+        return CommonResult.success(b);
     }
 
 
@@ -89,11 +88,11 @@ public class CollectController {
      * @return
      */
     @GetMapping("/collectArticles/{userId}")
-    public Result getUserCollectArticles(@PathVariable Integer userId,Page page) {
+    public CommonResult getUserCollectArticles(@PathVariable Integer userId, Page page) {
         Collect collect = new Collect();
         collect.setUserId(userId);
         IPage<CollectArticleVo> result = iCollectService.getUserCollectArticles(page, collect);
-        return ResultGenerator.genSuccessResult(result);
+        return CommonResult.success(result);
     }
 
     /**
@@ -103,11 +102,11 @@ public class CollectController {
      * @return
      */
     @GetMapping("/collectVideos/{userId}")
-    public Result getUserCollectVideos(@PathVariable Integer userId, Page page) {
+    public CommonResult getUserCollectVideos(@PathVariable Integer userId, Page page) {
         Collect collect = new Collect();
         collect.setUserId(userId);
         IPage<CollectVideoVo> result = iCollectService.getUserCollectVideos(page, collect);
-        return ResultGenerator.genSuccessResult(result);
+        return CommonResult.success(result);
     }
 
     /**
@@ -116,13 +115,13 @@ public class CollectController {
      * @return
      */
     @DeleteMapping("/article")
-    public Result cancelArticleCollect(Collect collect){
+    public CommonResult cancelArticleCollect(Collect collect){
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("user_id", collect.getUserId());
         queryWrapper.eq("resource_id", collect.getResourceId());
         queryWrapper.eq("type", "article");
         iCollectService.remove(queryWrapper);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
     /**
@@ -131,13 +130,13 @@ public class CollectController {
      * @return
      */
     @DeleteMapping("/video")
-    public Result cancelVideoCollect(Collect collect){
+    public CommonResult cancelVideoCollect(Collect collect){
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("user_id", collect.getUserId());
         queryWrapper.eq("resource_id", collect.getResourceId());
         queryWrapper.eq("type", "video");
         iCollectService.remove(queryWrapper);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
 }

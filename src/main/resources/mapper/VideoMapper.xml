@@ -44,6 +44,9 @@
             <if test="video.title != null">
                 and video.title like concat('%',#{video.title},'%')
             </if>
+            <if test="video.searchPetType != null">
+                and p.name like concat('%',#{video.searchPetType},'%')
+            </if>
         </where>
     </select>
 

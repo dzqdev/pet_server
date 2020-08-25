@@ -2,8 +2,7 @@ package com.sise.pet.controller.v1;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.sise.pet.core.Result;
-import com.sise.pet.core.ResultGenerator;
+import com.sise.pet.core.CommonResult;
 import com.sise.pet.entity.Banner;
 import com.sise.pet.service.IBannerService;
 import org.springframework.web.bind.annotation.*;
@@ -28,28 +27,28 @@ public class BannerController {
     private IBannerService iBannerService;
 
     @PostMapping
-    public Result addBanner(Banner entity){
+    public CommonResult addBanner(Banner entity){
         entity.setCreateTime(new Date());
         iBannerService.save(entity);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
     @PutMapping
-    public Result updateBanner(Banner entity){
+    public CommonResult updateBanner(Banner entity){
         iBannerService.updateById(entity);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
     @GetMapping
-    public Result bannerList(Banner entity,Page page){
+    public CommonResult bannerList(Banner entity, Page page){
         Page<Banner> list = iBannerService.selectPage(entity,page);
-        return ResultGenerator.genSuccessResult(list);
+        return CommonResult.success(list);
     }
 
     @DeleteMapping("/{id}")
-    public Result deleteBanner(@PathVariable String id){
+    public CommonResult deleteBanner(@PathVariable String id){
         iBannerService.removeById(id);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
     /**
@@ -57,8 +56,8 @@ public class BannerController {
      * @return
      */
     @GetMapping("/visible")
-    public Result getVisibleBanner(){
+    public CommonResult getVisibleBanner(){
         List<Banner> list =  iBannerService.getVisibleBanner();
-        return ResultGenerator.genSuccessResult(list);
+        return CommonResult.success(list);
     }
 }

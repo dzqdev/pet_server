@@ -3,8 +3,7 @@ package com.sise.pet.controller.v2;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.sise.pet.core.Result;
-import com.sise.pet.core.ResultGenerator;
+import com.sise.pet.core.CommonResult;
 import com.sise.pet.entity.Comment;
 import com.sise.pet.service.ICommentService;
 import com.sise.pet.vo.CommentVo;
@@ -27,10 +26,10 @@ public class CommentController {
     private ICommentService iCommentService;
 
     @PostMapping
-    public Result add(Comment comment){
+    public CommonResult add(Comment comment){
         comment.setCreateDate(new Date());
         iCommentService.saveComment(comment);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
     /**
@@ -39,17 +38,17 @@ public class CommentController {
      * @return
      */
     @GetMapping("/discussion/{id}")
-    public Result listCommentsByDiscussion(@PathVariable("id") Integer id){
+    public CommonResult listCommentsByDiscussion(@PathVariable("id") Integer id){
         List<CommentVo> commentList = iCommentService.listCommentsByDiscussion(id);
-        return ResultGenerator.genSuccessResult(commentList);
+        return CommonResult.success(commentList);
     }
 
     @GetMapping("/list/{id}")
-    public Result listCommentsByDiscussionWithoutLevel(@PathVariable("id") Integer id, Page page){
+    public CommonResult listCommentsByDiscussionWithoutLevel(@PathVariable("id") Integer id, Page page){
         Comment comment = new Comment();
         comment.setDiscussionId(id);
         IPage<CommentVo> list = iCommentService.selectPage(comment, page);
-        return ResultGenerator.genSuccessResult(list);
+        return CommonResult.success(list);
     }
 
     /**
@@ -58,9 +57,9 @@ public class CommentController {
      * @return
      */
     @DeleteMapping("/{id}")
-    public Result delete(@PathVariable Integer id){
+    public CommonResult delete(@PathVariable Integer id){
         iCommentService.removeById(id);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
 

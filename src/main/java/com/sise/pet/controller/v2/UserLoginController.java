@@ -1,8 +1,7 @@
 package com.sise.pet.controller.v2;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.sise.pet.core.Result;
-import com.sise.pet.core.ResultGenerator;
+import com.sise.pet.core.CommonResult;
 import com.sise.pet.entity.User;
 import com.sise.pet.exception.RedisConnectException;
 import com.sise.pet.service.IUserService;
@@ -46,13 +45,13 @@ public class UserLoginController {
 
 
     @PostMapping("/userLogin")
-    public Result userLogin(@NotBlank(message = "{required}") String account,
-                            @NotBlank(message = "{required}") String password) throws RedisConnectException {
+    public CommonResult userLogin(@NotBlank(message = "{required}") String account,
+                                  @NotBlank(message = "{required}") String password) throws RedisConnectException {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("account", account);
         User user = iUserService.getOne(queryWrapper);
         if (user == null || !StringUtils.equals(user.getPassword(), password)){
-            return ResultGenerator.genFailResult("用户名或密码错误");
+            return CommonResult.failed("用户名或密码错误");
         }
 
         String token = JWTUtil.sign(user.getId().toString(), Constant.USER_LOGIN_TYPE, user.getPassword());
@@ -65,7 +64,7 @@ public class UserLoginController {
         //设置最后登录时间
         user.setLastLogin(new Date());
         iUserService.updateById(user);
-        return ResultGenerator.genSuccessResult(userInfo);
+        return CommonResult.success(userInfo);
     }
 
     private Map<String, Object> generateUserInfo(JwtToken token, User user) {
@@ -73,7 +72,7 @@ public class UserLoginController {
         userInfo.put("token", token.getToken());
         userInfo.put("expireTime", token.getExpireAt());
 
-        user.setPassword(null);
+        user.setPassword("it's a secret");
         userInfo.put("user", user);
         return userInfo;
     }
@@ -86,27 +85,27 @@ public class UserLoginController {
      * @return
      */
     @PutMapping("/updatePassword")
-    public Result updatePassword(String account,String password,String captcha){
+    public CommonResult updatePassword(String account, String password, String captcha){
         try {
             String redisCaptcha = redisService.get(CaptchaType.UPDATE_PASSWORD.getValue() + account);
             if(StringUtils.isBlank(redisCaptcha) || !StringUtils.equals(redisCaptcha,captcha)){
-                return ResultGenerator.genFailResult("验证码过期或错误");
+                return CommonResult.failed("验证码过期或错误");
             }
             iUserService.updatePassword(account,password);
-            return ResultGenerator.genSuccessResult();
+            return CommonResult.success(null);
         } catch (RedisConnectException e) {
             e.printStackTrace();
-            return ResultGenerator.genFailResult("服务器内部错误");
+            return CommonResult.failed("服务器内部错误");
         }
     }
 
     @PostMapping("/register")
-    public Result register(String account,String password,String captcha){
+    public CommonResult register(String account, String password, String captcha){
         //校验验证码是否正确
         try {
             String redisCaptcha = redisService.get(CaptchaType.REGISTER.getValue() + account);
             if(StringUtils.isBlank(redisCaptcha) || !StringUtils.equals(redisCaptcha,captcha)){
-                return ResultGenerator.genFailResult("验证码过期或错误");
+                return CommonResult.failed("验证码过期或错误");
             }
             //验证码正确
             User user = new User();
@@ -116,10 +115,10 @@ public class UserLoginController {
             user.setCreateTime(new Date());
             user.setAvatar(Constant.USER_DEFAULT_AVATAR);
             iUserService.save(user);
-            return ResultGenerator.genSuccessResult();
+            return CommonResult.success(null);
         } catch (RedisConnectException e) {
             e.printStackTrace();
-            return ResultGenerator.genFailResult("服务器内部错误");
+            return CommonResult.failed("服务器内部错误");
         }
     }
 
@@ -139,18 +138,18 @@ public class UserLoginController {
      * @return
      */
     @GetMapping("/captcha")
-    public Result getCaptcha(String phone,Integer captchaType){
+    public CommonResult getCaptcha(String phone, Integer captchaType){
         if(captchaType != CaptchaType.UPDATE_PASSWORD.getCode()){
             boolean validate = accountUniqueValidate(phone);
             if(!validate){
-                return ResultGenerator.genFailResult("该手机号码已注册");
+                return CommonResult.failed("该手机号码已注册");
             }
         }
         String value = CaptchaType.getValue(captchaType);
-        Result result = SmsUtil.sendSms(phone,value);
+        CommonResult result = SmsUtil.sendSms(phone,value);
         if(result.getCode() != 200){
-            return ResultGenerator.genFailResult(result.getMessage());
+            return CommonResult.failed(result.getMessage());
         }
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 }

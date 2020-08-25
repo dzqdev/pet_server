@@ -3,8 +3,7 @@ package com.sise.pet.controller.v1;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.sise.pet.core.Result;
-import com.sise.pet.core.ResultGenerator;
+import com.sise.pet.core.CommonResult;
 import com.sise.pet.entity.Pet;
 import com.sise.pet.service.IPetService;
 import org.springframework.web.bind.annotation.*;
@@ -29,16 +28,16 @@ public class PetController {
     private IPetService iPetService;
 
     @PostMapping
-    public Result addPet(Pet pet){
+    public CommonResult addPet(Pet pet){
         pet.setCreateTime(new Date());
         iPetService.save(pet);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
     @GetMapping
-    public Result petList(Pet pet, Page page){
+    public CommonResult petList(Pet pet, Page page){
         IPage<Pet> list = iPetService.selectPage(pet, page);
-        return ResultGenerator.genSuccessResult(list);
+        return CommonResult.success(list);
     }
 
     /**
@@ -46,34 +45,34 @@ public class PetController {
      * @return
      */
     @GetMapping("/unPage")
-    public Result getAllPets(){
+    public CommonResult getAllPets(){
         List<Pet> list = iPetService.list();
-        return ResultGenerator.genSuccessResult(list);
+        return CommonResult.success(list);
     }
 
     @GetMapping("/{id}")
-    public Result get(@PathVariable Integer id){
+    public CommonResult get(@PathVariable Integer id){
         Pet pet = iPetService.getById(id);
-        return ResultGenerator.genSuccessResult(pet);
+        return CommonResult.success(pet);
     }
 
     @PutMapping
-    public Result updatePet(Pet pet){
+    public CommonResult updatePet(Pet pet){
         iPetService.updateById(pet);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
 
     @DeleteMapping("/{id}")
-    public Result delPet(@PathVariable String id){
+    public CommonResult delPet(@PathVariable String id){
        iPetService.removeById(id);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
     @PutMapping("/{id}")
-    public Result updateViewCount(@PathVariable Integer id){
+    public CommonResult updateViewCount(@PathVariable Integer id){
         iPetService.updateViewCount(id);
-        return ResultGenerator.genSuccessResult();
+        return CommonResult.success(null);
     }
 
     /**
@@ -81,8 +80,8 @@ public class PetController {
      * @return
      */
     @GetMapping("/popular")
-    public Result getPopularPet(){
+    public CommonResult getPopularPet(){
         List<Pet> list = iPetService.getPopularPet();
-        return ResultGenerator.genSuccessResult(list);
+        return CommonResult.success(list);
     }
 }
