@@ -29,6 +29,7 @@ public class RedisServiceImpl implements RedisService {
             return j.excute(jedis);
         } catch (Exception e) {
             throw new RedisConnectException(e.getMessage());
+        }finally {
         }
     }
 

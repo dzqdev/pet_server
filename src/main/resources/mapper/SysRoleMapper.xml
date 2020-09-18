@@ -20,4 +20,21 @@
         id, name, level, description, data_scope, create_by, update_by, create_time, update_time
     </sql>
 
+    <select id="getMenuList" resultMap="com.sise.pet.mapper.SysMenuMapper.BaseResultMap">
+        SELECT
+            r.*
+        FROM
+            sys_menu r
+            LEFT JOIN sys_roles_menus p ON r.id = p.menu_id
+        WHERE
+            p.role_id = #{roleId}
+    </select>
+
+    <select id="findByUsersId" resultMap="BaseResultMap">
+        select
+        sr.*
+        from sys_users_roles sur
+        join sys_role sr on sur.role_id = sr.id
+        where sur.user_id = #{id}
+    </select>
 </mapper>
