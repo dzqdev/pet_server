@@ -10,15 +10,10 @@ import com.sise.pet.service.ISysMenuService;
 import com.sise.pet.service.ISysRoleService;
 import com.sise.pet.vo.MenuVo;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.java.Log;
 import org.apache.shiro.SecurityUtils;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -42,7 +37,7 @@ public class SysMenuController {
 
     @ApiOperation("新增菜单")
     @PostMapping
-    public CommonResult create(@RequestBody SysMenu sysMenu){
+    public CommonResult create(SysMenu sysMenu){
         boolean b = menuService.save(sysMenu);
         if (b) {
             return CommonResult.success(null);

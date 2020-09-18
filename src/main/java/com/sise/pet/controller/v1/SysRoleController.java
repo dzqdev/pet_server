@@ -39,7 +39,7 @@ import java.util.Set;
  */
 @RestController
 @Api(tags = "系统：角色管理")
-@RequestMapping("/api/v1/roles")
+@RequestMapping("/api/v1/role")
 public class SysRoleController {
 
     @Resource

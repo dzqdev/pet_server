@@ -7,6 +7,6 @@ import java.util.Date;
 
 @Data
 public class CollectVideoVo extends Video {
-    //收藏事件
+    //收藏时间
     private Date collectTime;
 }
