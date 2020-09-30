@@ -16,6 +16,7 @@ public class ShiroProperties {
     private List<String> anonUrl = new ArrayList<>();
 
     {
+        anonUrl.add("/api/v1/auth/login");
         anonUrl.add("/api/v1/manager/login");
         anonUrl.add("/api/v1/manager/logout");
         anonUrl.add("/api/v1/pictures");

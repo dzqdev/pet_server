@@ -11,7 +11,7 @@
         <result column="create_time" property="createTime" />
     </resultMap>
 
-    <resultMap id="ArticleResultMap" type="com.sise.pet.vo.CollectArticleVo">
+    <resultMap id="ArticleResultMap" type="com.sise.pet.dto.CollectArticleDto">
         <result column="id" property="id"/>
         <result column="title" property="title"/>
         <result column="description" property="description"/>
@@ -29,7 +29,7 @@
         </association>
     </resultMap>
 
-    <resultMap id="VideoResultMap" type="com.sise.pet.vo.CollectVideoVo">
+    <resultMap id="VideoResultMap" type="com.sise.pet.dto.CollectVideoDto">
         <id column="id" property="id" />
         <result column="title" property="title" />
         <result column="thumbnail" property="thumbnail" />

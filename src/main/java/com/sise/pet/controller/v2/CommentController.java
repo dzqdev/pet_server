@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sise.pet.core.CommonResult;
 import com.sise.pet.entity.Comment;
 import com.sise.pet.service.ICommentService;
-import com.sise.pet.vo.CommentVo;
+import com.sise.pet.dto.CommentDto;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -39,7 +39,7 @@ public class CommentController {
      */
     @GetMapping("/discussion/{id}")
     public CommonResult listCommentsByDiscussion(@PathVariable("id") Integer id){
-        List<CommentVo> commentList = iCommentService.listCommentsByDiscussion(id);
+        List<CommentDto> commentList = iCommentService.listCommentsByDiscussion(id);
         return CommonResult.success(commentList);
     }
 
@@ -47,7 +47,7 @@ public class CommentController {
     public CommonResult listCommentsByDiscussionWithoutLevel(@PathVariable("id") Integer id, Page page){
         Comment comment = new Comment();
         comment.setDiscussionId(id);
-        IPage<CommentVo> list = iCommentService.selectPage(comment, page);
+        IPage<CommentDto> list = iCommentService.selectPage(comment, page);
         return CommonResult.success(list);
     }
 

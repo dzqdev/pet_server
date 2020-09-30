@@ -7,8 +7,8 @@ import com.sise.pet.entity.Collect;
 import com.sise.pet.mapper.CollectMapper;
 import com.sise.pet.service.ICollectService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.sise.pet.vo.CollectArticleVo;
-import com.sise.pet.vo.CollectVideoVo;
+import com.sise.pet.dto.CollectArticleDto;
+import com.sise.pet.dto.CollectVideoDto;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -42,12 +42,12 @@ public class CollectServiceImpl extends ServiceImpl<CollectMapper, Collect> impl
     }
 
     @Override
-    public IPage<CollectArticleVo> getUserCollectArticles(Page page, Collect collect) {
+    public IPage<CollectArticleDto> getUserCollectArticles(Page page, Collect collect) {
         return collectMapper.getUserCollectArticles(page,collect);
     }
 
     @Override
-    public IPage<CollectVideoVo> getUserCollectVideos(Page page, Collect collect) {
+    public IPage<CollectVideoDto> getUserCollectVideos(Page page, Collect collect) {
         return collectMapper.getUserCollectVideos(page,collect);
     }
 

@@ -20,9 +20,9 @@ public interface ISysMenuService extends IService<SysMenu> {
 
     List<SysMenu> getMenus(Long pid);
 
-    List<SysMenuDto> findByRoles(List<SysRole> roles);
+    List<SysMenuDto> findByRoles(List<SysRole> roles,Integer type);
 
     List<SysMenuDto> buildTree(List<SysMenuDto> menuDTOs);
 
-    public List<MenuVo> buildMenus(List<SysMenuDto> menuDTOs);
+    public List<MenuVo> buildMenus(List<SysMenuDto> menuDtos) ;
 }

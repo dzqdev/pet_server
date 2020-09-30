@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sise.pet.entity.Comment;
-import com.sise.pet.vo.CommentVo;
+import com.sise.pet.dto.CommentDto;
 
 import java.util.List;
 
@@ -18,11 +18,11 @@ import java.util.List;
  */
 public interface ICommentService extends IService<Comment> {
 
-    List<CommentVo> listCommentsByDiscussion(Integer id);
+    List<CommentDto> listCommentsByDiscussion(Integer id);
 
     void saveComment(Comment comment);
 
     void deleteComment(Integer id);
 
-    IPage<CommentVo> selectPage(Comment entity, Page page);
+    IPage<CommentDto> selectPage(Comment entity, Page page);
 }

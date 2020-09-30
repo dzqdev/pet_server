@@ -1,4 +1,4 @@
-package com.sise.pet.vo;
+package com.sise.pet.dto;
 
 import com.sise.pet.entity.Comment;
 import com.sise.pet.entity.Discussion;
@@ -14,10 +14,10 @@ import java.util.List;
  * @Version 1.0
  **/
 @Data
-public class CommentVo extends Comment {
+public class CommentDto extends Comment {
     private Discussion discussion;
     private User toUser;
     private User author;
     private Comment parent;
-    private List<CommentVo> children;
+    private List<CommentDto> children;
 }

@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -30,24 +32,10 @@ public class SysUser implements Serializable {
     private Long id;
 
     /**
-     * 部门名称
-     */
-    private Long deptId;
-
-    /**
      * 用户名
      */
     private String username;
 
-    /**
-     * 昵称
-     */
-    private String nickName;
-
-    /**
-     * 性别
-     */
-    private String gender;
 
     /**
      * 手机号码
@@ -55,23 +43,14 @@ public class SysUser implements Serializable {
     private String phone;
 
     /**
-     * 邮箱
-     */
-    private String email;
-
-    /**
-     * 头像地址
-     */
-    private String avatarName;
-
-    /**
      * 头像真实路径
      */
-    private String avatarPath;
+    private String avatar;
 
     /**
      * 密码
      */
+    @JsonIgnore
     private String password;
 
     /**

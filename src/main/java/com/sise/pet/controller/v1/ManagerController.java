@@ -56,7 +56,7 @@ public class ManagerController {
             return CommonResult.failed("用户名或密码错误");
         }
 
-        String token = JWTUtil.sign(manager.getId().toString(), Constant.MANAGER_LOGIN_TYPE, manager.getPassword());
+        String token = JWTUtil.sign(manager.getId().toString(), Constant.ADMIN_LOGIN_TYPE, manager.getPassword());
         LocalDateTime expireTime = LocalDateTime.now().plusSeconds(86400L);
         String expireTimeStr = DateUtil.formatFullTime(expireTime);
         JwtToken jwtToken = new JwtToken(token, expireTimeStr);

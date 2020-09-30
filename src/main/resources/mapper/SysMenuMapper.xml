@@ -29,11 +29,17 @@
     </sql>
 
     <select id="findByRoles" resultMap="BaseResultMap">
-        select * from sys_menu where id in (
-            select menu_id from sys_roles_menus where role_id in
-            <foreach item="item" index="index" collection="roleIds" open="(" separator="," close=")">
-                #{item}
-            </foreach>
+        select * from sys_menu
+         <where>
+             <if test="type != null">
+                 and type != #{type}
+             </if>
+            and id in (
+             select menu_id from sys_roles_menus where role_id in
+             <foreach item="item" index="index" collection="roleIds" open="(" separator="," close=")">
+                 #{item}
+             </foreach>
+         </where>
         )
     </select>
 

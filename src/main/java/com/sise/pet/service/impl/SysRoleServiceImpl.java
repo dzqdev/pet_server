@@ -46,9 +46,4 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         return 0;
     }
 
-    @Override
-    public List<SysRole> findByUsersId(Long id) {
-        List<SysRole> list = sysRoleMapper.findByUsersId(id);
-        return list;
-    }
 }

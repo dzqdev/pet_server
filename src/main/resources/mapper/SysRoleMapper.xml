@@ -30,11 +30,4 @@
             p.role_id = #{roleId}
     </select>
 
-    <select id="findByUsersId" resultMap="BaseResultMap">
-        select
-        sr.*
-        from sys_users_roles sur
-        join sys_role sr on sur.role_id = sr.id
-        where sur.user_id = #{id}
-    </select>
 </mapper>

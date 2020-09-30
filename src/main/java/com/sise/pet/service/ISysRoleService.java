@@ -25,5 +25,4 @@ public interface ISysRoleService extends IService<SysRole> {
 
     int updateMenu(Long roleId, List<Long> menuIds);
 
-    List<SysRole> findByUsersId(Long id);
 }

@@ -7,8 +7,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sise.pet.core.CommonResult;
 import com.sise.pet.entity.Collect;
 import com.sise.pet.service.ICollectService;
-import com.sise.pet.vo.CollectArticleVo;
-import com.sise.pet.vo.CollectVideoVo;
+import com.sise.pet.dto.CollectArticleDto;
+import com.sise.pet.dto.CollectVideoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -91,7 +91,7 @@ public class CollectController {
     public CommonResult getUserCollectArticles(@PathVariable Integer userId, Page page) {
         Collect collect = new Collect();
         collect.setUserId(userId);
-        IPage<CollectArticleVo> result = iCollectService.getUserCollectArticles(page, collect);
+        IPage<CollectArticleDto> result = iCollectService.getUserCollectArticles(page, collect);
         return CommonResult.success(result);
     }
 
@@ -105,7 +105,7 @@ public class CollectController {
     public CommonResult getUserCollectVideos(@PathVariable Integer userId, Page page) {
         Collect collect = new Collect();
         collect.setUserId(userId);
-        IPage<CollectVideoVo> result = iCollectService.getUserCollectVideos(page, collect);
+        IPage<CollectVideoDto> result = iCollectService.getUserCollectVideos(page, collect);
         return CommonResult.success(result);
     }
 

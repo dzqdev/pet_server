@@ -5,16 +5,20 @@ import com.sise.pet.core.CommonResult;
 import com.sise.pet.dto.SysMenuDto;
 import com.sise.pet.entity.SysMenu;
 import com.sise.pet.entity.SysRole;
-import com.sise.pet.entity.SysUser;
 import com.sise.pet.service.ISysMenuService;
 import com.sise.pet.service.ISysRoleService;
+import com.sise.pet.service.ISysUserService;
+import com.sise.pet.shiro.JWTUtil;
 import com.sise.pet.vo.MenuVo;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -34,6 +38,9 @@ public class SysMenuController {
 
     @Resource
     private ISysRoleService roleService;
+
+    @Resource
+    private ISysUserService sysUserService;
 
     @ApiOperation("新增菜单")
     @PostMapping
@@ -74,6 +81,12 @@ public class SysMenuController {
         return CommonResult.success(CommonPage.restPage(menuList));
     }*/
 
+    @ApiOperation("返回全部的菜单")
+    @GetMapping(value = "/lazy")
+    public CommonResult query(@RequestParam Long pid){
+//        return new ResponseEntity<>(menuService.getMenus(pid), HttpStatus.OK);
+        return CommonResult.success(null);
+    }
 
     @ApiOperation("根据ID获取菜单详情")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -86,11 +99,21 @@ public class SysMenuController {
     @ApiOperation("获取前端所需菜单")
     @GetMapping(value = "/build")
     public CommonResult buildMenus(){
-        SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
-        List<SysRole> roles = roleService.findByUsersId(user.getId());
-        List<SysMenuDto> sysMenuDtos = menuService.findByRoles(roles);
-        List<MenuVo> buildMenus = menuService.buildMenus(sysMenuDtos);
-        return CommonResult.success(buildMenus);
+        Object principal = SecurityUtils.getSubject().getPrincipal();
+        if(Objects.nonNull(principal)){
+            String token = (String) principal;
+            String userId = JWTUtil.getUserId(token);
+            if(null != userId){
+                List<SysRole> roles = sysUserService.getRoleList(Long.valueOf(userId));
+                List<SysMenuDto> sysMenuDtos = menuService.findByRoles(roles,2);
+                List<SysMenuDto> treeMuenuDtos = menuService.buildTree(sysMenuDtos);
+                List<MenuVo> menus = menuService.buildMenus(treeMuenuDtos);
+                return CommonResult.success(menus);
+            }else{
+                return CommonResult.failed("用户不存在");
+            }
+        }else{
+            return CommonResult.failed("用户不存在");
+        }
     }
-
 }

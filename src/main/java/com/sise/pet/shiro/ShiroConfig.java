@@ -1,6 +1,7 @@
 package com.sise.pet.shiro;
 
 
+import com.sise.pet.shiro.realms.AdminRealm;
 import com.sise.pet.shiro.realms.ManagerRealm;
 import com.sise.pet.shiro.realms.UserRealm;
 import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
@@ -72,6 +73,7 @@ public class ShiroConfig {
         List<Realm> realms = new ArrayList<>();
         realms.add(userRealm());
         realms.add(managerRealm());
+        realms.add(adminRealm());
         securityManager.setRealms(realms);
 
         return securityManager;
@@ -91,6 +93,12 @@ public class ShiroConfig {
     public UserRealm userRealm() {
         UserRealm userRealm = new UserRealm();
         return userRealm;
+    }
+
+    @Bean
+    public AdminRealm adminRealm() {
+        AdminRealm adminRealm = new AdminRealm();
+        return adminRealm;
     }
 
     @Bean

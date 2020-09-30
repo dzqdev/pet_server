@@ -5,14 +5,8 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.sise.pet.entity.SysUser">
         <id column="id" property="id" />
-        <result column="dept_id" property="deptId" />
         <result column="username" property="username" />
-        <result column="nick_name" property="nickName" />
-        <result column="gender" property="gender" />
         <result column="phone" property="phone" />
-        <result column="email" property="email" />
-        <result column="avatar_name" property="avatarName" />
-        <result column="avatar_path" property="avatarPath" />
         <result column="password" property="password" />
         <result column="is_admin" property="isAdmin" />
         <result column="enabled" property="enabled" />
@@ -23,9 +17,36 @@
         <result column="update_time" property="updateTime" />
     </resultMap>
 
+    <resultMap id="SysUserDto" type="com.sise.pet.dto.SysUserDto" extends="BaseResultMap">
+        <collection property="roles" ofType="com.sise.pet.entity.SysRole" column="id"
+                    select="com.sise.pet.mapper.SysUsersRolesMapper.selectUserRoles">
+        </collection>
+    </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, dept_id, username, nick_name, gender, phone, email, avatar_name, avatar_path, password, is_admin, enabled, create_by, update_by, pwd_reset_time, create_time, update_time
+        id, username, phone, avatar, password, is_admin, enabled, create_by, update_by, pwd_reset_time, create_time, update_time
     </sql>
+
+    <!--  查询用户以及用户的角色信息  -->
+    <select id="query" resultMap="SysUserDto">
+        select * from sys_user
+        <where>
+            <if test="user.username != null">
+                and sys_user.username like concat('%',#{user.username},'%')
+            </if>
+            <if test="user.id != null">
+                and sys_user.id = #{user.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="getRoleList" resultMap="com.sise.pet.mapper.SysRoleMapper.BaseResultMap">
+        select
+        sr.*
+        from sys_users_roles sur
+        join sys_role sr on sur.role_id = sr.id
+        where sur.user_id = #{userId}
+    </select>
 
 </mapper>

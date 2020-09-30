@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sise.pet.entity.Collect;
-import com.sise.pet.vo.CollectArticleVo;
-import com.sise.pet.vo.CollectVideoVo;
+import com.sise.pet.dto.CollectArticleDto;
+import com.sise.pet.dto.CollectVideoDto;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -17,7 +17,7 @@ import org.apache.ibatis.annotations.Param;
  * @since 2020-03-08
  */
 public interface CollectMapper extends BaseMapper<Collect> {
-    IPage<CollectArticleVo> getUserCollectArticles(Page page, Collect collect);
+    IPage<CollectArticleDto> getUserCollectArticles(Page page, Collect collect);
 
-    IPage<CollectVideoVo> getUserCollectVideos(Page page, @Param("collect") Collect collect);
+    IPage<CollectVideoDto> getUserCollectVideos(Page page, @Param("collect") Collect collect);
 }

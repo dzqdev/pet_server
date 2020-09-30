@@ -1,7 +1,10 @@
 package com.sise.pet.mapper;
 
+import com.sise.pet.entity.SysRole;
 import com.sise.pet.entity.SysUsersRoles;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,5 +15,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2020-09-07
  */
 public interface SysUsersRolesMapper extends BaseMapper<SysUsersRoles> {
-
+    List<SysRole> selectUserRoles(Long id);
 }

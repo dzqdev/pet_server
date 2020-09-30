@@ -14,7 +14,7 @@
         <result column="create_date" property="createDate" />
     </resultMap>
 
-    <resultMap id="withDetailInfoResultMap" extends="BaseResultMap" type="com.sise.pet.vo.CommentVo">
+    <resultMap id="withDetailInfoResultMap" extends="BaseResultMap" type="com.sise.pet.dto.CommentDto">
         <association property="author" javaType="com.sise.pet.entity.User">
             <result column="a_id" property="id"/>
             <result column="a_username" property="username"/>

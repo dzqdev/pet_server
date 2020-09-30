@@ -10,7 +10,7 @@ import com.sise.pet.mapper.NoticeMapper;
 import com.sise.pet.mapper.UserMapper;
 import com.sise.pet.service.ICommentService;
 import com.sise.pet.utils.Constant;
-import com.sise.pet.vo.CommentVo;
+import com.sise.pet.dto.CommentDto;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -41,12 +41,12 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private UserMapper userMapper;
 
     @Override
-    public List<CommentVo> listCommentsByDiscussion(Integer id) {
-        List<CommentVo> list = commentMapper.listCommentsByDiscussion(id, "0");
+    public List<CommentDto> listCommentsByDiscussion(Integer id) {
+        List<CommentDto> list = commentMapper.listCommentsByDiscussion(id, "0");
         if(null != list && list.size() > 0){
-            for (CommentVo commentVo : list) {
+            for (CommentDto commentVo : list) {
                 //查询该评论下的其他子评论
-                List<CommentVo> subComments = commentMapper.listCommentSubComments(commentVo.getId());
+                List<CommentDto> subComments = commentMapper.listCommentSubComments(commentVo.getId());
                 commentVo.setChildren(subComments);
             }
         }
@@ -119,8 +119,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     }
 
     @Override
-    public IPage<CommentVo> selectPage(Comment entity, Page page) {
-        IPage<CommentVo> commentPage = commentMapper.getCommentPage(page, entity);
+    public IPage<CommentDto> selectPage(Comment entity, Page page) {
+        IPage<CommentDto> commentPage = commentMapper.getCommentPage(page, entity);
         return commentPage;
     }
 

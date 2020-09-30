@@ -38,9 +38,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
-    public List<SysMenuDto> findByRoles(List<SysRole> roles) {
+    public List<SysMenuDto> findByRoles(List<SysRole> roles,Integer type) {
         Set<Long> roleIds = roles.stream().map(SysRole::getId).collect(Collectors.toSet());
-        List<SysMenu> menuList = menuMapper.findByRoles(roleIds);
+        List<SysMenu> menuList = menuMapper.findByRoles(roleIds,type);
         List<SysMenuDto> list = menuList.stream().map(menu -> convert(menu)).collect(Collectors.toList());
         return list;
     }
@@ -70,47 +70,47 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
-    public List<MenuVo> buildMenus(List<SysMenuDto> menuDTOs) {
+    public List<MenuVo> buildMenus(List<SysMenuDto> menuDtos) {
         List<MenuVo> list = new LinkedList<>();
-        menuDTOs.forEach(menuDTO -> {
-                    if (menuDTO != null) {
+        menuDtos.forEach(menuDTO -> {
+                    if (menuDTO!=null){
                         List<SysMenuDto> menuDtoList = menuDTO.getChildren();
                         MenuVo menuVo = new MenuVo();
-                        menuVo.setName(ObjectUtil.isNotEmpty(menuDTO.getComponentName()) ? menuDTO.getComponentName() : menuDTO.getTitle());
+                        menuVo.setName(ObjectUtil.isNotEmpty(menuDTO.getComponentName())  ? menuDTO.getComponentName() : menuDTO.getTitle());
                         // 一级目录需要加斜杠，不然会报警告
-                        menuVo.setPath(menuDTO.getPid() == null ? "/" + menuDTO.getPath() : menuDTO.getPath());
+                        menuVo.setPath(menuDTO.getPid() == null ? "/" + menuDTO.getPath() :menuDTO.getPath());
                         menuVo.setHidden(menuDTO.getHidden());
                         // 如果不是外链
-                        if (!menuDTO.getIFrame()) {
-                            if (menuDTO.getPid() == null) {
-                                menuVo.setComponent(StrUtil.isEmpty(menuDTO.getComponent()) ? "Layout" : menuDTO.getComponent());
-                            } else if (!StrUtil.isEmpty(menuDTO.getComponent())) {
+                        if(!menuDTO.getIFrame()){
+                            if(menuDTO.getPid() == null){
+                                menuVo.setComponent(StrUtil.isEmpty(menuDTO.getComponent())?"Layout":menuDTO.getComponent());
+                            }else if(!StrUtil.isEmpty(menuDTO.getComponent())){
                                 menuVo.setComponent(menuDTO.getComponent());
                             }
                         }
-                        menuVo.setMeta(new MenuMetaVo(menuDTO.getTitle(), menuDTO.getIcon(), !menuDTO.getCache()));
-                        if (menuDtoList != null && menuDtoList.size() != 0) {
+                        menuVo.setMeta(new MenuMetaVo(menuDTO.getTitle(),menuDTO.getIcon(),!menuDTO.getCache()));
+                        if(menuDtoList !=null && menuDtoList.size()!=0){
                             menuVo.setAlwaysShow(true);
                             menuVo.setRedirect("noredirect");
                             menuVo.setChildren(buildMenus(menuDtoList));
                             // 处理是一级菜单并且没有子菜单的情况
-                        } else if (menuDTO.getPid() == null) {
-                            MenuVo nonChildrenMenuVo = new MenuVo();
-                            nonChildrenMenuVo.setMeta(menuVo.getMeta());
+                        } else if(menuDTO.getPid() == null){
+                            MenuVo menuVo1 = new MenuVo();
+                            menuVo1.setMeta(menuVo.getMeta());
                             // 非外链
-                            if (!menuDTO.getIFrame()) {
-                                nonChildrenMenuVo.setPath("index");
-                                nonChildrenMenuVo.setName(menuVo.getName());
-                                nonChildrenMenuVo.setComponent(menuVo.getComponent());
+                            if(!menuDTO.getIFrame()){
+                                menuVo1.setPath("index");
+                                menuVo1.setName(menuVo.getName());
+                                menuVo1.setComponent(menuVo.getComponent());
                             } else {
-                                nonChildrenMenuVo.setPath(menuDTO.getPath());
+                                menuVo1.setPath(menuDTO.getPath());
                             }
                             menuVo.setName(null);
                             menuVo.setMeta(null);
                             menuVo.setComponent("Layout");
-                            List<MenuVo> children = new ArrayList<>();
-                            children.add(nonChildrenMenuVo);
-                            menuVo.setChildren(children);
+                            List<MenuVo> list1 = new ArrayList<>();
+                            list1.add(menuVo1);
+                            menuVo.setChildren(list1);
                         }
                         list.add(menuVo);
                     }
