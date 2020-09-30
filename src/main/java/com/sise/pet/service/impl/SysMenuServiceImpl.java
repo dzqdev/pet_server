@@ -2,6 +2,8 @@ package com.sise.pet.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.sise.pet.dto.SysMenuDto;
 import com.sise.pet.entity.SysMenu;
 import com.sise.pet.entity.SysRole;
@@ -33,8 +35,14 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Override
     public List<SysMenu> getMenus(Long pid) {
-
-        return null;
+        LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
+        if(Objects.isNull(pid)){
+            queryWrapper.isNull(SysMenu::getPid);
+        }else{
+            queryWrapper.eq(SysMenu::getPid, pid);
+        }
+        List<SysMenu> menuList = menuMapper.selectList(queryWrapper);
+        return menuList;
     }
 
     @Override

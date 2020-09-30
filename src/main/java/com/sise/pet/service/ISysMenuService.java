@@ -24,5 +24,6 @@ public interface ISysMenuService extends IService<SysMenu> {
 
     List<SysMenuDto> buildTree(List<SysMenuDto> menuDTOs);
 
-    public List<MenuVo> buildMenus(List<SysMenuDto> menuDtos) ;
+    List<MenuVo> buildMenus(List<SysMenuDto> menuDtos);
+
 }

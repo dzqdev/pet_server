@@ -71,15 +71,13 @@ public class SysMenuController {
         return CommonResult.success(null);
     }
 
-  /*  @ApiOperation("分页查询后台菜单")
-    @RequestMapping(value = "/list/{parentId}", method = RequestMethod.GET)
+    @ApiOperation("分页查询后台菜单")
+    @GetMapping
     @ResponseBody
-    public CommonResult<CommonPage<UmsMenu>> list(@PathVariable Long parentId,
-                                                  @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                                  @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
-        List<UmsMenu> menuList = menuService.list(parentId, pageSize, pageNum);
-        return CommonResult.success(CommonPage.restPage(menuList));
-    }*/
+    public CommonResult list(Long pid) {
+        List<SysMenu> menus = menuService.getMenus(pid);
+        return CommonResult.success(menus);
+    }
 
     @ApiOperation("返回全部的菜单")
     @GetMapping(value = "/lazy")
