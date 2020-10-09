@@ -3,11 +3,9 @@ package com.sise.pet.aspect;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import com.alibaba.fastjson.JSON;
-import com.sise.pet.entity.User;
 import com.sise.pet.entity.WebLog;
 import com.sise.pet.service.IUserService;
 import com.sise.pet.service.IWebLogService;
-import com.sise.pet.shiro.JWTUtil;
 import com.sise.pet.utils.HttpRequestUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -87,14 +85,13 @@ public class WebLogAspect {
         webLog.setUri(request.getRequestURI());
         webLog.setUrl(request.getRequestURL().toString());
         webLog.setIp(HttpRequestUtil.getIpAddress(request));
-        if (StrUtil.isNotBlank(token)) {
+        /*if (StrUtil.isNotBlank(token)) {
             String userId = JWTUtil.getUserId(token);
             if (StrUtil.isNotBlank(userId)) {
                 User user = userService.getById(userId);
                 webLog.setUsername(user != null ? user.getUsername() : "");
             }
-
-        }
+        }*/
 
         webLogService.save(webLog);
         return result;

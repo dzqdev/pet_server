@@ -1,24 +1,22 @@
 package com.sise.pet.controller.v1;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.sise.pet.core.CommonResult;
 import com.sise.pet.dto.SysMenuDto;
 import com.sise.pet.entity.SysMenu;
 import com.sise.pet.entity.SysRole;
+import com.sise.pet.entity.SysUser;
 import com.sise.pet.service.ISysMenuService;
 import com.sise.pet.service.ISysRoleService;
 import com.sise.pet.service.ISysUserService;
-import com.sise.pet.shiro.JWTUtil;
+import com.sise.pet.utils.SecurityUtils;
 import com.sise.pet.vo.MenuVo;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.SecurityUtils;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -97,21 +95,11 @@ public class SysMenuController {
     @ApiOperation("获取前端所需菜单")
     @GetMapping(value = "/build")
     public CommonResult buildMenus(){
-        Object principal = SecurityUtils.getSubject().getPrincipal();
-        if(Objects.nonNull(principal)){
-            String token = (String) principal;
-            String userId = JWTUtil.getUserId(token);
-            if(null != userId){
-                List<SysRole> roles = sysUserService.getRoleList(Long.valueOf(userId));
-                List<SysMenuDto> sysMenuDtos = menuService.findByRoles(roles,2);
-                List<SysMenuDto> treeMuenuDtos = menuService.buildTree(sysMenuDtos);
-                List<MenuVo> menus = menuService.buildMenus(treeMuenuDtos);
-                return CommonResult.success(menus);
-            }else{
-                return CommonResult.failed("用户不存在");
-            }
-        }else{
-            return CommonResult.failed("用户不存在");
-        }
+        SysUser user = sysUserService.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, SecurityUtils.getUsername()));
+        List<SysRole> roles = sysUserService.getRoleList(Long.valueOf(user.getId()));
+        List<SysMenuDto> sysMenuDtos = menuService.findByRoles(roles,2);
+        List<SysMenuDto> treeMuenuDtos = menuService.buildTree(sysMenuDtos);
+        List<MenuVo> menus = menuService.buildMenus(treeMuenuDtos);
+        return CommonResult.success(menus);
     }
 }

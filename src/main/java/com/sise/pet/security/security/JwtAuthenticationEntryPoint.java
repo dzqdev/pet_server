@@ -15,6 +15,8 @@
  */
 package com.sise.pet.security.security;
 
+import cn.hutool.json.JSONUtil;
+import com.sise.pet.core.CommonResult;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -23,9 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/**
- * @author Zheng Jie
- */
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
@@ -34,6 +33,11 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
                          HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
         // 当用户尝试访问安全的REST资源而不提供任何凭据时，将调用此方法发送401 响应
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException==null?"Unauthorized":authException.getMessage());
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Cache-Control","no-cache");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.getWriter().println(JSONUtil.parse(CommonResult.unauthorized(authException.getMessage())));
+        response.getWriter().flush();
     }
 }

@@ -15,6 +15,8 @@
  */
 package com.sise.pet.security.security;
 
+import cn.hutool.json.JSONUtil;
+import com.sise.pet.core.CommonResult;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
@@ -31,7 +33,11 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 
    @Override
    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
-      //当用户在没有授权的情况下访问受保护的REST资源时，将调用此方法发送403 Forbidden响应
-      response.sendError(HttpServletResponse.SC_FORBIDDEN, accessDeniedException.getMessage());
+      response.setHeader("Access-Control-Allow-Origin", "*");
+      response.setHeader("Cache-Control","no-cache");
+      response.setCharacterEncoding("UTF-8");
+      response.setContentType("application/json");
+      response.getWriter().println(JSONUtil.parse(CommonResult.forbidden(accessDeniedException.getMessage())));
+      response.getWriter().flush();
    }
 }

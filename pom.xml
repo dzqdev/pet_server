@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.sise</groupId>
-    <artifactId>pet</artifactId>
+    <artifactId>pet_server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>pet</name>
+    <name>pet_server</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -187,10 +187,16 @@
             <version>${mapstruct.version}</version>
             <scope>provided</scope>
         </dependency>
-    <!--   安全框架     -->
+        <!--   安全框架     -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <!--    验证码    -->
+        <dependency>
+            <groupId>com.github.whvcse</groupId>
+            <artifactId>easy-captcha</artifactId>
+            <version>1.6.2</version>
         </dependency>
     </dependencies>
 

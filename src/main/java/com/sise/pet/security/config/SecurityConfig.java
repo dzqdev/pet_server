@@ -15,9 +15,12 @@
  */
 package com.sise.pet.security.config;
 
+import com.sise.pet.annotation.AnonymousAccess;
+import com.sise.pet.security.security.JwtAccessDeniedHandler;
+import com.sise.pet.security.security.JwtAuthenticationEntryPoint;
+import com.sise.pet.security.security.TokenConfigurer;
+import com.sise.pet.security.security.TokenProvider;
 import lombok.RequiredArgsConstructor;
-import me.zhengjie.annotation.AnonymousAccess;
-import me.zhengjie.modules.security.security.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,9 +43,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * @author Zheng Jie
- */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor

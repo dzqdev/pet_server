@@ -22,7 +22,7 @@ import java.util.Random;
 public class SmsUtil {
 
     public static CommonResult sendSms(String PhoneNumber, String captchaType){
-        RedisService redisService = (RedisService)SpringContextUtil.getBean(RedisService.class);
+        RedisService redisService = (RedisService) SpringContextHolder.getBean(RedisService.class);
         DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAIgdc2tQIF9Klw", "dDFbTl6vt09FG4ylLsrZO5sNhGlwsE");
         IAcsClient client = new DefaultAcsClient(profile);
         String verifyCode = getVerifyCode();
