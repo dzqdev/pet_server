@@ -15,7 +15,7 @@
  */
 package com.sise.pet.security.config;
 
-import com.sise.pet.utils.LoginProperties;
+import com.sise.pet.configurer.LoginProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

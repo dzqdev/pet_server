@@ -15,6 +15,7 @@
  */
 package com.sise.pet.security.security;
 
+import cn.hutool.core.util.StrUtil;
 import com.sise.pet.security.config.SecurityProperties;
 import com.sise.pet.security.dto.OnlineUserDto;
 import com.sise.pet.utils.SpringContextHolder;
@@ -31,6 +32,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * @author /
@@ -49,26 +51,10 @@ public class TokenFilter extends GenericFilterBean {
            throws IOException, ServletException {
       HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
       String token = resolveToken(httpServletRequest);
-      String requestRri = httpServletRequest.getRequestURI();
-      // 验证 token 是否存在
-      OnlineUserDto onlineUser = null;
-      try {
-         /*SecurityProperties properties = SpringContextHolder.getBean(SecurityProperties.class);
-         OnlineUserService onlineUserService = SpringContextHolder.getBean(OnlineUserService.class);
-         onlineUser = onlineUserService.getOne(properties.getOnlineKey() + token);*/
-      } catch (ExpiredJwtException e) {
-         log.error(e.getMessage());
-      }
-      Authentication authentication = tokenProvider.getAuthentication(token);
-      SecurityContextHolder.getContext().setAuthentication(authentication);
-      log.debug("set Authentication to security context for '{}', uri: {}", authentication.getName(), requestRri);
-      /*if (onlineUser != null && StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
+      if (StrUtil.isNotBlank(token)) {
          Authentication authentication = tokenProvider.getAuthentication(token);
          SecurityContextHolder.getContext().setAuthentication(authentication);
-         log.debug("set Authentication to security context for '{}', uri: {}", authentication.getName(), requestRri);
-      } else {
-         log.debug("no valid JWT token found, uri: {}", requestRri);
-      }*/
+      }
       filterChain.doFilter(servletRequest, servletResponse);
    }
 
@@ -76,7 +62,10 @@ public class TokenFilter extends GenericFilterBean {
       SecurityProperties properties = SpringContextHolder.getBean(SecurityProperties.class);
       String bearerToken = request.getHeader(properties.getHeader());
       if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(properties.getTokenStartWith())) {
-         return bearerToken.substring(7);
+         // 去掉令牌前缀
+         return bearerToken.replace(properties.getTokenStartWith(), "");
+      } else {
+         log.debug("非法Token：{}", bearerToken);
       }
       return null;
    }
