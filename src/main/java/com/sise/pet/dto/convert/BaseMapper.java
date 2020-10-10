@@ -13,52 +13,37 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.sise.pet.security.service.dto;
+package com.sise.pet.dto.convert;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.util.List;
 
-import java.util.Date;
-
-/**
- * 在线用户
- * @author Zheng Jie
- */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class OnlineUserDto {
+public interface BaseMapper<D, E> {
 
     /**
-     * 用户名
+     * DTO转Entity
+     * @param dto /
+     * @return /
      */
-    private String userName;
+    E toEntity(D dto);
 
     /**
-     * 浏览器
+     * Entity转DTO
+     * @param entity /
+     * @return /
      */
-    private String browser;
+    D toDto(E entity);
 
     /**
-     * IP
+     * DTO集合转Entity集合
+     * @param dtoList /
+     * @return /
      */
-    private String ip;
+    List <E> toEntity(List<D> dtoList);
 
     /**
-     * 地址
+     * Entity集合转DTO集合
+     * @param entityList /
+     * @return /
      */
-    private String address;
-
-    /**
-     * token
-     */
-    private String key;
-
-    /**
-     * 登录时间
-     */
-    private Date loginTime;
-
-
+    List <D> toDto(List<E> entityList);
 }

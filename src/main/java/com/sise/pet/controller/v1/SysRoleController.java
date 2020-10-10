@@ -1,33 +1,18 @@
 package com.sise.pet.controller.v1;
 
 
-import cn.hutool.core.lang.Dict;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sise.pet.core.CommonResult;
-import com.sise.pet.dto.ArticleDto;
 import com.sise.pet.dto.SysRoleDto;
-import com.sise.pet.entity.Article;
 import com.sise.pet.entity.SysMenu;
 import com.sise.pet.entity.SysRole;
 import com.sise.pet.service.ISysRoleService;
-import io.netty.util.internal.ThrowableUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.java.Log;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 /**
  * <p>
@@ -102,7 +87,7 @@ public class SysRoleController {
     @ResponseBody
     public CommonResult updatePermission(@PathVariable Long roleId,
                                          @RequestParam("menuIds") List<Long> menuIds) {
-        int count = roleService.updateMenu(roleId, menuIds);
+        int count = roleService.updateRoleMenus(roleId, menuIds);
         if (count > 0) {
             return CommonResult.success(count);
         }

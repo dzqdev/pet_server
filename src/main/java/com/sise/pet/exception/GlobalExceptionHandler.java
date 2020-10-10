@@ -1,23 +1,55 @@
 package com.sise.pet.exception;
 
 import com.sise.pet.core.CommonResult;
+import com.sise.pet.core.ResultCode;
+import com.sise.pet.utils.ThrowableUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Objects;
+
 /**
  * 全局异常处理
- * Created by macro on 2020/2/27.
  */
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(value = ApiException.class)
     public CommonResult handle(ApiException e) {
+        log.error(ThrowableUtil.getStackTrace(e));
         if (e.getErrorCode() != null) {
             return CommonResult.failed(e.getErrorCode());
         }
         return CommonResult.failed(e.getMessage());
     }
+
+    /**
+     * 处理所有接口数据验证异常
+     */
+    @ResponseBody
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public CommonResult handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
+        log.error(ThrowableUtil.getStackTrace(e));
+        String[] str = Objects.requireNonNull(e.getBindingResult().getAllErrors().get(0).getCodes())[1].split("\\.");
+        String message = e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+        String msg = "不能为空";
+        if(msg.equals(message)){
+            message = str[1] + ":" + message;
+        }
+        return CommonResult.failed(ResultCode.FAILURE,message);
+    }
+
+    @ResponseBody
+    @ExceptionHandler(Throwable.class)
+    public CommonResult handleException(Throwable e){
+        // 打印堆栈信息
+        log.error(ThrowableUtil.getStackTrace(e));
+        return CommonResult.failed(ResultCode.FAILURE,e.getMessage());
+    }
+
 }

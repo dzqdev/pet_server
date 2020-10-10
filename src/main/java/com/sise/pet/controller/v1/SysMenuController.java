@@ -95,7 +95,7 @@ public class SysMenuController {
     @ApiOperation("获取前端所需菜单")
     @GetMapping(value = "/build")
     public CommonResult buildMenus(){
-        SysUser user = sysUserService.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, SecurityUtils.getUsername()));
+        SysUser user = sysUserService.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, SecurityUtils.getCurrentUsername()));
         List<SysRole> roles = sysUserService.getRoleList(Long.valueOf(user.getId()));
         List<SysMenuDto> sysMenuDtos = menuService.findByRoles(roles,2);
         List<SysMenuDto> treeMuenuDtos = menuService.buildTree(sysMenuDtos);

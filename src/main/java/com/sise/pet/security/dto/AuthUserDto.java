@@ -1,13 +1,17 @@
-package com.sise.pet.security.vo;
+package com.sise.pet.security.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 
+/**
+ * @author Zheng Jie
+ * @date 2018-11-30
+ */
 @Getter
 @Setter
-public class AuthUser {
+public class AuthUserDto {
 
     @NotBlank
     private String username;

@@ -36,7 +36,6 @@ public class SysUser implements Serializable {
      */
     private String username;
 
-
     /**
      * 手机号码
      */

@@ -12,8 +12,6 @@ import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.sise.pet.core.CommonResult;
 import com.sise.pet.core.ResultCode;
-import com.sise.pet.exception.RedisConnectException;
-import com.sise.pet.service.RedisService;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
@@ -22,7 +20,7 @@ import java.util.Random;
 public class SmsUtil {
 
     public static CommonResult sendSms(String PhoneNumber, String captchaType){
-        RedisService redisService = (RedisService) SpringContextHolder.getBean(RedisService.class);
+        RedisUtils redisService = (RedisUtils) SpringContextHolder.getBean(RedisUtils.class);
         DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAIgdc2tQIF9Klw", "dDFbTl6vt09FG4ylLsrZO5sNhGlwsE");
         IAcsClient client = new DefaultAcsClient(profile);
         String verifyCode = getVerifyCode();
@@ -53,8 +51,7 @@ public class SmsUtil {
         } catch (ClientException e) {
             e.printStackTrace();
             return new CommonResult().setCode(ResultCode.FAILURE.getCode()).setMessage("短信发送错误");
-        } catch (RedisConnectException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
             return new CommonResult().setCode(ResultCode.FAILURE.getCode()).setMessage("服务器内部错误");
         }
     }

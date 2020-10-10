@@ -13,43 +13,46 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.sise.pet.security.config;
+package com.sise.pet.utils;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Jwt参数配置
  */
 @Data
-public class SecurityProperties {
+@Configuration
+@ConfigurationProperties(prefix = "file")
+public class FileProperties {
 
-    /** Request Headers ： Authorization */
-    private String header;
+    /** 文件大小限制 */
+    private Long maxSize;
 
-    /** 令牌前缀，最后留个空格 Bearer */
-    private String tokenStartWith;
+    /** 头像大小限制 */
+    private Long avatarMaxSize;
 
-    /** 必须使用最少88位的Base64对该令牌进行编码 */
-    private String base64Secret;
+    private ElPath mac;
 
-    /** 令牌过期时间 此处单位/毫秒 */
-    private Long tokenValidityInSeconds;
+    private ElPath linux;
 
-    /** 在线用户 key，根据 key 查询 redis 中在线用户的数据 */
-    private String onlineKey;
+    private ElPath windows;
 
-    /** 验证码 key */
-    private String codeKey;
+    public ElPath getPath(){
+        String os = System.getProperty("os.name");
+        if(os.toLowerCase().startsWith("window")) {
+            return windows;
+        } else if(os.toLowerCase().startsWith("mac")){
+            return mac;
+        }
+        return linux;
+    }
 
-    /** token 续期检查 */
-    private Long detect;
+    @Data
+    public static class ElPath{
 
-    /** 续期时间 */
-    private Long renew;
+        private String path;
 
-    public String getTokenStartWith() {
-        return tokenStartWith + " ";
+        private String avatar;
     }
 }

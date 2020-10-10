@@ -13,33 +13,26 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.sise.pet.security.service.dto;
+package com.sise.pet.utils;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.validation.constraints.NotBlank;
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Zheng Jie
- * @date 2018-11-30
- */
-@Getter
-@Setter
-public class AuthUserDto {
+ * @website https://el-admin.vip
+ * @description
+ * @date 2020-05-18
+ **/
+@Data
+@Component
+public class RsaProperties {
 
-    @NotBlank
-    private String username;
+    public static String privateKey;
 
-    @NotBlank
-    private String password;
-
-    private String code;
-
-    private String uuid = "";
-
-    @Override
-    public String toString() {
-        return "{username=" + username  + ", password= ******}";
+    @Value("${rsa.private_key}")
+    public void setPrivateKey(String privateKey) {
+        RsaProperties.privateKey = privateKey;
     }
 }

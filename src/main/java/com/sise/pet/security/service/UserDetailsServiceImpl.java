@@ -15,52 +15,53 @@
  */
 package com.sise.pet.security.service;
 
-import lombok.RequiredArgsConstructor;
-import me.zhengjie.exception.BadRequestException;
-import me.zhengjie.exception.EntityNotFoundException;
-import me.zhengjie.modules.security.service.dto.JwtUserDto;
-import me.zhengjie.modules.system.service.DataService;
-import me.zhengjie.modules.system.service.RoleService;
-import me.zhengjie.modules.system.service.UserService;
-import me.zhengjie.modules.system.service.dto.UserDto;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.sise.pet.core.ResultCode;
+import com.sise.pet.dto.SysUserDto;
+import com.sise.pet.dto.convert.SysUserConvert;
+import com.sise.pet.entity.SysUser;
+import com.sise.pet.exception.Asserts;
+import com.sise.pet.security.dto.JwtUserDto;
+import com.sise.pet.service.ISysRoleService;
+import com.sise.pet.service.ISysUserService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * @author Zheng Jie
- * @date 2018-11-22
- */
-@RequiredArgsConstructor
+import javax.annotation.Resource;
+
 @Service("userDetailsService")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserService userService;
-    private final RoleService roleService;
-    private final DataService dataService;
+    @Resource
+    private ISysUserService userService;
+    @Resource
+    private ISysRoleService roleService;
+
+    @Resource
+    private SysUserConvert sysUserConvert;
 
     @Override
     public JwtUserDto loadUserByUsername(String username) {
-        UserDto user;
+        SysUserDto sysUserDto = null;
         try {
-            user = userService.findByName(username);
-        } catch (EntityNotFoundException e) {
-            // SpringSecurity会自动转换UsernameNotFoundException为BadCredentialsException
-            throw new UsernameNotFoundException("", e);
+            SysUser sysUser = userService.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, username));
+            sysUserDto = sysUserConvert.toDto(sysUser);
+        } catch (UsernameNotFoundException e) {
+            Asserts.fail(ResultCode.UN_AUTHORIZED);
         }
-        if (user == null) {
+        if (sysUserDto == null) {
             throw new UsernameNotFoundException("");
         } else {
-            if (!user.getEnabled()) {
-                throw new BadRequestException("账号未激活");
+            if (!sysUserDto.getEnabled()) {
+                Asserts.fail("账号未激活");
             }
             return new JwtUserDto(
-                    user,
-                    dataService.getDeptIds(user),
-                    roleService.mapToGrantedAuthorities(user)
+                    sysUserDto,
+                    roleService.mapToGrantedAuthorities(sysUserDto)
             );
         }
     }

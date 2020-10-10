@@ -16,7 +16,7 @@
 package com.sise.pet.security.security;
 
 import com.sise.pet.security.config.SecurityProperties;
-import com.sise.pet.security.vo.OnlineUser;
+import com.sise.pet.security.dto.OnlineUserDto;
 import com.sise.pet.utils.SpringContextHolder;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
@@ -51,21 +51,24 @@ public class TokenFilter extends GenericFilterBean {
       String token = resolveToken(httpServletRequest);
       String requestRri = httpServletRequest.getRequestURI();
       // 验证 token 是否存在
-      OnlineUser onlineUser = null;
+      OnlineUserDto onlineUser = null;
       try {
-         SecurityProperties properties = SpringContextHolder.getBean(SecurityProperties.class);
-         /*OnlineUserService onlineUserService = SpringContextHolder.getBean(OnlineUserService.class);
+         /*SecurityProperties properties = SpringContextHolder.getBean(SecurityProperties.class);
+         OnlineUserService onlineUserService = SpringContextHolder.getBean(OnlineUserService.class);
          onlineUser = onlineUserService.getOne(properties.getOnlineKey() + token);*/
       } catch (ExpiredJwtException e) {
          log.error(e.getMessage());
       }
-      if (onlineUser != null && StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
+      Authentication authentication = tokenProvider.getAuthentication(token);
+      SecurityContextHolder.getContext().setAuthentication(authentication);
+      log.debug("set Authentication to security context for '{}', uri: {}", authentication.getName(), requestRri);
+      /*if (onlineUser != null && StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
          Authentication authentication = tokenProvider.getAuthentication(token);
          SecurityContextHolder.getContext().setAuthentication(authentication);
          log.debug("set Authentication to security context for '{}', uri: {}", authentication.getName(), requestRri);
       } else {
          log.debug("no valid JWT token found, uri: {}", requestRri);
-      }
+      }*/
       filterChain.doFilter(servletRequest, servletResponse);
    }
 

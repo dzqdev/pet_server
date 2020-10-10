@@ -3,12 +3,14 @@ package com.sise.pet.aspect;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.sise.pet.entity.WebLog;
 import com.sise.pet.service.IUserService;
 import com.sise.pet.service.IWebLogService;
 import com.sise.pet.utils.HttpRequestUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -23,12 +25,12 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Aspect
@@ -101,29 +103,10 @@ public class WebLogAspect {
      * 根据方法和传入的参数获取请求参数
      */
     private Object getParameter(Method method, Object[] args) {
-        List<Object> argList = new ArrayList<>();
-        Parameter[] parameters = method.getParameters();
-        for (int i = 0; i < parameters.length; i++) {
-            //将RequestParam注解修饰的参数作为请求参数
-            RequestParam requestParam = parameters[i].getAnnotation(RequestParam.class);
-            if (requestParam != null) {
-                Map<String, Object> map = new HashMap<>();
-                String key = parameters[i].getName();
-                if (!StringUtils.isEmpty(requestParam.value())) {
-                    key = requestParam.value();
-                }
-                map.put(key, args[i]);
-                argList.add(map);
-            } else {
-                argList.add(args[i]);
-            }
-        }
-        if (argList.size() == 0) {
-            return null;
-        } else if (argList.size() == 1) {
-            return argList.get(0);
-        } else {
-            return argList;
-        }
+        Stream<?> stream = ArrayUtils.isEmpty(args) ? Stream.empty() : Arrays.stream(args);
+        List<Object> logArgs = stream
+                .filter(arg -> (!(arg instanceof HttpServletRequest) && !(arg instanceof HttpServletResponse)))
+                .collect(Collectors.toList());
+        return logArgs;
     }
 }
