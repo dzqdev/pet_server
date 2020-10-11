@@ -17,9 +17,7 @@ package com.sise.pet.security.security;
 
 import cn.hutool.core.util.StrUtil;
 import com.sise.pet.security.config.SecurityProperties;
-import com.sise.pet.security.dto.OnlineUserDto;
 import com.sise.pet.utils.SpringContextHolder;
-import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,7 +30,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Objects;
 
 /**
  * @author /
@@ -51,7 +48,7 @@ public class TokenFilter extends GenericFilterBean {
            throws IOException, ServletException {
       HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
       String token = resolveToken(httpServletRequest);
-      if (StrUtil.isNotBlank(token)) {
+      if (StrUtil.isNotBlank(token) && tokenProvider.validateToken(token)) {
          Authentication authentication = tokenProvider.getAuthentication(token);
          SecurityContextHolder.getContext().setAuthentication(authentication);
       }

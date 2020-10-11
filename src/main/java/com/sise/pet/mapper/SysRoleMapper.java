@@ -1,8 +1,9 @@
 package com.sise.pet.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.sise.pet.entity.SysMenu;
 import com.sise.pet.entity.SysRole;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -17,4 +18,5 @@ import java.util.List;
 public interface SysRoleMapper extends BaseMapper<SysRole> {
     public List<SysMenu> getMenuList(Long roleId);
 
+    void untiedMenu(@Param("id") Long id);
 }

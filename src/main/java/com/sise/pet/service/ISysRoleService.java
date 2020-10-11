@@ -2,12 +2,11 @@ package com.sise.pet.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.sise.pet.dto.SysRoleDto;
 import com.sise.pet.dto.SysUserDto;
 import com.sise.pet.entity.SysMenu;
 import com.sise.pet.entity.SysRole;
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.sise.pet.entity.SysUser;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.List;
@@ -31,4 +30,5 @@ public interface ISysRoleService extends IService<SysRole> {
      */
     List<GrantedAuthority> mapToGrantedAuthorities(SysUserDto user);
 
+    void untiedMenu(Long id);
 }

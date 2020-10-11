@@ -25,12 +25,12 @@ import com.sise.pet.security.dto.AuthUserDto;
 import com.sise.pet.security.dto.JwtUserDto;
 import com.sise.pet.security.security.TokenProvider;
 import com.sise.pet.security.service.OnlineUserService;
-import com.sise.pet.utils.*;
+import com.sise.pet.utils.RedisUtils;
+import com.sise.pet.utils.SecurityUtils;
 import com.wf.captcha.base.Captcha;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -105,8 +105,8 @@ public class AuthorizationController {
 
     @ApiOperation("获取用户信息")
     @GetMapping(value = "/info")
-    public ResponseEntity<Object> getUserInfo() {
-        return ResponseEntity.ok(SecurityUtils.getCurrentUser());
+    public CommonResult getUserInfo() {
+        return CommonResult.success(SecurityUtils.getCurrentUser());
     }
 
     @ApiOperation("获取验证码")
@@ -132,8 +132,9 @@ public class AuthorizationController {
 
     @ApiOperation("退出登录")
     @AnonymousAccess
+    @DeleteMapping(value = "logout")
     public CommonResult logout(HttpServletRequest request) {
-        onlineUserService.logout(tokenProvider.getToken(request));
+        //onlineUserService.logout(tokenProvider.getToken(request));
         return CommonResult.success(null);
     }
 }

@@ -7,6 +7,7 @@
         <id column="id" property="id" />
         <result column="pid" property="pid" />
         <result column="type" property="type" />
+        <result column="sub_count" property="subCount"/>
         <result column="title" property="title" />
         <result column="name" property="name" />
         <result column="component" property="component" />
@@ -25,7 +26,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, pid, type, title, name, component, menu_sort, icon, path, i_frame, cache, hidden, permission, create_by, update_by, create_time, update_time
+        id, pid, type,sub_count, title, name, component, menu_sort, icon, path, i_frame, cache, hidden, permission, create_by, update_by, create_time, update_time
     </sql>
 
     <select id="findByRoles" resultMap="BaseResultMap">

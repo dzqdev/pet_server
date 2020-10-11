@@ -20,6 +20,10 @@
         id, name, level, description, data_scope, create_by, update_by, create_time, update_time
     </sql>
 
+    <delete id="untiedMenu">
+        delete from sys_roles_menus where menu_id = #{id}
+    </delete>
+
     <select id="getMenuList" resultMap="com.sise.pet.mapper.SysMenuMapper.BaseResultMap">
         SELECT
             r.*

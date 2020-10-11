@@ -87,4 +87,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public void untiedMenu(Long id) {
+        sysRoleMapper.untiedMenu(id);
+    }
+
 }

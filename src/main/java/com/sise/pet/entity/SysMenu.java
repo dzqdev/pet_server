@@ -1,12 +1,13 @@
 package com.sise.pet.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -33,6 +34,11 @@ public class SysMenu implements Serializable {
      * 上级菜单ID
      */
     private Long pid;
+
+    /**
+     * 子菜单数目
+     */
+    private Integer subCount;
 
     /**
      * 菜单类型
