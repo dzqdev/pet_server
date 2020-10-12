@@ -1,4 +1,4 @@
-package com.sise.pet.controller;
+package com.sise.pet.controller.v1;
 
 
 import cn.hutool.core.collection.CollectionUtil;
@@ -20,6 +20,7 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -52,6 +53,9 @@ public class SysUserController {
     @Resource
     private ISysRoleService roleService;
 
+    @Resource
+    private PasswordEncoder passwordEncoder;
+
     @ApiOperation("查询用户")
     @GetMapping
     public CommonResult query(SysUserDto dto, Page page){
@@ -63,7 +67,7 @@ public class SysUserController {
     @PostMapping
     public CommonResult create(SysUser user){
         // 默认密码 123456
-        user.setPassword("123456");
+        user.setPassword(passwordEncoder.encode("123456"));
         sysUserService.save(user);
         return CommonResult.success(null);
     }

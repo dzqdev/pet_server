@@ -15,6 +15,8 @@
  */
 package com.sise.pet.dto.convert;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
 import java.util.List;
 
 public interface BaseMapper<D, E> {
@@ -46,4 +48,5 @@ public interface BaseMapper<D, E> {
      * @return /
      */
     List <D> toDto(List<E> entityList);
+
 }

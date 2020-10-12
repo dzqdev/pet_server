@@ -48,7 +48,7 @@ public class PetServiceImpl extends ServiceImpl<PetMapper, Pet> implements IPetS
         QueryWrapper<Pet> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByAsc("view_count");
         queryWrapper.last("limit 0 , 5");
-        List<Pet> list = petMapper.selectList(queryWrapper);
+        List<Pet> list = list(queryWrapper);
         return list;
     }
 

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Objects;
 
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+
 /**
  * 全局异常处理
  */
@@ -42,6 +44,26 @@ public class GlobalExceptionHandler {
             message = str[1] + ":" + message;
         }
         return CommonResult.failed(ResultCode.FAILURE,message);
+    }
+
+    /**
+     * 处理 EntityExist
+     */
+    @ExceptionHandler(value = EntityExistException.class)
+    public CommonResult entityExistException(EntityExistException e) {
+        // 打印堆栈信息
+        log.error(ThrowableUtil.getStackTrace(e));
+        return CommonResult.failed(ResultCode.FAILURE,e.getMessage());
+    }
+
+    /**
+     * 处理 EntityNotFound
+     */
+    @ExceptionHandler(value = EntityNotFoundException.class)
+    public CommonResult entityNotFoundException(EntityNotFoundException e) {
+        // 打印堆栈信息
+        log.error(ThrowableUtil.getStackTrace(e));
+        return CommonResult.failed(ResultCode.FAILURE,e.getMessage());
     }
 
     @ResponseBody

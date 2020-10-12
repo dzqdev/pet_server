@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sise.pet.dto.SysUserDto;
 import com.sise.pet.dto.UpdateSysUserPasswordParam;
+import com.sise.pet.dto.query.SysUserQueryCriteria;
 import com.sise.pet.entity.SysRole;
 import com.sise.pet.entity.SysUser;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -43,5 +44,5 @@ public interface ISysUserService extends IService<SysUser> {
      */
     void updateCenter(SysUser resources);
 
-    IPage<SysUserDto> query(SysUserDto dto, Page page);
+    Page<SysUserDto> queryAll(SysUserQueryCriteria criteria, Page pageable);
 }

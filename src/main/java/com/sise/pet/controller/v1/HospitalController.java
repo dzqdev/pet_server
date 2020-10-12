@@ -54,7 +54,6 @@ public class HospitalController {
 
     @GetMapping("/{id}")
     public CommonResult get(@PathVariable Integer id){
-        Hospital hospital = iHospitalService.getById(id);
-        return CommonResult.success(hospital);
+        return CommonResult.success(iHospitalService.getById(id));
     }
 }
