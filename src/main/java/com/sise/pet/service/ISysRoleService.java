@@ -1,6 +1,5 @@
 package com.sise.pet.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sise.pet.dto.SysRoleDto;
@@ -43,6 +42,8 @@ public interface ISysRoleService extends IService<SysRole> {
      * @param roleId
      */
     void untiedMenu(Long roleId);
+
+    List<SysRoleDto> queryAll();
 
     /**
      * 分页查询角色列表

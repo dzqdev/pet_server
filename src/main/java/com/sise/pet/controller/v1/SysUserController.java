@@ -1,39 +1,21 @@
 package com.sise.pet.controller.v1;
 
 
-import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.PageUtil;
-import cn.hutool.crypto.asymmetric.KeyType;
-import cn.hutool.crypto.asymmetric.RSA;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sise.pet.core.CommonResult;
-import com.sise.pet.dto.ArticleDto;
-import com.sise.pet.dto.SysUserDto;
 import com.sise.pet.dto.UpdateSysUserPasswordParam;
+import com.sise.pet.dto.query.SysUserQueryCriteria;
 import com.sise.pet.entity.SysUser;
 import com.sise.pet.service.ISysRoleService;
 import com.sise.pet.service.ISysUserService;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.java.Log;
 import org.apache.shiro.SecurityUtils;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -58,9 +40,8 @@ public class SysUserController {
 
     @ApiOperation("查询用户")
     @GetMapping
-    public CommonResult query(SysUserDto dto, Page page){
-        IPage<SysUserDto> list = sysUserService.query(dto,page);
-        return CommonResult.success(list);
+    public CommonResult query(SysUserQueryCriteria criteria, Page page){
+        return CommonResult.success(sysUserService.queryAll(criteria,page));
     }
 
     @ApiOperation("新增用户")

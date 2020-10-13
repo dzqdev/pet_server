@@ -3,9 +3,8 @@ package com.sise.pet.service.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Sets;
 import com.sise.pet.dto.SysMenuDto;
 import com.sise.pet.dto.SysRoleDto;
@@ -23,10 +22,8 @@ import com.sise.pet.exception.EntityExistException;
 import com.sise.pet.mapper.SysRoleMapper;
 import com.sise.pet.mapper.SysUserMapper;
 import com.sise.pet.service.ISysRoleService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sise.pet.service.ISysRolesMenusService;
 import com.sise.pet.service.ISysUsersRolesService;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -114,6 +111,17 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public void untiedMenu(Long id) {
         sysRoleMapper.untiedMenu(id);
+    }
+
+    @Override
+    public List<SysRoleDto> queryAll() {
+        List<SysRole> list = list();
+        List<SysRoleDto> sysRoleDtos = roleConvert.toDto(list);
+        sysRoleDtos.stream().forEach(sysRoleDto -> {
+            List<SysMenu> menuList = getMenuList(sysRoleDto.getId());
+            sysRoleDto.setMenus(Sets.newHashSet(menuConvert.toDto(menuList)));
+        });
+        return sysRoleDtos;
     }
 
     @Override
