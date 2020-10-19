@@ -2,7 +2,12 @@ package com.sise.pet.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.sise.pet.dto.DictDto;
+import com.sise.pet.dto.query.DictQueryCriteria;
 import com.sise.pet.entity.Dict;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -13,5 +18,10 @@ import com.sise.pet.entity.Dict;
  * @since 2020-02-21
  */
 public interface IDictService extends IService<Dict> {
-    public Page<Dict> selectPage(Dict dict, Page page);
+
+    List<DictDto> queryAll(DictQueryCriteria dictQueryCriteria);
+
+    Page<DictDto> queryAll(DictQueryCriteria dictQueryCriteria,Page pageable);
+
+    void delete(Set<Long> ids);
 }

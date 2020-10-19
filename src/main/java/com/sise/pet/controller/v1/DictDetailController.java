@@ -3,11 +3,19 @@ package com.sise.pet.controller.v1;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sise.pet.core.CommonResult;
+import com.sise.pet.dto.DictDetailDto;
+import com.sise.pet.dto.query.DictDetailQueryCriteria;
 import com.sise.pet.entity.DictDetail;
 import com.sise.pet.service.IDictDetailService;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -18,28 +26,51 @@ import javax.annotation.Resource;
  * @since 2020-02-21
  */
 @RestController
-@RequestMapping(value = {"api/v1/dict-detail","api/v2/dict-detail"})
+@RequestMapping(value = {"api/v1/dictDetail","api/v2/dictDetail"})
 public class DictDetailController {
 
     @Resource
-    private IDictDetailService iDictDetailService;
+    private IDictDetailService dictDetailService;
 
-    @PostMapping
-    public CommonResult addDictDetail(DictDetail dict){
-        iDictDetailService.save(dict);
-        return CommonResult.success(null);
-    }
-
-    @PutMapping
-    public CommonResult updateDictDetail(DictDetail dict){
-        iDictDetailService.updateById(dict);
-        return CommonResult.success(null);
-    }
-
+    @ApiOperation("查询字典详情")
     @GetMapping
-    public CommonResult dictDetailList(DictDetail dict, Page page){
-        Page<DictDetail> dictPage = iDictDetailService.selectPage(dict, page);
-        return CommonResult.success(dictPage);
+    public CommonResult query(DictDetailQueryCriteria criteria, Page pageable){
+        return CommonResult.success(dictDetailService.queryAll(criteria, pageable));
+    }
+
+    @ApiOperation("查询多个字典详情")
+    @GetMapping(value = "/map")
+    public CommonResult getDictDetailMaps(@RequestParam String dictName){
+        String[] names = dictName.split("[,，]");
+        Map<String, List<DictDetailDto>> dictMap = new HashMap<>(16);
+        for (String name : names) {
+            dictMap.put(name, dictDetailService.getDictByName(name));
+        }
+        return CommonResult.success(dictMap);
+    }
+
+    @ApiOperation("新增字典详情")
+    @PostMapping
+    @PreAuthorize("@el.check('dict:add')")
+    public CommonResult create(@Validated @RequestBody DictDetail resources){
+        dictDetailService.save(resources);
+        return CommonResult.success(null);
+    }
+
+    @ApiOperation("修改字典详情")
+    @PutMapping
+    @PreAuthorize("@el.check('dict:edit')")
+    public CommonResult update(@RequestBody DictDetail resources){
+        dictDetailService.updateById(resources);
+        return CommonResult.success(null);
+    }
+
+    @ApiOperation("删除字典详情")
+    @DeleteMapping(value = "/{id}")
+    @PreAuthorize("@el.check('dict:del')")
+    public CommonResult delete(@PathVariable Long id){
+        dictDetailService.removeById(id);
+        return CommonResult.success(null);
     }
 
 }

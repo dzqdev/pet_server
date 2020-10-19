@@ -1,8 +1,12 @@
 package com.sise.pet.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.sise.pet.entity.DictDetail;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.sise.pet.dto.DictDetailDto;
+import com.sise.pet.dto.query.DictDetailQueryCriteria;
+import com.sise.pet.entity.DictDetail;
+
+import java.util.List;
 
 /**
  * <p>
@@ -14,5 +18,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IDictDetailService extends IService<DictDetail> {
 
-    Page<DictDetail> selectPage(DictDetail dict, Page page);
+    Page<DictDetailDto> queryAll(DictDetailQueryCriteria criteria, Page pageable);
+
+    List<DictDetailDto> getDictByName(String name);
 }

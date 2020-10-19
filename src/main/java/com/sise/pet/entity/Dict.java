@@ -1,7 +1,6 @@
 package com.sise.pet.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,7 +9,6 @@ import org.springframework.data.annotation.CreatedDate;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
  * <p>
@@ -45,9 +43,6 @@ public class Dict implements Serializable {
      */
     @CreatedDate
     private Date createTime;
-
-    @TableField(exist = false)
-    private List<DictDetail> dictDetails;
 
 
 }
