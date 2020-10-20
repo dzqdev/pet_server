@@ -1,13 +1,12 @@
 package com.sise.pet.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.sise.pet.dto.SysUserDto;
 import com.sise.pet.dto.UpdateSysUserPasswordParam;
 import com.sise.pet.dto.query.SysUserQueryCriteria;
 import com.sise.pet.entity.SysRole;
 import com.sise.pet.entity.SysUser;
-import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -45,4 +44,6 @@ public interface ISysUserService extends IService<SysUser> {
     void updateCenter(SysUser resources);
 
     Page<SysUserDto> queryAll(SysUserQueryCriteria criteria, Page pageable);
+
+    void create(SysUserDto userDto);
 }

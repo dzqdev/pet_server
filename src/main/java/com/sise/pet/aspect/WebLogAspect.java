@@ -3,9 +3,8 @@ package com.sise.pet.aspect;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.sise.pet.entity.WebLog;
-import com.sise.pet.service.IUserService;
+import com.sise.pet.security.security.TokenProvider;
 import com.sise.pet.service.IWebLogService;
 import com.sise.pet.utils.HttpRequestUtil;
 import io.swagger.annotations.ApiOperation;
@@ -18,8 +17,6 @@ import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -27,8 +24,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,13 +35,13 @@ import java.util.stream.Stream;
 @Order(1)
 public class WebLogAspect {
 
-    private static final String TOKEN = "Authentication";
+    private static final String TOKEN = "Authorization";
 
     @Resource
     IWebLogService webLogService;
 
     @Resource
-    IUserService userService;
+    private TokenProvider tokenProvider;
 
     @Pointcut("execution(public * com.sise.pet.controller..*.*(..))")
     public void pointCut() {
@@ -64,7 +61,6 @@ public class WebLogAspect {
         //获取当前请求对象
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
-        //记录请求信息(通过Logstash传入Elasticsearch)
         WebLog webLog = new WebLog();
         Object result = joinPoint.proceed();
         Signature signature = joinPoint.getSignature();
@@ -88,10 +84,11 @@ public class WebLogAspect {
         webLog.setUrl(request.getRequestURL().toString());
         webLog.setIp(HttpRequestUtil.getIpAddress(request));
         /*if (StrUtil.isNotBlank(token)) {
-            String userId = JWTUtil.getUserId(token);
-            if (StrUtil.isNotBlank(userId)) {
-                User user = userService.getById(userId);
-                webLog.setUsername(user != null ? user.getUsername() : "");
+            Authentication authentication = tokenProvider.getAuthentication(token);
+            if (authentication.getPrincipal() instanceof UserDetails) {
+                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+                String username = userDetails.getUsername();
+                webLog.setUsername(username);
             }
         }*/
 

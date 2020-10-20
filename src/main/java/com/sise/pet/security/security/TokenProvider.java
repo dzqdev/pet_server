@@ -73,7 +73,7 @@ public class TokenProvider implements InitializingBean {
               .compact();
    }
 
-   Authentication getAuthentication(String token) {
+   public Authentication getAuthentication(String token) {
       Claims claims = Jwts.parser()
               .setSigningKey(key)
               .parseClaimsJws(token)

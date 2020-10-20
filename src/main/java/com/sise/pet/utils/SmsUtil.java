@@ -20,7 +20,7 @@ import java.util.Random;
 public class SmsUtil {
 
     public static CommonResult sendSms(String PhoneNumber, String captchaType){
-        RedisUtils redisService = (RedisUtils) SpringContextHolder.getBean(RedisUtils.class);
+        RedisUtils redisUtil = (RedisUtils) SpringContextHolder.getBean(RedisUtils.class);
         DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAIgdc2tQIF9Klw", "dDFbTl6vt09FG4ylLsrZO5sNhGlwsE");
         IAcsClient client = new DefaultAcsClient(profile);
         String verifyCode = getVerifyCode();
@@ -43,7 +43,7 @@ public class SmsUtil {
                 return new CommonResult().setCode(ResultCode.FAILURE.getCode()).setMessage("每小时至多发5条短信，每天至多发10条，当前超出上限");
             }
             //发送成功才存入redis
-            redisService.set(captchaType + PhoneNumber, verifyCode, new Long(5 * 60 * 1000));
+            redisUtil.set(captchaType + PhoneNumber, verifyCode, new Long(5 * 60 * 1000));
             return new CommonResult().setCode(ResultCode.SUCCESS.getCode());
         } catch (ServerException e) {
             e.printStackTrace();

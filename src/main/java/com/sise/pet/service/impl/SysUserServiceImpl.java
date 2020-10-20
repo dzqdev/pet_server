@@ -3,10 +3,8 @@ package com.sise.pet.service.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.google.common.collect.Sets;
-import com.sise.pet.dto.SysRoleDto;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sise.pet.dto.SysUserDto;
 import com.sise.pet.dto.UpdateSysUserPasswordParam;
 import com.sise.pet.dto.convert.PageConvert;
@@ -15,15 +13,15 @@ import com.sise.pet.dto.format.BooleanFormatter;
 import com.sise.pet.dto.query.SysUserQueryCriteria;
 import com.sise.pet.entity.SysRole;
 import com.sise.pet.entity.SysUser;
+import com.sise.pet.entity.SysUsersRoles;
 import com.sise.pet.mapper.SysUserMapper;
 import com.sise.pet.service.ISysUserService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sise.pet.service.ISysUsersRolesService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * <p>
@@ -44,6 +42,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private PageConvert<SysUserDto, SysUser> pageConvert;
     @Resource
     private SysUserConvert sysUserConvert;
+    @Resource
+    private ISysUsersRolesService usersRolesService;
 
 
     @Override
@@ -102,6 +102,21 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         });
         Page<SysUserDto> dtoPage = pageConvert.toPageDto(page, sysUserDtos);
         return dtoPage;
+    }
+
+    @Override
+    public void create(SysUserDto userDto) {
+        List<SysRole> roles = userDto.getRoles();
+        SysUser sysUser = sysUserConvert.toEntity(userDto);
+        save(sysUser);
+        if(CollectionUtil.isNotEmpty(roles)){
+            roles.forEach(role->{
+                SysUsersRoles usersRoles = new SysUsersRoles();
+                usersRoles.setRoleId(role.getId());
+                usersRoles.setUserId(sysUser.getId());
+                usersRolesService.save(usersRoles);
+            });
+        }
     }
 
 }

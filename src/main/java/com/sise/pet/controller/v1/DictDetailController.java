@@ -8,11 +8,11 @@ import com.sise.pet.dto.query.DictDetailQueryCriteria;
 import com.sise.pet.entity.DictDetail;
 import com.sise.pet.service.IDictDetailService;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,15 +51,14 @@ public class DictDetailController {
 
     @ApiOperation("新增字典详情")
     @PostMapping
-    @PreAuthorize("@el.check('dict:add')")
     public CommonResult create(@Validated @RequestBody DictDetail resources){
+        resources.setCreateTime(new Date());
         dictDetailService.save(resources);
         return CommonResult.success(null);
     }
 
     @ApiOperation("修改字典详情")
     @PutMapping
-    @PreAuthorize("@el.check('dict:edit')")
     public CommonResult update(@RequestBody DictDetail resources){
         dictDetailService.updateById(resources);
         return CommonResult.success(null);
@@ -67,7 +66,6 @@ public class DictDetailController {
 
     @ApiOperation("删除字典详情")
     @DeleteMapping(value = "/{id}")
-    @PreAuthorize("@el.check('dict:del')")
     public CommonResult delete(@PathVariable Long id){
         dictDetailService.removeById(id);
         return CommonResult.success(null);

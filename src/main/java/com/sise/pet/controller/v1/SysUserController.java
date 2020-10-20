@@ -1,15 +1,18 @@
 package com.sise.pet.controller.v1;
 
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sise.pet.core.CommonResult;
+import com.sise.pet.dto.SysUserDto;
 import com.sise.pet.dto.UpdateSysUserPasswordParam;
+import com.sise.pet.dto.convert.SysUserConvert;
 import com.sise.pet.dto.query.SysUserQueryCriteria;
 import com.sise.pet.entity.SysUser;
 import com.sise.pet.service.ISysRoleService;
 import com.sise.pet.service.ISysUserService;
+import com.sise.pet.utils.SecurityUtils;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,12 +34,12 @@ public class SysUserController {
 
     @Resource
     private ISysUserService sysUserService;
-
     @Resource
     private ISysRoleService roleService;
-
     @Resource
     private PasswordEncoder passwordEncoder;
+    @Resource
+    private SysUserConvert sysUserConvert;
 
     @ApiOperation("查询用户")
     @GetMapping
@@ -46,10 +49,13 @@ public class SysUserController {
 
     @ApiOperation("新增用户")
     @PostMapping
-    public CommonResult create(SysUser user){
+    public CommonResult create(@RequestBody SysUserDto userDto){
+        if(StrUtil.isEmpty(userDto.getUsername())){
+            return CommonResult.failed("用户名称不能为空");
+        }
         // 默认密码 123456
-        user.setPassword(passwordEncoder.encode("123456"));
-        sysUserService.save(user);
+        userDto.setPassword(passwordEncoder.encode("123456"));
+        sysUserService.create(userDto);
         return CommonResult.success(null);
     }
 
@@ -63,11 +69,12 @@ public class SysUserController {
     @ApiOperation("修改用户：个人中心")
     @PutMapping(value = "center")
     public CommonResult center(SysUser resources){
-        SysUser sysUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
+        /*SysUser sysUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
         if(!resources.getId().equals(sysUser.getId())){
             return CommonResult.failed("不能修改他人资料");
         }
-        sysUserService.updateCenter(resources);
+        sysUserService.updateCenter(resources);*/
+        SecurityUtils.getCurrentUser();
         return CommonResult.success(null);
     }
 
@@ -84,7 +91,7 @@ public class SysUserController {
     @ApiOperation("修改密码")
     @PostMapping(value = "/updatePass")
     public CommonResult updatePass(@RequestBody UpdateSysUserPasswordParam passVo){
-        SysUser currentUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
+        /*SysUser currentUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
         SysUser user = sysUserService.getById(currentUser.getId());
         if(!passVo.getOldPassword().equals(user.getPassword())){
             return CommonResult.failed("修改失败，旧密码错误");
@@ -92,7 +99,7 @@ public class SysUserController {
         if(passVo.getNewPassword().equals(user.getPassword())){
             return CommonResult.failed("新密码不能与旧密码相同");
         }
-        sysUserService.updatePassword(passVo);
+        sysUserService.updatePassword(passVo);*/
         return CommonResult.success(null);
     }
 

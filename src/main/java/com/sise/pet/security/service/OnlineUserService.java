@@ -25,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
@@ -36,13 +37,11 @@ import java.util.*;
 @Slf4j
 public class OnlineUserService {
 
-    private final SecurityProperties properties;
-    private final RedisUtils redisUtils;
+    @Resource
+    private SecurityProperties properties;
+    @Resource
+    private RedisUtils redisUtils;
 
-    public OnlineUserService(SecurityProperties properties, RedisUtils redisUtils) {
-        this.properties = properties;
-        this.redisUtils = redisUtils;
-    }
 
     /**
      * 保存在线用户信息

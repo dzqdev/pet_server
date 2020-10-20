@@ -50,22 +50,16 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Resource
     private SysRoleMapper sysRoleMapper;
-
     @Resource
     private SysUserMapper sysUserMapper;
-
     @Resource
     private SysRoleConvert roleConvert;
-
     @Resource
     private SysMenuConvert menuConvert;
-
     @Resource
     private PageConvert<SysRoleDto,SysRole> pageConvert;
-
     @Resource
     private ISysRolesMenusService rolesMenusService;
-
     @Resource
     private ISysUsersRolesService usersRolesService;
 
