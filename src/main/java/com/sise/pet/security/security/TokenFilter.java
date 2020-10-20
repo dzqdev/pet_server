@@ -48,6 +48,7 @@ public class TokenFilter extends GenericFilterBean {
            throws IOException, ServletException {
       HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
       String token = resolveToken(httpServletRequest);
+      //String token1 = tokenProvider.getToken(httpServletRequest);
       if (StrUtil.isNotBlank(token) && tokenProvider.validateToken(token)) {
          Authentication authentication = tokenProvider.getAuthentication(token);
          SecurityContextHolder.getContext().setAuthentication(authentication);

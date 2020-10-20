@@ -1,6 +1,7 @@
 package com.sise.pet.controller.v1;
 
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sise.pet.core.CommonResult;
 import com.sise.pet.dto.UpdateSysUserPasswordParam;
@@ -47,6 +48,9 @@ public class SysUserController {
     @ApiOperation("新增用户")
     @PostMapping
     public CommonResult create(SysUser user){
+        if(StrUtil.isEmpty(user.getUsername()) || StrUtil.isEmpty(user.getPassword())){
+            return CommonResult.failed("用户名面不能为空");
+        }
         // 默认密码 123456
         user.setPassword(passwordEncoder.encode("123456"));
         sysUserService.save(user);
