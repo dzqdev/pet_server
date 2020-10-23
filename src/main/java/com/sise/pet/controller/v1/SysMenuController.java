@@ -3,6 +3,7 @@ package com.sise.pet.controller.v1;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.sise.pet.annotation.Log;
 import com.sise.pet.core.CommonResult;
 import com.sise.pet.dto.SysMenuDto;
 import com.sise.pet.dto.convert.SysMenuConvert;
@@ -47,6 +48,7 @@ public class SysMenuController {
     @Resource
     private SysMenuConvert sysMenuConvert;
 
+    @Log("新增菜单")
     @ApiOperation("新增菜单")
     @PostMapping
     public CommonResult create(SysMenu sysMenu){
@@ -54,6 +56,7 @@ public class SysMenuController {
         return CommonResult.success(null);
     }
 
+    @Log("修改菜单")
     @ApiOperation("修改菜单")
     @PutMapping
     public CommonResult update(@RequestBody SysMenu sysMenu){
@@ -61,6 +64,7 @@ public class SysMenuController {
         return CommonResult.success(null);
     }
 
+    @Log("删除菜单")
     @ApiOperation("删除菜单")
     @DeleteMapping
     public CommonResult delete(@RequestBody Set<Long> ids){
@@ -94,7 +98,7 @@ public class SysMenuController {
     @GetMapping(value = "/build")
     public CommonResult buildMenus(){
         SysUser user = sysUserService.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, SecurityUtils.getCurrentUsername()));
-        List<SysRole> roles = sysUserService.getRoleList(Long.valueOf(user.getId()));
+        List<SysRole> roles = sysUserService.getUserRoleList(Long.valueOf(user.getId()));
         List<SysMenuDto> sysMenuDtos = menuService.findByRoles(roles,2);
         List<SysMenuDto> treeMuenuDtos = menuService.buildTree(sysMenuDtos);
         List<MenuVo> menus = menuService.buildMenus(treeMuenuDtos);

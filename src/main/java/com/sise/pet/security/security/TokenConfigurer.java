@@ -15,6 +15,8 @@
  */
 package com.sise.pet.security.security;
 
+import com.sise.pet.security.config.SecurityProperties;
+import com.sise.pet.security.service.OnlineUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,10 +30,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class TokenConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 
     private final TokenProvider tokenProvider;
+    private final SecurityProperties properties;
+    private final OnlineUserService onlineUserService;
 
     @Override
     public void configure(HttpSecurity http) {
-        TokenFilter customFilter = new TokenFilter(tokenProvider);
+        TokenFilter customFilter = new TokenFilter(tokenProvider,properties,onlineUserService);
         http.addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }

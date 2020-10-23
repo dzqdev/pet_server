@@ -43,6 +43,10 @@ public interface ISysRoleService extends IService<SysRole> {
      */
     void untiedMenu(Long roleId);
 
+    /**
+     * 查询所有角色dto
+     * @return
+     */
     List<SysRoleDto> queryAll();
 
     /**

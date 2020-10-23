@@ -43,7 +43,7 @@ public class SysUser implements Serializable {
     private String phone;
 
     /**
-     * 头像真实路径
+     * 头像路径
      */
     private String avatar;
 

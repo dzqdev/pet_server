@@ -4,6 +4,7 @@ import com.sise.pet.core.CommonResult;
 import com.sise.pet.core.ResultCode;
 import com.sise.pet.utils.ThrowableUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.RedisSystemException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -68,10 +69,17 @@ public class GlobalExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(Throwable.class)
-    public CommonResult handleException(Throwable e){
+    public CommonResult handleThrowable(Throwable e){
         // 打印堆栈信息
         log.error(ThrowableUtil.getStackTrace(e));
         return CommonResult.failed(ResultCode.FAILURE,e.getMessage());
+    }
+
+    @ResponseBody
+    @ExceptionHandler(Exception.class)
+    public CommonResult handleException(Exception e){
+        log.error(ThrowableUtil.getStackTrace(e));
+        return CommonResult.failed(ResultCode.INTERNAL_SERVER_ERROR);
     }
 
 }

@@ -17,6 +17,7 @@ package com.sise.pet.controller.v1;
 
 import cn.hutool.core.util.IdUtil;
 import com.sise.pet.annotation.AnonymousAccess;
+import com.sise.pet.annotation.Log;
 import com.sise.pet.configurer.LoginCodeEnum;
 import com.sise.pet.configurer.LoginProperties;
 import com.sise.pet.core.CommonResult;
@@ -66,6 +67,7 @@ public class AuthorizationController {
     private LoginProperties loginProperties;
 
 
+    @Log("用户登录")
     @PostMapping(value = "/login")
     @ApiOperation("登录授权")
     @AnonymousAccess
@@ -134,7 +136,7 @@ public class AuthorizationController {
     @AnonymousAccess
     @DeleteMapping(value = "logout")
     public CommonResult logout(HttpServletRequest request) {
-        //onlineUserService.logout(tokenProvider.getToken(request));
+        onlineUserService.logout(tokenProvider.getToken(request));
         return CommonResult.success(null);
     }
 }

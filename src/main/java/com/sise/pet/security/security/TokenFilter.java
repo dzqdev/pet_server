@@ -16,14 +16,22 @@
 package com.sise.pet.security.security;
 
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSONObject;
+import com.sise.pet.core.CommonResult;
+import com.sise.pet.core.ResultCode;
 import com.sise.pet.security.config.SecurityProperties;
+import com.sise.pet.security.dto.OnlineUserDto;
+import com.sise.pet.security.service.OnlineUserService;
 import com.sise.pet.utils.SpringContextHolder;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
 
+import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -38,22 +46,37 @@ import java.io.IOException;
 public class TokenFilter extends GenericFilterBean {
 
    private final TokenProvider tokenProvider;
+   private final SecurityProperties properties;
+   private final OnlineUserService onlineUserService;
 
-   TokenFilter(TokenProvider tokenProvider) {
+   public TokenFilter(TokenProvider tokenProvider, SecurityProperties properties, OnlineUserService onlineUserService) {
+      this.properties = properties;
+      this.onlineUserService = onlineUserService;
       this.tokenProvider = tokenProvider;
    }
 
    @Override
    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
            throws IOException, ServletException {
-      HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-      String token = resolveToken(httpServletRequest);
-      //String token1 = tokenProvider.getToken(httpServletRequest);
-      if (StrUtil.isNotBlank(token) && tokenProvider.validateToken(token)) {
-         Authentication authentication = tokenProvider.getAuthentication(token);
-         SecurityContextHolder.getContext().setAuthentication(authentication);
+      try {
+         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
+         String token = resolveToken(httpServletRequest);
+         OnlineUserDto onlineUserDto = null;
+         if (StrUtil.isNotBlank(token)) {
+            //token不为空且token合法
+            onlineUserDto = onlineUserService.getOne(properties.getOnlineKey() + token);
+            if(null != onlineUserDto && tokenProvider.validateToken(token)){
+               Authentication authentication = tokenProvider.getAuthentication(token);
+               SecurityContextHolder.getContext().setAuthentication(authentication);
+               tokenProvider.checkRenewal(token);
+            }
+         }
+         filterChain.doFilter(servletRequest, servletResponse);
+      } catch (Exception e) {
+         logger.error(e.getMessage());
+         servletResponse.setCharacterEncoding("utf-8");
+         servletResponse.getWriter().print(JSONObject.toJSON(CommonResult.failed(ResultCode.INTERNAL_SERVER_ERROR, ResultCode.INTERNAL_SERVER_ERROR.getMessage())));
       }
-      filterChain.doFilter(servletRequest, servletResponse);
    }
 
    private String resolveToken(HttpServletRequest request) {

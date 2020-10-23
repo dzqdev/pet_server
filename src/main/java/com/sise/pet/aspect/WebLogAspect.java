@@ -3,10 +3,12 @@ package com.sise.pet.aspect;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import com.alibaba.fastjson.JSON;
+import com.sise.pet.annotation.Log;
 import com.sise.pet.entity.WebLog;
 import com.sise.pet.security.security.TokenProvider;
 import com.sise.pet.service.IWebLogService;
 import com.sise.pet.utils.HttpRequestUtil;
+import com.sise.pet.utils.SecurityUtils;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
@@ -35,13 +37,8 @@ import java.util.stream.Stream;
 @Order(1)
 public class WebLogAspect {
 
-    private static final String TOKEN = "Authorization";
-
     @Resource
     IWebLogService webLogService;
-
-    @Resource
-    private TokenProvider tokenProvider;
 
     @Pointcut("execution(public * com.sise.pet.controller..*.*(..))")
     public void pointCut() {
@@ -66,9 +63,8 @@ public class WebLogAspect {
         Signature signature = joinPoint.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;
         Method method = methodSignature.getMethod();
-        String token = request.getHeader(TOKEN);
-        if (method.isAnnotationPresent(ApiOperation.class)) {
-            ApiOperation log = method.getAnnotation(ApiOperation.class);
+        if (method.isAnnotationPresent(Log.class)) {
+            Log log = method.getAnnotation(Log.class);
             webLog.setDescription(log.value());
         }
         long endTime = System.currentTimeMillis();
@@ -83,15 +79,8 @@ public class WebLogAspect {
         webLog.setUri(request.getRequestURI());
         webLog.setUrl(request.getRequestURL().toString());
         webLog.setIp(HttpRequestUtil.getIpAddress(request));
-        /*if (StrUtil.isNotBlank(token)) {
-            Authentication authentication = tokenProvider.getAuthentication(token);
-            if (authentication.getPrincipal() instanceof UserDetails) {
-                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-                String username = userDetails.getUsername();
-                webLog.setUsername(username);
-            }
-        }*/
-
+        String username = SecurityUtils.getCurrentUsername();
+        webLog.setUsername(username);
         webLogService.save(webLog);
         return result;
     }

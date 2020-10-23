@@ -20,6 +20,7 @@ import com.sise.pet.security.security.JwtAccessDeniedHandler;
 import com.sise.pet.security.security.JwtAuthenticationEntryPoint;
 import com.sise.pet.security.security.TokenConfigurer;
 import com.sise.pet.security.security.TokenProvider;
+import com.sise.pet.security.service.OnlineUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -50,6 +51,8 @@ import java.util.Set;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final TokenProvider tokenProvider;
+    private final SecurityProperties properties;
+    private final OnlineUserService onlineUserService;
     private final CorsFilter corsFilter;
     private final JwtAuthenticationEntryPoint authenticationErrorHandler;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
@@ -132,6 +135,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     private TokenConfigurer securityConfigurerAdapter() {
-        return new TokenConfigurer(tokenProvider);
+        return new TokenConfigurer(tokenProvider,properties,onlineUserService);
     }
 }

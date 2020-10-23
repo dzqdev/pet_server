@@ -18,6 +18,7 @@ package com.sise.pet.security.service;
 import com.sise.pet.security.config.SecurityProperties;
 import com.sise.pet.security.dto.JwtUserDto;
 import com.sise.pet.security.dto.OnlineUserDto;
+import com.sise.pet.utils.HttpRequestUtil;
 import com.sise.pet.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -29,10 +30,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
-/**
- * @author Zheng Jie
- * @date 2019年10月26日21:56:27
- */
+
 @Service
 @Slf4j
 public class OnlineUserService {
@@ -50,12 +48,11 @@ public class OnlineUserService {
      * @param request /
      */
     public void save(JwtUserDto jwtUserDto, String token, HttpServletRequest request){
-        String ip = null;
-        String browser = null;
-        String address = null;
+        String ip = HttpRequestUtil.getIpAddress(request);
+        String browser = HttpRequestUtil.getBrowser(request);
         OnlineUserDto onlineUserDto = null;
         try {
-            onlineUserDto = new OnlineUserDto(jwtUserDto.getUsername(), browser , ip, address, token, new Date());
+            onlineUserDto = new OnlineUserDto(jwtUserDto.getUsername(), browser , ip, token, new Date());
         } catch (Exception e) {
             log.error(e.getMessage(),e);
         }

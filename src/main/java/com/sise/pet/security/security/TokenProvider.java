@@ -15,7 +15,10 @@
  */
 package com.sise.pet.security.security;
 
+import cn.hutool.core.date.DateField;
+import cn.hutool.core.date.DateUtil;
 import com.sise.pet.security.config.SecurityProperties;
+import com.sise.pet.utils.RedisUtils;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -28,11 +31,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -42,13 +47,12 @@ import java.util.stream.Collectors;
 @Component
 public class TokenProvider implements InitializingBean {
 
-   private final SecurityProperties properties;
+   @Resource
+   private SecurityProperties properties;
    private static final String AUTHORITIES_KEY = "auth";
+   @Resource
+   private RedisUtils redisUtils;
    private Key key;
-
-   public TokenProvider(SecurityProperties properties) {
-      this.properties = properties;
-   }
 
 
    @Override
@@ -115,5 +119,18 @@ public class TokenProvider implements InitializingBean {
          return requestHeader.substring(7);
       }
       return null;
+   }
+
+   public void checkRenewal(String token) {
+      // 判断是否续期token,计算token的过期时间
+      long time = redisUtils.getExpire(properties.getOnlineKey() + token) * 1000;
+      Date expireDate = DateUtil.offset(new Date(), DateField.MILLISECOND, (int) time);
+      // 判断当前时间与过期时间的时间差
+      long differ = expireDate.getTime() - System.currentTimeMillis();
+      // 如果在续期检查的范围内，则续期
+      if (differ <= properties.getDetect()) {
+         long renew = time + properties.getRenew();
+         redisUtils.expire(properties.getOnlineKey() + token, renew, TimeUnit.MILLISECONDS);
+      }
    }
 }

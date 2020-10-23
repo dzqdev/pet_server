@@ -2,6 +2,7 @@ package com.sise.pet.controller.v1;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.sise.pet.annotation.Log;
 import com.sise.pet.core.CommonResult;
 import com.sise.pet.dto.SysRoleDto;
 import com.sise.pet.dto.query.SysRoleQueryCriteria;
@@ -50,6 +51,7 @@ public class SysRoleController {
         return CommonResult.success(page);
     }
 
+    @Log("新增角色")
     @ApiOperation("新增角色")
     @PostMapping
     public CommonResult create(@Validated @RequestBody SysRole resource){
@@ -57,6 +59,7 @@ public class SysRoleController {
         return CommonResult.success(null);
     }
 
+    @Log("修改角色")
     @ApiOperation("修改角色")
     @PutMapping
     public CommonResult update( @RequestBody SysRole resources){
@@ -64,6 +67,7 @@ public class SysRoleController {
         return CommonResult.success(null);
     }
 
+    @Log("修改角色菜单")
     @ApiOperation("修改角色菜单")
     @PutMapping(value = "/menu")
     public CommonResult updateMenu(@RequestBody SysRoleDto resources){
@@ -71,6 +75,7 @@ public class SysRoleController {
         return CommonResult.success(null);
     }
 
+    @Log("删除角色")
     @ApiOperation("删除角色")
     @DeleteMapping
     public CommonResult delete(@RequestBody Set<Long> ids){

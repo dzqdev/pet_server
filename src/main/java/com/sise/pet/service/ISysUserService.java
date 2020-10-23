@@ -7,9 +7,11 @@ import com.sise.pet.dto.UpdateSysUserPasswordParam;
 import com.sise.pet.dto.query.SysUserQueryCriteria;
 import com.sise.pet.entity.SysRole;
 import com.sise.pet.entity.SysUser;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * <p>
@@ -22,15 +24,9 @@ import java.util.List;
 public interface ISysUserService extends IService<SysUser> {
 
     /**
-     * 修改用户角色关系
-     */
-    @Transactional
-    int updateRole(Long userId, List<Long> roleIds);
-
-    /**
      * 获取用户对应角色
      */
-    List<SysRole> getRoleList(Long userId);
+    List<SysRole> getUserRoleList(Long userId);
 
     /**
      * 修改密码
@@ -39,11 +35,47 @@ public interface ISysUserService extends IService<SysUser> {
 
     /**
      * 用户自助修改资料
-     * @param resources
+     * @param sysUser
      */
-    void updateCenter(SysUser resources);
+    void updateCenter(SysUser sysUser);
 
+    /**
+     * 分页查询用户列表
+     * @param criteria
+     * @param pageable
+     * @return
+     */
     Page<SysUserDto> queryAll(SysUserQueryCriteria criteria, Page pageable);
 
+    /**
+     * 创建用户
+     * @param userDto
+     */
     void create(SysUserDto userDto);
+
+    /**
+     * 根据用户名查询用户信息
+     * @param userName
+     * @return
+     */
+    SysUserDto findByName(String userName);
+
+    /**
+     * 更新用户信息
+     * @param userDto
+     */
+    void update(SysUserDto userDto);
+
+    /**
+     * 修改头像
+     * @param file 文件
+     * @return /
+     */
+    Map<String, String> updateAvatar(MultipartFile file);
+
+    /**
+     * 删除用户
+     * @param ids
+     */
+    void delete(Set<Long> ids);
 }
